@@ -1,0 +1,48 @@
+swagger: '2.0'
+info:
+  description: DEMO APP
+  version: '1.0'
+  title: DEMO APP 
+  termsOfService: /service/
+  contact:
+    name: SONGMING 399465
+  license:
+    name: DEMOAPP License
+schemes:
+  - http
+basePath: /
+tags:
+  - name: param-test-controller
+    description: 'Param Test Api Of Service Under Test '
+  - name: header-test-controller
+    description: 'Header Test Api Of Service Under Test '
+  - name: method-test-controller
+    description: 'Method Test Api Of Service Under Test '
+paths:
+  /api/hello-world:
+    get:
+      tags:
+        - header-test-controller
+      summary: hello-world
+      description: hello-world
+      operationId: helloWorld
+      consumes:
+        - application/json
+      produces:
+        - application/json;charset=utf-8
+      parameters:
+        - name: name
+          in: query
+          description: 名字
+          required: false
+          default: devcloud
+          type: string
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            additionalProperties:
+              type: object
