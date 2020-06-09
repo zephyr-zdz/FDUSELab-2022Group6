@@ -20,8 +20,8 @@
 
 在环境克隆代码
 以下工具需要安装好
-* [Maven 3.3](https://maven.apache.org/) 
-* [A Maven + JDK Docker image](https://hub.docker.com/_/maven/)
+* [Maven 3.3]
+* [JDK 1.8]
 
 ### 构建过程
 
@@ -72,41 +72,16 @@ mvn install
 
 ### 本地执行
 
- [DropWizard框架](http://www.dropwizard.io/1.0.0/docs/) 生成的应用是一个独立的程序.
+ Spring boot生成的应用是一个独立的程序.
 
 执行如下命令拉起应用:
 
 ```bash
-java -jar ./target/demoapp.jar server ./hello-world.yml
+java -jar ./target/javaWebDemo-1.0.jar
 ```
 
 通过地址 http://localhost:8080/ 访问
 
-### Docker 执行
-
-构建docker镜像
-
-* 仓库在根目录下有一个`Dockerfile`
-* 第一步执行docker build生成镜像:
-```bash
-docker build -t dw-demo-app:latest ./
-```
-* 运行镜像(随机端口)
-```bash
-CID=$(docker run -d -P dw-demo-app:latest)
-```
-* 查询端口
-```bash
-docker port ${CID} 8080
-```
-例如: 0.0.0.0:**37567**
-
-* 则通过 http://{DOCKER SERVICE IP}:**37567**访问
-
-* 停止和清理应用:
-```bash
-docker stop ${CID} && docker rm -v ${CID}
-```
 
 ## 流水线相关
 
@@ -124,30 +99,3 @@ docker stop ${CID} && docker rm -v ${CID}
 > 部署阶段
 + 部署任务
 + 接口测试任务
-
-## CloudIDE相关
-
-- 是否支持在CloudIDE导入：**支持**
-
-- CloudIDE中配置的构建和启动命令
-
-**配置构建命令**
-
-```shell
-mvn clean install -f ${current.project.path}
-```
-
-![CloudIDE构建配置](./images/ide-build.PNG)
-
-**配置启动命令**
-
-```shell
-java -jar ${current.project.path}/target/demoapp.jar server ${current.project.path}/hello-world.yml
-```
-
-![CloudIDE运行配置](./images/ide-run.PNG)
-
-
-- 在CloudIDE中成功运行
-
-![CloudIDE成功运行](./images/ide-run-success.PNG)

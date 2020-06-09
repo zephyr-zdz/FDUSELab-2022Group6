@@ -1,4 +1,0 @@
-template:  Hello %s, Welcome to the Cloud!!!
-defaultName: James
-server:
-  rootPath: /api/

@@ -1,7 +1,0 @@
-template: Hello, %s!
-defaultName: IntegrationTest
-server:
-  rootPath: /api/
-  applicationConnectors:
-  - type: http
-    port: 8082
