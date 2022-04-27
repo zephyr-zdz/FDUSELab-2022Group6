@@ -4,7 +4,6 @@ import Router from 'vue-router'
 
 import AppIndex from '@/components/home/AppIndex'
 import Home from '@/components/home/Home'
-import Test from '@/components/home/test'
 
 import CommonLogin from '@/components/login/commonLogin'
 import AdminLogin from '@/components/login/adminLogin'
@@ -29,11 +28,6 @@ export const constantRouterMap = [
         path: '/',
         name: 'AppIndex',
         component: AppIndex,
-      },
-      {
-        path: '/test',
-        name: 'test',
-        component: Test
       }
     ]
   },
