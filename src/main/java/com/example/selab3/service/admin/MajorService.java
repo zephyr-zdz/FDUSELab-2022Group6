@@ -1,0 +1,110 @@
+package com.example.selab3.service.admin;
+
+import com.example.selab3.manager.admin.MajorManager;
+import com.example.selab3.model.entity.Institute;
+import com.example.selab3.model.entity.Major;
+import com.example.selab3.model.entity.Student;
+import com.example.selab3.model.entity.Teacher;
+import com.example.selab3.util.Response;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service("AdminMajorService")
+public class MajorService {
+    private final MajorManager manager;
+
+    @Autowired
+    public MajorService(MajorManager manager) {
+        this.manager = manager;
+    }
+
+    public Response<Major> get(String majorName) {
+        Major major = manager.getMajorByName(majorName);
+        if (major == null) {
+            return new Response<>(Response.FAIL, "专业: " + majorName + "不存在", null);
+        }
+
+        return new Response<>(Response.SUCCESS, "查找专业成功", major);
+    }
+
+    public Response<Major> create(Major major) {
+        if (major.getId() != null) {
+            return new Response<>(Response.FAIL, "专业id由系统自动生成", null);
+        }
+
+        if (manager.getMajorByName(major.getName()) != null) {
+            return new Response<>(Response.FAIL, "专业: " + major.getName() + "已存在", null);
+        }
+
+        Institute institute = manager.getInstituteByName(major.getInstitute());
+        if (institute == null) {
+            return new Response<>(Response.FAIL, "所在学院: " + major.getInstitute() + "不存在!", null);
+        }
+
+        manager.createMajor(major);
+        return new Response<>(Response.SUCCESS, "新增专业成功", major);
+    }
+
+    public Response<Major> delete(String majorName) {
+        Major major = manager.getMajorByName(majorName);
+        if (major == null) {
+            return new Response<>(Response.FAIL, "专业: " + majorName + "不存在", null);
+        }
+
+        // 如果专业还有学生，不允许删除专业
+        List<Student> students = manager.getStudentsByMajor(major);
+        if (students.size() > 0) {
+            return new Response<>(Response.FAIL, "专业: " + majorName + "还有学生，删除专业失败", null);
+        }
+
+        // 如果专业还有教师，不允许删除专业
+        List<Teacher> teachers = manager.getTeachersByMajor(major);
+        if (teachers.size() > 0) {
+            return new Response<>(Response.FAIL, "专业: " + majorName + "还有教师，删除专业失败", null);
+        }
+
+        manager.deleteMajor(major);
+        return new Response<>(Response.SUCCESS, "删除专业成功", major);
+    }
+
+    public Response<Major> update(Major major) {
+        if (major.getId() == null || manager.getMajorById(major.getId()) == null) {
+            return new Response<>(Response.FAIL, "被修改对象不存在", null);
+        }
+
+        Major oldMajor = manager.getMajorById(major.getId());
+        Major newMajor = manager.getMajorByName(major.getName());
+        if (newMajor != null && !newMajor.getId().equals(oldMajor.getId())) {
+            return new Response<>(Response.FAIL, "专业: " + major.getName() + "已存在", null);
+        }
+
+        Institute institute = manager.getInstituteByName(major.getInstitute());
+        if (institute == null) {
+            return new Response<>(Response.FAIL, "所在学院: " + major.getInstitute() + "不存在", null);
+        }
+
+        // 级联的update
+        manager.updateStudentsByMajor(oldMajor, major);
+        manager.updateTeachersByMajor(oldMajor, major);
+
+        oldMajor.update(major);
+        manager.updateMajor(oldMajor);
+        return new Response<>(Response.SUCCESS, "修改专业成功", oldMajor);
+    }
+
+    public Response<List<Major>> getAll() {
+        return new Response<>(Response.SUCCESS, "查找所有专业成功", manager.getAllMajors());
+    }
+
+    public Response<List<Major>> getAllByInstitute(String name) {
+        Institute institute = manager.getInstituteByName(name);
+        if (institute == null) {
+            return new Response<>(Response.FAIL, "学院: " + name + "不存在", null);
+        }
+
+        return new Response<>(Response.SUCCESS, "查找学院: " + name + "的所有专业成功", manager.getAllMajorsByInstitute(institute.getName()));
+    }
+
+}
