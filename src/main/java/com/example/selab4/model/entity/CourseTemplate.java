@@ -20,4 +20,9 @@ public class CourseTemplate {
     private String name;
     @Column(name = "coursenum", nullable = false, length = 45)
     private String coursenum;   // 课程编号，不同教师开设该课程，名字和编号都应是相同的
+
+    public void update(CourseTemplate newCourseTemplate) {
+        setName(newCourseTemplate.getName());
+        setCoursenum(newCourseTemplate.getCoursenum());
+    }
 }
