@@ -43,7 +43,7 @@ public class CourseController {
         return courseService.approve(courseApplication,attitude);
     }
 
-    // 修改课程（传入相对应的课程申请）
+    // 管理员自己修改课程（传入相对应的课程申请）
     @PostMapping("/modify")
     public Response<String> modify(@RequestBody CourseApplication courseApplication){
         return courseService.modify(courseApplication);
@@ -68,10 +68,5 @@ public class CourseController {
     @GetMapping("/getCourse")
     public Response<List<CourseVO>> getCourse(){
         return courseService.showAllCourse();
-    }
-
-    @GetMapping("/getJsonOfCourse")
-    public Response<String> courseDetail(@RequestBody Course course){
-        return courseService.courseDetail(course);
     }
 }

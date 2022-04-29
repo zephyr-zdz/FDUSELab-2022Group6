@@ -2,10 +2,7 @@ package com.example.selab4.manager.admin;
 
 import com.example.selab4.mapper.*;
 import com.example.selab4.model.ClassAdapter;
-import com.example.selab4.model.entity.Calendar;
-import com.example.selab4.model.entity.Course;
-import com.example.selab4.model.entity.CourseApplication;
-import com.example.selab4.model.entity.Schedule;
+import com.example.selab4.model.entity.*;
 import com.example.selab4.model.vo.CourseApplicationVO;
 import com.example.selab4.model.vo.CourseVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,17 +19,20 @@ public class CourseManager {
     private final CalendarMapper calendarMapper;
     private final TeacherMapper teacherMapper;
     private final ClassroomMapper classroomMapper;
+    private final CourseTemplateMapper courseTemplateMapper;
     private final ClassAdapter classAdapter;
+
     @Autowired
     CourseManager(ApplicationMapper applicationMapper, CourseMapper courseMapper,
                   ScheduleMapper scheduleMapper, CalendarMapper calendarMapper,
-                  TeacherMapper teacherMapper, ClassroomMapper classroomMapper, ClassAdapter classAdapter){
+                  TeacherMapper teacherMapper, ClassroomMapper classroomMapper, CourseTemplateMapper courseTemplateMapper, ClassAdapter classAdapter){
         this.applicationMapper=applicationMapper;
         this.courseMapper=courseMapper;
         this.scheduleMapper=scheduleMapper;
         this.calendarMapper=calendarMapper;
         this.teacherMapper=teacherMapper;
         this.classroomMapper=classroomMapper;
+        this.courseTemplateMapper = courseTemplateMapper;
         this.classAdapter = classAdapter;
     }
 
@@ -116,7 +116,7 @@ public class CourseManager {
 
 
     public boolean scheduleExistByCalendarIdAndClassroomId(Integer cal_id,Integer class_id){
-        Schedule schedule1= findScheduleByCalendarIdAndClassroomId(cal_id,class_id);
+        Schedule schedule1 = findScheduleByCalendarIdAndClassroomId(cal_id,class_id);
         return schedule1 != null;
     }
 
@@ -146,11 +146,11 @@ public class CourseManager {
         return classroomMapper.findClassroomById(id).getName();
     }
 
-    public Course findCourseByCourseNum(String courseNum) {
-        return courseMapper.findCourseByCoursenum(courseNum);
-    }
-
     public Course findCourseByCourseId(Integer course_id) {
         return courseMapper.findCourseById(course_id);
+    }
+
+    public CourseTemplate getCourseTemplateByCoursenum(String coursenum) {
+        return courseTemplateMapper.findCourseTemplateByCoursenum(coursenum);
     }
 }

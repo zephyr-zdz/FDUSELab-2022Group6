@@ -1,10 +1,7 @@
 package com.example.selab4.service.admin;
 
 import com.example.selab4.manager.admin.CourseManager;
-import com.example.selab4.model.entity.Calendar;
-import com.example.selab4.model.entity.Course;
-import com.example.selab4.model.entity.CourseApplication;
-import com.example.selab4.model.entity.Schedule;
+import com.example.selab4.model.entity.*;
 import com.example.selab4.model.vo.CourseApplicationVO;
 import com.example.selab4.model.vo.CourseVO;
 import com.example.selab4.util.Response;
@@ -37,13 +34,14 @@ public class CourseService {
     }
 
     Course fromApplicationToCourse(CourseApplication courseApplication){
-        Course course=new Course();
-        course.setName(courseApplication.getCoursename());
+        Course course = new Course();
         course.setCoursehour(courseApplication.getCoursehour());
-        course.setCoursenum(courseApplication.getCoursenum());
         course.setCredit(courseApplication.getCredit());
         course.setCapacity(courseApplication.getCapacity());
         course.setIntro(courseApplication.getIntro());
+
+        CourseTemplate courseTemplate = courseManager.getCourseTemplateByCoursenum(courseApplication.getCoursenum());
+        course.setCoursetemplateid(courseTemplate.getId());
         return course;
     }
 
@@ -73,23 +71,36 @@ public class CourseService {
         return courseManager.findTeacherIdByJobNum(JobNum);
     }
 
-    List<Schedule> getSchedulesFromApplication(CourseApplication courseApplication,Course course){
-        List<Integer> CalendarIdList=getCalendarIDsFromApplication(courseApplication);
+    List<Schedule> getSchedulesFromApplication(CourseApplication courseApplication){
+        List<Integer> CalendarIdList = getCalendarIDsFromApplication(courseApplication);
         List<Schedule> schedules = new ArrayList<>();
         for(Integer c : CalendarIdList) {
-        Schedule schedule=new Schedule();
-        schedule.setCalendarid(c);
-        schedule.setCourseid(courseApplication.getPre_courseId());
-        schedule.setClassroomid(courseApplication.getClassroomid());
-        schedule.setTeacherid(courseApplication.getTeacherid());
-        schedules.add(schedule);
+            Schedule schedule = new Schedule();
+            schedule.setCalendarid(c);
+            schedule.setCourseid(courseApplication.getPre_courseId());
+            schedule.setClassroomid(courseApplication.getClassroomid());
+            schedule.setTeacherid(courseApplication.getTeacherid());
+            schedules.add(schedule);
         }
         return schedules;
     }
 
     boolean check(CourseApplication courseApplication){
-        if(Objects.equals(courseApplication.getApplytype(), "delete")&&courseApplication.getPre_courseId()==-1) return false;
-        if(Objects.equals(courseApplication.getApplytype(),"update")&&courseApplication.getPre_courseId()==-1) return false;
+        Course course = courseManager.findCourseByCourseId(courseApplication.getPre_courseId());
+        switch (courseApplication.getApplytype()) {
+            case "delete" : case "update" :
+                if (course == null) {
+                    return false;
+                }
+                break;
+            case "insert" :
+                if (course != null) {
+                    return false;
+                }
+                break;
+            default :
+                return false;
+        }
 
         List<Integer> CalendarIdListId=getCalendarIDsFromApplication(courseApplication);
         Integer ClassroomId=courseApplication.getClassroomid();
@@ -109,43 +120,46 @@ public class CourseService {
     }
 
     public Response<String> approve(CourseApplication courseApplication,boolean attitude){
-        if (!attitude){
+        if (!attitude){ // 管理员不通过申请
             courseApplication.setResult("reject");
             courseManager.save(courseApplication);
-            return new Response<>(Response.SUCCESS,"Administrator not approve","disapproval");
+            return new Response<>(Response.SUCCESS,"课程申请处理成功，管理员不通过申请","disapproval");
         }
-        Course course=fromApplicationToCourse(courseApplication);
+        Course course = fromApplicationToCourse(courseApplication);
+
+        // 一些逻辑检查
         if(!check(courseApplication))
-            return new Response<>(Response.FAIL,"err","Another application had been approved,leading to conflict");
+            return new Response<>(Response.FAIL,"产生逻辑错误，管理员不得通过申请","Another application had been approved,leading to conflict");
+
         switch (courseApplication.getApplytype()){
             case "delete":{
                 courseManager.delete(course);
                 courseApplication.setResult("approve");
                 courseManager.save(courseApplication);
                 courseManager.deleteSchedulesByCourseId(courseApplication.getPre_courseId());
-                return new Response<>(Response.SUCCESS,"删除申请处理成功","delete succeed");
+                return new Response<>(Response.SUCCESS,"管理员通过申请，删除申请处理成功","delete succeed");
             }
             case "update":{
                 Course originCourse=courseManager.findCourseByCourseId(courseApplication.getPre_courseId());
                 courseManager.deleteSchedulesByCourseId(courseApplication.getPre_courseId());
                 originCourse.update(course);
                 courseManager.save(originCourse);
-                addSchedules(getSchedulesFromApplication(courseApplication,course));
+                addSchedules(getSchedulesFromApplication(courseApplication));
                 courseApplication.setResult("approve");
                 courseManager.save(courseApplication);
-                return new Response<>(Response.SUCCESS,"修改申请处理成功","update succeed");
+                return new Response<>(Response.SUCCESS,"管理员通过申请，修改申请处理成功","update succeed");
             }
             case "insert":{
                 courseManager.save(course);
-                addSchedules(getSchedulesFromApplication(courseApplication,course));
+                addSchedules(getSchedulesFromApplication(courseApplication));
                 courseApplication.setResult("approve");
                 courseManager.save(courseApplication);
-                return new Response<>(Response.SUCCESS,"新增申请处理成功","insert succeed");
+                return new Response<>(Response.SUCCESS,"管理员通过申请，新增申请处理成功","insert succeed");
             }
             default:
                 courseApplication.setResult("reject");
                 courseManager.save(courseApplication);
-                return new Response<>(Response.FAIL,"err","illegal application type");
+                return new Response<>(Response.FAIL,"课程申请的类型非法，管理员不得通过申请","illegal application type");
         }
     }
 
@@ -154,10 +168,10 @@ public class CourseService {
         if(!check(courseApplication)){
             courseApplication.setResult("reject");
             courseManager.save(courseApplication);
-            return new Response<>(Response.FAIL,"conflict","conflict");
+            return new Response<>(Response.FAIL,"产生逻辑错误，管理员不得修改课程，","conflict");
         }
         approve(courseApplication,true);
-        return new Response<>(Response.SUCCESS,"success","modify success");
+        return new Response<>(Response.SUCCESS,"管理员修改课程成功","modify success");
     }
 
     public Response<String> BatchModify(MultipartFile multipartFile) {
@@ -193,17 +207,16 @@ public class CourseService {
             courseApplication.setResult(row.getField("result"));
             courseApplication.setCoursehour(row.getField("coursehour"));
             courseApplication.setCoursenum(row.getField("coursenum"));
-            courseApplication.setCapacity(row.getField("coursenum"));
+            courseApplication.setCapacity(row.getField("capacity"));
             courseApplication.setApplytype(row.getField("applytype"));
             courseApplication.setClassroomid(Integer.valueOf(row.getField("classroomid")));
             courseApplication.setCoursename(row.getField("coursename"));
             courseApplication.setApplytime(row.getField("applytime"));
             courseApplication.setIntro(row.getField("intro"));
-            courseApplication.setInstituteid(Integer.valueOf(row.getField("instituteid")));
             courseApplication.setCredit(row.getField("credit"));
             courseApplication.setSchedule(row.getField("schedule"));
             courseApplication.setTeacherid(Integer.valueOf(row.getField("teacherid")));
-            courseApplication.setResult(row.getField("Result"));
+            courseApplication.setIspublic(row.getField("ispublic"));
             response=modify(courseApplication);
             if (response.getCode().equals(Response.FAIL)) {
                 result.append(count).append(",");
@@ -222,32 +235,5 @@ public class CourseService {
 
     public Response<List<CourseVO>> showAllCourse(){
         return new Response<>(Response.SUCCESS,"success",courseManager.findAllCourse());
-    }
-
-    public Response<String> courseDetail(Course course){
-            List<Schedule> schedules=courseManager.findSchedulesByCourseId(course.getId());
-            Integer TeacherId= schedules.get(0).getTeacherid();
-            String schedule="";
-            String teacherNum=courseManager.findJobNumById(TeacherId);
-            for(Schedule s : schedules){
-                Calendar calendar=courseManager.findCalendarById(s.getCalendarid());
-                String day=calendar.getDay();
-                String number=calendar.getNumber();
-                schedule=day+","+number;
-            }
-            Integer classroomId=schedules.get(0).getClassroomid();
-            String classroomNum=courseManager.findClassroomNumById(classroomId);
-            JSONObject jsonObject=new JSONObject();
-            jsonObject.put("Id",course.getId());
-            jsonObject.put("Name",course.getName());
-            jsonObject.put("Credit",course.getCredit());
-            jsonObject.put("Hour",course.getCoursehour());
-            jsonObject.put("Capacity",course.getCapacity());
-            jsonObject.put("Coursenum",course.getCoursenum());
-            jsonObject.put("Intro",course.getIntro());
-            jsonObject.put("teacherNum",teacherNum);
-            jsonObject.put("schedule",schedule);
-            jsonObject.put("classroomNum",classroomNum);
-            return new Response<>(Response.SUCCESS,"success",jsonObject.toString());
     }
 }

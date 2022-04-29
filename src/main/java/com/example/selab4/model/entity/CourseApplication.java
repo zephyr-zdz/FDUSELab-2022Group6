@@ -20,8 +20,8 @@ public class CourseApplication {
     private String coursename;
     @Column(name = "coursenum", nullable = false, length = 45)
     private String coursenum;   // 课程编号
-    @Column(name = "instituteid", nullable = false, length = 45)
-    private Integer instituteid;
+    @Column(name = "ispublic", nullable = false, length = 1)
+    private String ispublic;    // Y/N
     @Column(name = "coursehour", nullable = false, length = 45)
     private String coursehour;  // 学时
     @Column(name = "credit", nullable = false, length = 45)

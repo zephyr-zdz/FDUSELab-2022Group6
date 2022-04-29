@@ -57,14 +57,6 @@ public class ApplicationManager {
         return applicationMapper.findAllByTeacherid(teacher.getId());
     }
 
-    public Course findCourseByCourseNum(String courseNum) {
-        return courseMapper.findCourseByCoursenum(courseNum);
-    }
-
-    public Course findCourseByApplication(CourseApplication courseApplication){
-        return findCourseByCourseNum(courseApplication.getCoursenum());
-    }
-
     public Course findCourseById(Integer pre_courseId) {
         return courseMapper.findCourseById(pre_courseId);
     }

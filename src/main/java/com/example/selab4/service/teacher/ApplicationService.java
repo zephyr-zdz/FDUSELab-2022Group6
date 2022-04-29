@@ -1,5 +1,6 @@
 package com.example.selab4.service.teacher;
 import com.example.selab4.manager.teacher.ApplicationManager;
+import com.example.selab4.model.checker.CourseApplicationChecker;
 import com.example.selab4.model.entity.Course;
 import com.example.selab4.model.entity.CourseApplication;
 import com.example.selab4.model.entity.Schedule;
@@ -9,15 +10,16 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Service("TeacherApplicationService")
 public class ApplicationService {
     private final ApplicationManager applicationManager;
+    private final CourseApplicationChecker checker;
 
     @Autowired
-    ApplicationService(ApplicationManager applicationManager){
+    ApplicationService(ApplicationManager applicationManager, CourseApplicationChecker checker){
         this.applicationManager=applicationManager;
+        this.checker = checker;
     }
 
     void addSchedules(List<Schedule> schedules){
@@ -29,9 +31,26 @@ public class ApplicationService {
     }
 
     boolean check(CourseApplication courseApplication){
+        // 字段非空检查
+        if (!checker.infoComplete(courseApplication)) {
+            return false;
+        }
+
         Course course= applicationManager.findCourseById(courseApplication.getPre_courseId());
-        if(Objects.equals(courseApplication.getApplytype(), "delete")&&course==null) return false;
-        if(Objects.equals(courseApplication.getCoursenum(),"update")&&course==null)  return false;
+        switch (courseApplication.getApplytype()) {
+            case "delete" : case "update" :
+                if (course == null) {
+                    return false;
+                }
+                break;
+            case "insert" :
+                if (course != null) {
+                    return false;
+                }
+                break;
+            default :
+                return false;
+        }
 
         List<Schedule> schedules=applicationManager.deleteSchedulesByCourseId(courseApplication.getPre_courseId());
         String[] schedule=split(courseApplication.getSchedule());
