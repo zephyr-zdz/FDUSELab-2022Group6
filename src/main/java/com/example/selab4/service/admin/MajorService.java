@@ -6,9 +6,16 @@ import com.example.selab4.model.entity.Major;
 import com.example.selab4.model.entity.Student;
 import com.example.selab4.model.entity.Teacher;
 import com.example.selab4.util.Response;
+import de.siegmar.fastcsv.reader.CsvContainer;
+import de.siegmar.fastcsv.reader.CsvReader;
+import de.siegmar.fastcsv.reader.CsvRow;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @Service("AdminMajorService")
@@ -107,4 +114,52 @@ public class MajorService {
         return new Response<>(Response.SUCCESS, "查找学院: " + name + "的所有专业成功", manager.getAllMajorsByInstitute(institute.getName()));
     }
 
+    public Response<String> createByFile(MultipartFile multipartFile) {
+        CsvReader csvReader = new CsvReader();
+        csvReader.setContainsHeader(true);
+
+        File file = null;
+        if (multipartFile != null){
+            try {
+                file = File.createTempFile("tmp", null);
+                multipartFile.transferTo(file);
+                System.gc();
+                file.deleteOnExit();
+            } catch (Exception e){
+                return new Response<>(Response.FAIL, "multipartFile转换为File时发生Exception异常", null);
+            }
+        }
+
+        CsvContainer csv;
+        try {
+            csv = csvReader.read(file, StandardCharsets.UTF_8);
+        } catch(IOException e) {
+            return new Response<>(Response.FAIL, "csv文件读取时发生IOException异常", null);
+        }
+
+        /* csv文件格式要求(顺序不重要)
+            列名应包含：name, institute
+         */
+
+        StringBuilder result = new StringBuilder("失败序号: ");
+        Integer count = 0;
+        Major major = null;
+        Response<Major> response = null;
+        for (CsvRow row : csv.getRows()) {
+            count++;
+            major = new Major();
+            response = new Response<>();
+
+            major.setName(row.getField("name"));
+            major.setInstitute(row.getField("institute"));
+            response = this.create(major);
+            if (response.getCode().equals(Response.FAIL)) {
+                result.append(count.toString() + ",") ;
+            }
+        }
+
+        // 只要文件能够读取就是成功
+        // 新建失败的情况通过data部分展示
+        return new Response<>(Response.SUCCESS, "批量新增专业成功", result.toString());
+    }
 }

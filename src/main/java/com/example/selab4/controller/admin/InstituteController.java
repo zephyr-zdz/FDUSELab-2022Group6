@@ -5,6 +5,7 @@ import com.example.selab4.service.admin.InstituteService;
 import com.example.selab4.util.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -53,5 +54,10 @@ public class InstituteController {
     @GetMapping("/getNameById")
     public Response<String> getNameById(Integer id){
         return new Response<>(0,"success", service.getNameById(id));
+    }
+
+    @PostMapping("/file")
+    public Response<String> createByFile(@RequestParam("file") MultipartFile multipartFile) {
+        return service.createByFile(multipartFile);
     }
 }

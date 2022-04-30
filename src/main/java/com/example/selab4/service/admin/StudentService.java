@@ -145,7 +145,7 @@ public class StudentService {
             列名应包含：name, identity, stunum, email, tel, major, institute
          */
 
-        String result = "失败序号: "; // 以后有空再用stringbuilder优化
+        StringBuilder result = new StringBuilder("失败序号: ");
         Integer count = 0;
         Student student = null;
         Response<Student> response = null;
@@ -173,13 +173,13 @@ public class StudentService {
             student.setInstitute(row.getField("institute"));
             response = this.create(student);
             if (response.getCode().equals(Response.FAIL)) {
-                result += count.toString() + ",";
+                result.append(count.toString() + ",");
             }
         }
 
         // 只要文件能够读取就是成功
         // 新建失败的情况通过data部分展示
-        return new Response<>(Response.SUCCESS, "批量创建学生成功", result);
+        return new Response<>(Response.SUCCESS, "批量新增学生成功", result.toString());
     }
 
     public Response<Student> delete(String stunum) {

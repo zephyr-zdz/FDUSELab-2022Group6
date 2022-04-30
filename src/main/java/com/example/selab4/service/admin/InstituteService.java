@@ -4,10 +4,18 @@ import com.example.selab4.manager.admin.InstituteManager;
 import com.example.selab4.model.entity.Institute;
 import com.example.selab4.model.entity.Major;
 import com.example.selab4.util.Response;
+import de.siegmar.fastcsv.reader.CsvContainer;
+import de.siegmar.fastcsv.reader.CsvReader;
+import de.siegmar.fastcsv.reader.CsvRow;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 
+import javax.persistence.criteria.CriteriaBuilder;
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @Service("AdminInstituteService")
@@ -96,4 +104,51 @@ public class InstituteService {
     }
 
 
+    public Response<String> createByFile(MultipartFile multipartFile) {
+        CsvReader csvReader = new CsvReader();
+        csvReader.setContainsHeader(true);
+
+        File file = null;
+        if (multipartFile != null){
+            try {
+                file = File.createTempFile("tmp", null);
+                multipartFile.transferTo(file);
+                System.gc();
+                file.deleteOnExit();
+            } catch (Exception e){
+                return new Response<>(Response.FAIL, "multipartFile转换为File时发生Exception异常", null);
+            }
+        }
+
+        CsvContainer csv;
+        try {
+            csv = csvReader.read(file, StandardCharsets.UTF_8);
+        } catch(IOException e) {
+            return new Response<>(Response.FAIL, "csv文件读取时发生IOException异常", null);
+        }
+
+        /* csv文件格式要求(顺序不重要)
+            列名应包含：name
+         */
+
+        StringBuilder result = new StringBuilder("失败序号: ");
+        Integer count = 0;
+        Institute institute = null;
+        Response<Institute> response = null;
+        for (CsvRow row : csv.getRows()) {
+            count++;
+            institute = new Institute();
+            response = new Response<>();
+
+            institute.setName(row.getField("name"));
+            response = this.create(institute);
+            if (response.getCode().equals(Response.FAIL)) {
+                result.append(count.toString() + ",") ;
+            }
+        }
+
+        // 只要文件能够读取就是成功
+        // 新建失败的情况通过data部分展示
+        return new Response<>(Response.SUCCESS, "批量新增学院成功", result.toString());
+    }
 }
