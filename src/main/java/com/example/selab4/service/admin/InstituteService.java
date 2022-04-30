@@ -90,9 +90,9 @@ public class InstituteService {
         manager.updateStudentsByInstitute(oldInstitute, institute);
         manager.updateTeachersByInstitute(oldInstitute, institute);
 
-        oldInstitute.update(institute);
-        manager.updateInstitute(oldInstitute);
-        return new Response<>(Response.SUCCESS, "修改学院成功", oldInstitute);
+        manager.updateInstitute(institute);
+
+        return new Response<>(Response.SUCCESS, "修改学院成功", institute);
     }
 
     public Response<List<Institute>> getAll() {

@@ -96,9 +96,8 @@ public class MajorService {
         manager.updateStudentsByMajor(oldMajor, major);
         manager.updateTeachersByMajor(oldMajor, major);
 
-        oldMajor.update(major);
-        manager.updateMajor(oldMajor);
-        return new Response<>(Response.SUCCESS, "修改专业成功", oldMajor);
+        manager.updateMajor(major);
+        return new Response<>(Response.SUCCESS, "修改专业成功", major);
     }
 
     public Response<List<Major>> getAll() {
