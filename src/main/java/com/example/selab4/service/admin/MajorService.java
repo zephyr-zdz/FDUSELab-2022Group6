@@ -47,22 +47,22 @@ public class MajorService {
         return new Response<>(Response.SUCCESS, "新增专业成功", major);
     }
 
-    public Response<Major> delete(String majorName) {
-        Major major = manager.getMajorByName(majorName);
+    public Response<Major> delete(Integer majorId) {
+        Major major = manager.getMajorById(majorId);
         if (major == null) {
-            return new Response<>(Response.FAIL, "专业: " + majorName + "不存在", null);
+            return new Response<>(Response.FAIL, "专业id: " + majorId + "不存在", null);
         }
 
         // 如果专业还有学生，不允许删除专业
         List<Student> students = manager.getStudentsByMajor(major);
         if (students.size() > 0) {
-            return new Response<>(Response.FAIL, "专业: " + majorName + "还有学生，删除专业失败", null);
+            return new Response<>(Response.FAIL, "专业: " + major.getName() + "还有学生，删除专业失败", null);
         }
 
         // 如果专业还有教师，不允许删除专业
         List<Teacher> teachers = manager.getTeachersByMajor(major);
         if (teachers.size() > 0) {
-            return new Response<>(Response.FAIL, "专业: " + majorName + "还有教师，删除专业失败", null);
+            return new Response<>(Response.FAIL, "专业: " + major.getName() + "还有教师，删除专业失败", null);
         }
 
         manager.deleteMajor(major);

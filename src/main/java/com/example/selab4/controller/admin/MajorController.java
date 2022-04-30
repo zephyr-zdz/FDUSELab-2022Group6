@@ -40,8 +40,8 @@ public class MajorController {
 
     // 如果专业还有学生/教师，不允许删除专业(此处可以不考虑课程申请)
     @DeleteMapping
-    public Response<Major> delete(@RequestParam("major") String majorName) {
-        return service.delete(majorName);
+    public Response<Major> delete(@RequestParam("majorid") Integer majorId) {
+        return service.delete(majorId);
     }
 
     // 修改专业会造成级联的影响(学生/教师)
