@@ -132,9 +132,8 @@ public class TeacherService {
             teacher.setEmail("NA");
         }
 
-        oldTeacher.update(teacher);
-        manager.updateTeacher(oldTeacher);
-        return new Response<>(Response.SUCCESS, "修改教师信息成功", oldTeacher);
+        manager.updateTeacher(teacher);
+        return new Response<>(Response.SUCCESS, "修改教师信息成功", teacher);
     }
 
     public Response<String> createByFile(MultipartFile multipartFile) {
@@ -201,22 +200,22 @@ public class TeacherService {
         return new Response<>(Response.SUCCESS, "批量新增教师成功", result.toString());
     }
 
-    public Response<Teacher> delete(String jobnum) {
-        Teacher teacher = manager.getTeacherByJobnum(jobnum);
+    public Response<Teacher> delete(Integer teacherId) {
+        Teacher teacher = manager.getTeacherById(teacherId);
         if (teacher == null) {
-            return new Response<>(Response.FAIL, "工号不存在", null);
+            return new Response<>(Response.FAIL, "教师id不存在", null);
         }
 
         // 如果教师有上课，不允许删除教师
         List<Course> courses = manager.getCoursesByTeacher(teacher);
         if (courses.size() > 0) {
-            return new Response<>(Response.FAIL, "工号为" + jobnum + "的教师仍有上课任务，删除教师失败" , null);
+            return new Response<>(Response.FAIL, "工号为" + teacher.getJobnum() + "的教师仍有上课任务，删除教师失败" , null);
         }
 
         // 如果教师有发出过选课申请，不允许删除教师
         List<CourseApplication> courseApplications = manager.getCourseApplicationsByTeacher(teacher);
         if (courseApplications.size() > 0) {
-            return new Response<>(Response.FAIL, "工号为" + jobnum + "的教师仍有课程申请，删除教师失败", null);
+            return new Response<>(Response.FAIL, "工号为" + teacher.getJobnum() + "的教师仍有课程申请，删除教师失败", null);
         }
 
         manager.deleteTeacher(teacher);

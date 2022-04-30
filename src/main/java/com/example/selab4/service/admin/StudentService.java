@@ -113,9 +113,8 @@ public class StudentService {
             student.setEmail("NA");
         }
 
-        oldStudent.update(student);
-        manager.updateStudent(oldStudent);
-        return new Response<>(Response.SUCCESS, "修改学生信息成功", oldStudent);
+        manager.updateStudent(student);
+        return new Response<>(Response.SUCCESS, "修改学生信息成功", student);
     }
 
     public Response<String> createByFile(MultipartFile multipartFile) {
@@ -182,16 +181,16 @@ public class StudentService {
         return new Response<>(Response.SUCCESS, "批量新增学生成功", result.toString());
     }
 
-    public Response<Student> delete(String stunum) {
-        Student student = manager.getStudentByStunum(stunum);
+    public Response<Student> delete(Integer studentId) {
+        Student student = manager.getStudentById(studentId);
         if (student == null) {
-            return new Response<>(Response.FAIL, "学号不存在", null);
+            return new Response<>(Response.FAIL, "学生id不存在", null);
         }
 
         // 如果学生有选课，不允许删除学生
         List<Course> courses = manager.getCoursesByStudent(student);
         if (courses.size() > 0) {
-            return new Response<>(Response.FAIL, "学号为" + stunum + "的学生仍有选上课程，删除学生失败", null);
+            return new Response<>(Response.FAIL, "学号为" + student.getStunum() + "的学生仍有选上课程，删除学生失败", null);
         }
 
         manager.deleteStudent(student);

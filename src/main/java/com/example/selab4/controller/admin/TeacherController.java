@@ -51,7 +51,7 @@ public class TeacherController {
 
     // 如果教师有上课，或者有发出的课程申请，不允许删除教师
     @DeleteMapping
-    public Response<Teacher> delete(@RequestParam("jobnum") String jobnum) {
-        return service.delete(jobnum);
+    public Response<Teacher> delete(@RequestParam("teacherid") Integer teacherId) {
+        return service.delete(teacherId);
     }
 }
