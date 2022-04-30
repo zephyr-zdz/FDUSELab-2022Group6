@@ -50,16 +50,16 @@ public class InstituteService {
         return new Response<>(Response.SUCCESS, "新增学院成功", institute);
     }
 
-    public Response<Institute> delete(String instituteName) {
-        Institute institute = manager.getInstituteByName(instituteName);
+    public Response<Institute> delete(Integer instituteId) {
+        Institute institute = manager.getInstituteById(instituteId);
         if (institute == null) {
-            return new Response<>(Response.FAIL, "学院: " + instituteName + "不存在", null);
+            return new Response<>(Response.FAIL, "学院id: " + instituteId + "不存在", null);
         }
 
         // 如果学院还有专业，不允许删除学院
         List<Major> majors = manager.getMajors(institute);
         if (majors.size() > 0) {
-            return new Response<>(Response.FAIL, "学院: " + instituteName + "还有专业存在，删除学院失败", null);
+            return new Response<>(Response.FAIL, "学院: " + institute.getName() + "还有专业存在，删除学院失败", null);
         }
 
         manager.deleteInstitute(institute);

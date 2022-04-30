@@ -40,12 +40,12 @@ public class InstituteController {
 
     // 如果学院还有专业，不允许删除学院(此处可以不考虑学生/教师)
     @DeleteMapping
-    public Response<Institute> delete(@RequestParam("institute") String instituteName) {
-        return service.delete(instituteName);
+    public Response<Institute> delete(@RequestParam("instituteid") Integer instituteId) {
+        return service.delete(instituteId);
     }
 
     // 修改学院会造成级联的修改(专业、学生/教师)
-    @PutMapping("/update")
+    @PutMapping()
     public Response<Institute> update(@RequestBody Institute institute) {
         return service.update(institute);
     }
