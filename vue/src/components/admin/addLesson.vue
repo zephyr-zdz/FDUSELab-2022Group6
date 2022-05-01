@@ -11,10 +11,32 @@
         <el-input v-model="addLesson.number" placeholder="请输入课程编号"></el-input>
       </el-form-item>
 
-      <el-form-item label="开课院系" prop="institute">
-        <el-select placeholder="请选择学院" v-model="addLesson.institute">
+      <el-form-item label="课程类型" prop="type">
+        <el-select placeholder="请选择类型" v-model="addLesson.type">
           <el-option
-            v-for="item in schoolOptions"
+            v-for="item in typeOptions"
+            :key="item.name"
+            :label="item.name"
+            :value="item.id">
+          </el-option>
+        </el-select>
+      </el-form-item>
+
+      <el-form-item label="可选专业" prop="major" v-if="addLesson.type === '2' ">
+        <el-select placeholder="请选择专业" multiple v-model="addLesson.majorMulti">
+          <el-option
+            v-for="item in majorOptions"
+            :key="item.name"
+            :label="item.name"
+            :value="item.id">
+          </el-option>
+        </el-select>
+      </el-form-item>
+
+      <el-form-item label="可选专业" prop="major" v-if="addLesson.type === '3' ">
+        <el-select placeholder="请选择专业" v-model="addLesson.majorSingle">
+          <el-option
+            v-for="item in majorOptions"
             :key="item.name"
             :label="item.name"
             :value="item.id">
@@ -79,15 +101,27 @@ export default {
         classroomid: '',
         name: '',
         number: '',
-        institute: '',
+        type: '',
+        majorSingle: '',
+        majorMulti: [],
         coursehour: '',
         credit: '',
         intro: '',
         schedule: '',
         capacity: ''
       },
-      schoolOptions: [],
+      majorOptions: [],
       classroomOptions: [],
+      typeOptions: [{
+        id: '1',
+        name: '通识课程'
+      }, {
+        id: '2',
+        name: '面向部分专业课程'
+      }, {
+        id: '3',
+        name: '专业课程'
+      }],
       rules: {
         name: [
           { required: true, message: '请输入课程名称', trigger: 'blur' }
@@ -95,7 +129,10 @@ export default {
         number: [
           { required: true, message: '请输入课程编号', trigger: 'blur' }
         ],
-        institute: [
+        type: [
+          { required: true, message: '请输入课程类型', trigger: 'blur' }
+        ],
+        major: [
           { required: true, message: '请选择学院', trigger: 'blur' }
         ],
         coursehour: [
@@ -129,10 +166,10 @@ export default {
   },
   methods: {
     getSchool () {
-      this.$axios.get('/api/admin/institute/all')
+      this.$axios.get('/api/admin/major/all')
         .then(response => {
           console.log(response.data)
-          this.schoolOptions = response.data.data
+          this.majorOptions = response.data.data
         })
         .catch(error => {
           console.log(error)

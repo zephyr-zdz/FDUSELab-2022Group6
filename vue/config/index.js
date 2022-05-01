@@ -15,7 +15,7 @@ module.exports = {
         target: 'http://123.60.5.129:8080',
         changeOrigin: true,
         pathRewrite: {
-          '^/api': '/'
+          '^/api': '/api'
         }
       }
     },
@@ -97,7 +97,7 @@ module.exports = {
       target: 'http://123.60.5.129:8080',
       changeOrigin: true,
       pathRewrite: {
-        '^/api': '/'
+        '^/api': '/api'
       }
     }
   }

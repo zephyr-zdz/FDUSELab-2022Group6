@@ -44,7 +44,7 @@
       </el-table-column>
       <el-table-column
         prop="school"
-        label="开课院系"
+        label="课程类型"
         width="100">
         <template v-slot="scope">
           <el-select v-model="scope.row.institute.id" v-show="(lessonEdit&&(scope.$index===editingIndex))" placeholder="请选择" size="mini">
