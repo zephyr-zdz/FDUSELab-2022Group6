@@ -161,11 +161,11 @@ export default {
   },
   mounted () {
     console.log('mounted')
-    this.getSchool()
+    this.getMajor()
     this.getClassrooms()
   },
   methods: {
-    getSchool () {
+    getMajor () {
       this.$axios.get('/api/admin/major/all')
         .then(response => {
           console.log(response.data)
