@@ -3,9 +3,9 @@
 
       <div>
         <h2>开课学期</h2>
-        <span class="elements" v-if="lessonEdit === false">{{lessonInfo.season}}</span>
-        <el-form-item prop="season" v-if="lessonEdit === true" >
-          <el-input placeholder="请输入开课学期" v-model="lessonInfoForm.season" style="width: 40%">
+        <span class="elements" v-if="lessonEdit === false">{{lessonInfo.semester}}</span>
+        <el-form-item prop="semester" v-if="lessonEdit === true" >
+          <el-input placeholder="请输入开课学期" v-model="lessonInfoForm.semester" style="width: 40%">
           </el-input>
         </el-form-item>
       </div>
@@ -157,7 +157,7 @@ export default {
         name: '专业课程'
       }],
       lessonInfo: {
-        season: '2021-2022春',
+        semester: '2021-2022春',
         name: '有机化学',
         coursenum: 'CHEM110011.01',
         type: '通识课程',
@@ -176,7 +176,7 @@ export default {
       editingCalendar: '',
       rowSchedule: '',
       lessonInfoForm: {
-        season: '',
+        semester: '',
         name: '有机化学',
         coursenum: 'CHEM110011.01',
         type: '',
@@ -191,7 +191,7 @@ export default {
         capacity: ''
       },
       rules: {
-        season: [
+        semester: [
           {required: true, message: '请输入开课学期', trigger: 'blur'},
           {pattern: /[0-9]{4}[-][0-9]{4}[\u4e00-\u9fa5]$/, message: '请输入正确的开课学期，如：2021-2022春', trigger: 'blur'}
         ],

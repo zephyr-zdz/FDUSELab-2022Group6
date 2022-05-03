@@ -24,11 +24,11 @@
               stripe
               pager="page">
       <el-table-column
-        prop="season"
+        prop="semester"
         label="开课学期"
         width="150">
         <template v-slot="scope">
-          <span v-show="!(lessonEdit&&(scope.$index===editingIndex))">{{ scope.row.course.season }}</span>
+          <span v-show="!(lessonEdit&&(scope.$index===editingIndex))">{{ scope.row.course.semester }}</span>
         </template>
       </el-table-column>
       <el-table-column

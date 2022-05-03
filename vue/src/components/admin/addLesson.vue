@@ -3,8 +3,8 @@
     <el-form class="reg-container" label-position="left" :model="addLesson" :rules="rules" ref="addLesson" label-width="100px">
       <h3 class="reg_title">新增课程</h3>
 
-      <el-form-item label="开课学期" prop="season">
-        <el-input v-model="addLesson.season" placeholder="请输入开课学期"></el-input>
+      <el-form-item label="开课学期" prop="semester">
+        <el-input v-model="addLesson.semester" placeholder="请输入开课学期"></el-input>
       </el-form-item>
 
       <el-form-item label="课程名称" prop="name">
@@ -101,7 +101,7 @@ export default {
     return {
       res: {id: -1},
       addLesson: {
-        season: '',
+        semester: '',
         jobnum: '',
         classroomid: '',
         name: '',
@@ -128,7 +128,7 @@ export default {
         name: '专业课程'
       }],
       rules: {
-        season: [
+        semester: [
           {required: true, message: '请输入开课学期', trigger: 'blur'},
           {pattern: /[0-9]{4}[-][0-9]{4}[\u4e00-\u9fa5]$/, message: '请输入正确的开课学期，如：2021-2022春', trigger: 'blur'}
         ],
