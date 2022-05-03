@@ -2,6 +2,16 @@
     <el-form class="lesson-info-container" :model="lessonInfoForm" :rules="rules" ref="lessonInfoForm">
 
       <div>
+        <h2>开课学期</h2>
+        <span class="elements" v-if="lessonEdit === false">{{lessonInfo.season}}</span>
+        <el-form-item prop="season" v-if="lessonEdit === true" >
+          <el-input placeholder="请输入开课学期" v-model="lessonInfoForm.season" style="width: 40%">
+          </el-input>
+        </el-form-item>
+      </div>
+      <el-divider></el-divider>
+
+      <div>
         <h2>课程名称</h2>
         <span class="elements">{{lessonInfo.name}}</span>
       </div>
@@ -147,6 +157,7 @@ export default {
         name: '专业课程'
       }],
       lessonInfo: {
+        season: '',
         name: '有机化学',
         coursenum: 'CHEM110011.01',
         type: '通识课程',
@@ -165,6 +176,7 @@ export default {
       editingCalendar: '',
       rowSchedule: '',
       lessonInfoForm: {
+        season: '',
         name: '有机化学',
         coursenum: 'CHEM110011.01',
         type: '',
@@ -179,6 +191,10 @@ export default {
         capacity: ''
       },
       rules: {
+        season: [
+          {required: true, message: '请输入开课学期', trigger: 'blur'},
+          {pattern: /[0-9]{4}[-][0-9]{4}[\u4e00-\u9fa5]$/, message: '请输入正确的开课学期，如：2021-2022春', trigger: 'blur'}
+        ],
         type: [
           { required: true, message: '请输入课程类型', trigger: 'blur' }
         ],

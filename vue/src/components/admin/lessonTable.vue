@@ -28,12 +28,6 @@
         label="开课学期"
         width="150">
         <template v-slot="scope">
-          <!--          <el-input-->
-          <!--              size="mini"-->
-          <!--              v-model="scope.row.course.name"-->
-          <!--              v-show="(lessonEdit&&(scope.$index===editingIndex))"-->
-          <!--              placeholder="请输入课程名称">-->
-          <!--          </el-input>-->
           <span v-show="!(lessonEdit&&(scope.$index===editingIndex))">{{ scope.row.course.season }}</span>
         </template>
       </el-table-column>
