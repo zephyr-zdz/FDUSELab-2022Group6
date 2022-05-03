@@ -21,7 +21,7 @@
     </el-form-item>
 
     <el-form-item label="申请理由" prop="reason">
-      <el-input v-model="applicationForm.reason" placeholder="请输入申请理由"></el-input>
+      <el-input type="textarea" v-model="applicationForm.reason" placeholder="请输入申请理由"></el-input>
     </el-form-item>
 
     <el-form-item style="width: 100%">
