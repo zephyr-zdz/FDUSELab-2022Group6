@@ -24,16 +24,30 @@
               stripe
               pager="page">
       <el-table-column
+        prop="season"
+        label="开课学期"
+        width="150">
+        <template v-slot="scope">
+          <!--          <el-input-->
+          <!--              size="mini"-->
+          <!--              v-model="scope.row.course.name"-->
+          <!--              v-show="(lessonEdit&&(scope.$index===editingIndex))"-->
+          <!--              placeholder="请输入课程名称">-->
+          <!--          </el-input>-->
+          <span v-show="!(lessonEdit&&(scope.$index===editingIndex))">{{ scope.row.course.season }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column
         prop="name"
         label="课程名称"
         width="80">
         <template v-slot="scope">
-          <el-input
-              size="mini"
-              v-model="scope.row.course.name"
-              v-show="(lessonEdit&&(scope.$index===editingIndex))"
-              placeholder="请输入课程名称">
-          </el-input>
+<!--          <el-input-->
+<!--              size="mini"-->
+<!--              v-model="scope.row.course.name"-->
+<!--              v-show="(lessonEdit&&(scope.$index===editingIndex))"-->
+<!--              placeholder="请输入课程名称">-->
+<!--          </el-input>-->
           <span v-show="!(lessonEdit&&(scope.$index===editingIndex))">{{ scope.row.course.name }}</span>
         </template>
       </el-table-column>
@@ -70,7 +84,7 @@
       <el-table-column
         prop="hours"
         label="学时"
-        width="150">
+        width="80">
         <template v-slot="scope">
 <!--          <el-input-number controls size="mini" v-show="(lessonEdit&&(scope.$index===editingIndex))" v-model="scope.row.course.coursehour" :min="0.5" :step="0.5"></el-input-number>-->
           <span v-show="!(lessonEdit&&(scope.$index===editingIndex))">{{ scope.row.course.coursehour }}</span>
@@ -79,7 +93,7 @@
       <el-table-column
         prop="points"
         label="学分"
-        width="150">
+        width="80">
         <template v-slot="scope">
 <!--          <el-input-number controls size="mini" v-show="(lessonEdit&&(scope.$index===editingIndex))" v-model="scope.row.course.credit" :min="0.5" :step="0.5"></el-input-number>-->
           <span v-show="!(lessonEdit&&(scope.$index===editingIndex))">{{ scope.row.course.credit }}</span>
@@ -145,7 +159,7 @@
       <el-table-column
         prop="operation"
         label="操作"
-        width="150">
+       >
         <template v-slot="scope">
 <!--          <el-button v-if="!(lessonEdit&&(scope.$index===editingIndex))" size="mini" type="warning" @click="editRow(scope.row,scope.$index)">修改</el-button>-->
 <!--          <el-button v-if="!(lessonEdit&&(scope.$index===editingIndex))" size="mini" type="danger" @click="deleteRow(scope.row,scope.$index)">删除</el-button>-->
