@@ -4,10 +4,7 @@ import com.example.selab4.model.entity.CourseApplication;
 import com.example.selab4.service.teacher.ApplicationService;
 import com.example.selab4.util.Response;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -26,7 +23,7 @@ public class ApplicationController {
         return applicationService.upload(courseApplication);
     }
 
-    @PostMapping("/getMyApplicationByJobNum")
+    @GetMapping("/all")
     public Response<List<CourseApplication>> getMyApplication(String JobNum){
         return applicationService.showMyApplication(JobNum);
     }

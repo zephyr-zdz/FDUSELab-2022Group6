@@ -27,12 +27,12 @@ public class CourseController {
     }
 
     // 查看所有的课程申请
-    @GetMapping("/getApplication")
+    @GetMapping("/applications")
     public Response<List<CourseApplicationVO>> getApplication(){
         return courseService.showAllApplications();
     }
 
-    @GetMapping("/getPendingApplication")
+    @GetMapping("/pending")
     public Response<List<CourseApplicationVO>> getPendingApplication() {
         return courseService.showPendingApplications();
     }
@@ -49,12 +49,12 @@ public class CourseController {
         return courseService.modify(courseApplication);
     }
 
-    @GetMapping("/getTeacherJobNumById")
+    @GetMapping("/get-jobnum-by-id")
     public Response<String> getTeacherJobNum(@RequestParam(name = "Id") Integer Id){
         return new Response<>(0,"success",courseService.getTeacherJobnumById(Id));
     }
 
-    @GetMapping("/getTeacherIdByJobNum")
+    @GetMapping("/get-id-by-jobnum")
     public Response<Integer> getTeacherJobNum(@RequestParam(name = "JobNum") String JobNum){
         return new Response<>(0,"success",courseService.getTeacherIdByJobnum(JobNum));
     }
@@ -65,7 +65,7 @@ public class CourseController {
         return courseService.BatchModify(multipartFile);
     }
 
-    @GetMapping("/getCourse")
+    @GetMapping("/all")
     public Response<List<CourseVO>> getCourse(){
         return courseService.showAllCourse();
     }

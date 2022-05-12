@@ -26,7 +26,7 @@ public class TeacherController {
         return service.update(teacher);
     }
 
-    @PutMapping("/changepassword")
+    @PutMapping("/change-password")
     public Response<String> changePassword(@RequestParam("username") String jobnum,
                                            @RequestParam("oldpwd") String oldpwd,
                                            @RequestParam("newpwd") String newpwd) {

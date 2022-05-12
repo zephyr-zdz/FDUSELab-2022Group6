@@ -20,7 +20,7 @@ public class CourseController {
     }
 
     // 学生查看选课功能状态
-    @GetMapping("/isValid")
+    @GetMapping("/valid")
     public Response<String> isValid() {
         return service.isValid();
     }
@@ -39,7 +39,7 @@ public class CourseController {
 
     // 学生选课 TODO
     @PostMapping
-    public Response<Course> choose(@RequestParam("courseid") String courseid) {
-        return service.choose(courseid);
+    public Response<Course> choose(@RequestParam("courseId") String courseId) {
+        return service.choose(courseId);
     }
 }

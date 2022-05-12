@@ -18,7 +18,7 @@ public class AdminController {
         this.adminService=adminService;
     }
 
-    @GetMapping("/isValid")
+    @GetMapping("/valid")
     public Response<String> isValid() {
         return adminService.isValid();
     }
