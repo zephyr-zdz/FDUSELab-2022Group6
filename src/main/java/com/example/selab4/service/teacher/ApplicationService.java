@@ -8,9 +8,14 @@ import com.example.selab4.util.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
+import static java.lang.Integer.parseInt;
+
+@Transactional
 @Service("TeacherApplicationService")
 public class ApplicationService {
     private final ApplicationManager applicationManager;
@@ -67,6 +72,14 @@ public class ApplicationService {
                 flag=false;
         }
         addSchedules(schedules);
+        Integer classroomId=courseApplication.getClassroomid();
+        String classroomCapacity=applicationManager.findClassroomCapacityById(classroomId);
+        if(applicationManager.findClassroomById(courseApplication.getClassroomid()).getState().equals("off")) {
+            throw new RuntimeException("classroom is off");
+        }
+        if(parseInt(courseApplication.getCapacity()) > parseInt(classroomCapacity)) {
+            throw new RuntimeException("capacity overflow");
+        }
         return flag;
     }
 

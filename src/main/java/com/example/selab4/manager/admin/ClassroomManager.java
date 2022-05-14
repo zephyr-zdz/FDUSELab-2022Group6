@@ -10,10 +10,12 @@ import java.util.List;
 @Component("AdminClassroomManager")
 public class ClassroomManager {
     private final ClassroomMapper classroomMapper;
+    private final ScheduleMapper scheduleMapper;
 
     @Autowired
-    ClassroomManager(ClassroomMapper classroomMapper){
+    ClassroomManager(ClassroomMapper classroomMapper, ScheduleMapper scheduleMapper){
         this.classroomMapper=classroomMapper;
+        this.scheduleMapper = scheduleMapper;
     }
 
     public Classroom findClassroomByName(String name){
@@ -30,5 +32,10 @@ public class ClassroomManager {
 
     public void save(Classroom classroom) {
         classroomMapper.save(classroom);
+    }
+
+    public boolean isClassroomUsed(Classroom classroom) {
+        List<Schedule> scheduleList = scheduleMapper.findSchedulesByClassroomid(classroom.getId());
+        return scheduleList.size() > 0;
     }
 }

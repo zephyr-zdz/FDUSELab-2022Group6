@@ -35,6 +35,7 @@ public class ClassroomController {
         return classroomService.openClassroomState(Name);
     }
 
+    // 这些教室必须没有课上，才能修改
     @GetMapping("/closeClassroomState")
     public Response<String> closeClassroomState(String Name){
         return classroomService.closeClassroomState(Name);
