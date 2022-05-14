@@ -37,13 +37,13 @@ public class CourseController {
         return service.getAllByStunum(stunum);
     }
 
-    // 学生选课
+    // 学生选课（学生看到的课都是能选课的专业）
     @PostMapping
-    public Response<String> choose(@RequestParam("stunum") String stunum, @RequestParam("coursenum") String coursenum) {
-        return service.choose(stunum, coursenum);
+    public Response<String> choose(@RequestParam("studentid") String studentid, @RequestParam("courseid") String courseid) {
+        return service.choose(studentid, courseid);
     }
 
-    // 学生退课
+    // 学生退课 TODO num=>id
     @DeleteMapping
     public Response<String> delete(@RequestParam("stunum") String stunum, @RequestParam("coursenum") String coursenum) {
         return service.delete(stunum, coursenum);

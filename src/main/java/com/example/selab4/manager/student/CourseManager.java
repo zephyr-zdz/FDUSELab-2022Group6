@@ -85,7 +85,7 @@ public class CourseManager {
 
     public boolean checkCapacity(Course course) {
         Integer capacity = parseInt(course.getCapacity());
-        Integer stuCount = stuCourseMapper.countByCourseid(course.getId());
+        Integer stuCount = parseInt(course.getCurrentcount());
         return stuCount < capacity;
     }
 
@@ -111,6 +111,11 @@ public class CourseManager {
         StuCourse stuCourse = new StuCourse();
         stuCourse.setStudentid(student.getId());
         stuCourse.setCourseid(course.getId());
+        stuCourse.setStatus("S");   // 已选S
+
+        course.addStudent();
+        courseMapper.save(course);
+
         stuCourseMapper.save(stuCourse);
     }
 
