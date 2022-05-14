@@ -6,6 +6,7 @@ import com.example.selab4.util.Response;
 import com.sun.istack.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -37,6 +38,11 @@ public class CourseTemplateController {
     @PutMapping
     public Response<CourseTemplate> update(@RequestBody CourseTemplate courseTemplate) {
         return service.update(courseTemplate);
+    }
+
+    @PostMapping("/file")
+    public Response<String> createByFile(@RequestParam("file") MultipartFile multipartFile) {
+        return service.createByFile(multipartFile);
     }
 
 }
