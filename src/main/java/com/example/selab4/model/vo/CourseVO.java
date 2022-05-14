@@ -15,7 +15,8 @@ public class CourseVO {
     private Teacher teacher;
     private List<Schedule> scheduleList;
     private Classroom classroom;
-    private Institute institute;
-    private Major major;
+    private Institute instituteOfTeacher;
+    private Major majorOfTeacher;
     private List<Calendar> calendarList;
+    private List<Major> majorListOfCourse;
 }

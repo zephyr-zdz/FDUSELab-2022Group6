@@ -49,7 +49,7 @@ public class CourseManager {
         courseVOList = new ArrayList<>(hashSet);
 
         for (CourseVO courseVO : courseVOList) {
-            if (courseVO.getMajor().equals(major)) {
+            if (courseVO.getMajorOfTeacher().equals(major)) {
                 result.add(courseVO);
             }
         }

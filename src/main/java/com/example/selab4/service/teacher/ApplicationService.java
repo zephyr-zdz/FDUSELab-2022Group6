@@ -72,12 +72,13 @@ public class ApplicationService {
 
 
     public Response<String> upload(CourseApplication courseApplication){
-        if(check(courseApplication)){
+        if(!check(courseApplication)){
+            return new Response<>(Response.FAIL,"err","conflict");
+        }
+        else {
             applicationManager.save(courseApplication);
             return new Response<>(Response.SUCCESS,"success","application uploaded");
         }
-        else
-            return new Response<>(Response.FAIL,"err","conflict");
     }
 
     public Response<List<CourseApplication>> showMyApplication(String JobNum){

@@ -29,6 +29,8 @@ public class Course {
     private String intro;
     @Column(name = "ispublic", nullable = false, length = 1)
     private String ispublic;    // Y：所有专业可选（通选课程）；N：部分专业可选（包括只有1个专业可选的情况）
+    @Column(name = "semester", nullable = false, length = 10)
+    private String semester;     // 学年学期，例如：2021-2022春
 
 
     public void update(Course newCourse){
@@ -38,5 +40,6 @@ public class Course {
         this.intro = newCourse.getIntro();
         this.coursehour = newCourse.getCoursehour();
         this.ispublic = newCourse.getIspublic();
+        this.semester = newCourse.getSemester();
     }
 }

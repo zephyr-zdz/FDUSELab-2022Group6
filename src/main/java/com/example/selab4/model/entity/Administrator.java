@@ -22,8 +22,8 @@ public class Administrator {
     private String password;
     @Column(name = "select_course_function", nullable = true, length = 5)
     private String selectcoursefunction;    // 暂定on/off
-
-    // TODO 当前学期 例如2021-2022春
+    @Column(name = "semester", nullable = false, length = 10)
+    private String semester;        // 学年学期，例如：2021-2022春
 
     // 第一轮选课 开关
 

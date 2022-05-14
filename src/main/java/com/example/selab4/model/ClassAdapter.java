@@ -1,10 +1,7 @@
 package com.example.selab4.model;
 
 import com.example.selab4.mapper.*;
-import com.example.selab4.model.entity.Calendar;
-import com.example.selab4.model.entity.Course;
-import com.example.selab4.model.entity.CourseApplication;
-import com.example.selab4.model.entity.Schedule;
+import com.example.selab4.model.entity.*;
 import com.example.selab4.model.vo.CourseApplicationVO;
 import com.example.selab4.model.vo.CourseVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,9 +24,10 @@ public class ClassAdapter {
     private final StudentMapper studentMapper;
     private final TeacherMapper teacherMapper;
     private final TimeMapper timeMapper;
+    private final CourseAndMajorMapper courseAndMajorMapper;
 
     @Autowired
-    public ClassAdapter(AdminMapper adminMapper, ApplicationMapper applicationMapper, CalendarMapper calendarMapper, ClassroomMapper classroomMapper, CourseMapper courseMapper, InstituteMapper instituteMapper, MajorMapper majorMapper, ScheduleMapper scheduleMapper, StuCourseMapper stuCourseMapper, StudentMapper studentMapper, TeacherMapper teacherMapper, TimeMapper timeMapper) {
+    public ClassAdapter(AdminMapper adminMapper, ApplicationMapper applicationMapper, CalendarMapper calendarMapper, ClassroomMapper classroomMapper, CourseMapper courseMapper, InstituteMapper instituteMapper, MajorMapper majorMapper, ScheduleMapper scheduleMapper, StuCourseMapper stuCourseMapper, StudentMapper studentMapper, TeacherMapper teacherMapper, TimeMapper timeMapper, CourseAndMajorMapper courseAndMajorMapper) {
         this.adminMapper = adminMapper;
         this.applicationMapper = applicationMapper;
         this.calendarMapper = calendarMapper;
@@ -42,6 +40,7 @@ public class ClassAdapter {
         this.studentMapper = studentMapper;
         this.teacherMapper = teacherMapper;
         this.timeMapper = timeMapper;
+        this.courseAndMajorMapper = courseAndMajorMapper;
     }
 
     public CourseApplicationVO fromCourseApplication2CourseApplicationVO(CourseApplication courseApplication) {
@@ -60,8 +59,8 @@ public class ClassAdapter {
         courseVO.setScheduleList(scheduleMapper.findSchedulesByCourseid(course.getId()));
         courseVO.setClassroom(classroomMapper.findClassroomById(courseVO.getScheduleList().get(0).getClassroomid()));
         courseVO.setTeacher(teacherMapper.findTeacherById(courseVO.getScheduleList().get(0).getTeacherid()));
-        courseVO.setInstitute(instituteMapper.findInstituteByName(courseVO.getTeacher().getInstitute()));
-        courseVO.setMajor(majorMapper.findMajorByName(courseVO.getTeacher().getMajor()));
+        courseVO.setInstituteOfTeacher(instituteMapper.findInstituteByName(courseVO.getTeacher().getInstitute()));
+        courseVO.setMajorOfTeacher(majorMapper.findMajorByName(courseVO.getTeacher().getMajor()));
 
         List<Calendar> calendarList = new ArrayList<>();
         for (Schedule schedule : courseVO.getScheduleList()) {
@@ -69,6 +68,13 @@ public class ClassAdapter {
             calendarList.add(calendar);
         }
         courseVO.setCalendarList(calendarList);
+
+        List<Major> majorListOfCourse = new ArrayList<>();
+        for (CourseAndMajor courseAndMajor : courseAndMajorMapper.findCourseAndMajorListByCourseid(course.getId())) {
+            Major major = majorMapper.findMajorById(courseAndMajor.getMajorid());
+            majorListOfCourse.add(major);
+        }
+        courseVO.setMajorListOfCourse(majorListOfCourse);
 
         return courseVO;
     }
