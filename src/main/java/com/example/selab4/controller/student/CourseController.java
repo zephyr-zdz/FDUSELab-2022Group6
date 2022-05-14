@@ -20,18 +20,18 @@ public class CourseController {
     }
 
     // 学生查看选课功能状态
-    @GetMapping("/isValid")
+    @GetMapping("/isvalid")
     public Response<String> isValid() {
         return service.isValid();
     }
 
-    // 学生查看本专业所有课程
+    // 学生查看本专业所有可选课程
     @GetMapping
     public Response<List<CourseVO>> getAllByMajor(@RequestParam("major") String majorName) {
         return service.getAllByMajor(majorName);
     }
 
-    // 学生查看自己的所有课程
+    // 学生查看所有已选/已修的课程
     @GetMapping("/stunum")
     public Response<List<CourseVO>> getAllByStunum(@RequestParam("stunum") String stunum) {
         return service.getAllByStunum(stunum);

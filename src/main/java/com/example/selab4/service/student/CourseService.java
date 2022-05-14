@@ -18,10 +18,10 @@ public class CourseService {
         this.manager = manager;
     }
 
-    public Response<List<CourseVO>> getAllByMajor(String majorName) {
-        Major major = manager.findMajorByName(majorName);
+    public Response<List<CourseVO>> getAllByMajor(String studentMajor) {
+        Major major = manager.findMajorByName(studentMajor);
         if (major == null) {
-            return new Response<>(Response.FAIL, "专业: " + majorName + "不存在", null);
+            return new Response<>(Response.FAIL, "专业: " + studentMajor + "不存在", null);
         }
 
         return new Response<>(Response.SUCCESS, "根据专业查找课程成功", manager.findCoursesByMajor(major));

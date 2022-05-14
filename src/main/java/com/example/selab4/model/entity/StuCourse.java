@@ -20,4 +20,6 @@ public class StuCourse {
     private Integer studentid;
     @Column(name = "courseid", nullable = false)
     private Integer courseid;
+    @Column(name = "status", nullable = false, length = 1)
+    private String status;  // 已选S；已修F
 }
