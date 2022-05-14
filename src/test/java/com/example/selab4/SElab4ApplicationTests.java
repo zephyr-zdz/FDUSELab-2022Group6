@@ -54,4 +54,9 @@ class SElab4ApplicationTests {
         studentMapper.save(student);
     }
 
+    @Test
+    void doAnything() {
+
+    }
+
 }
