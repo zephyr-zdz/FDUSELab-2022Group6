@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static java.lang.Integer.parseInt;
 import static org.aspectj.util.LangUtil.split;
 
 @Transactional
@@ -105,6 +106,19 @@ public class CourseService {
             }
         }
         addSchedules(schedules);
+
+        Integer classroomId=courseApplication.getClassroomid();
+        String classroomCapacity=courseManager.findClassroomCapacityById(classroomId);
+
+        // 教室on检查
+        if(courseManager.findClassroomById(courseApplication.getClassroomid()).getState().equals("off")) {
+            throw new RuntimeException("classroom is off");
+        }
+
+        // 教室capacity检查
+        if(parseInt(courseApplication.getCapacity()) > parseInt(classroomCapacity)) {
+            throw new RuntimeException("capacity overflow");
+        }
         return flag;
     }
 
@@ -115,11 +129,17 @@ public class CourseService {
             return new Response<>(Response.SUCCESS,"Administrator not approve","disapproval");
         }
         Course course=fromApplicationToCourse(courseApplication);
-        if(!check(courseApplication))
-            return new Response<>(Response.FAIL,"err","Another application had been approved,leading to conflict");
+
+        try {
+            if(!check(courseApplication))
+                return new Response<>(Response.FAIL,"err","Another application had been approved,leading to conflict");
+        } catch (RuntimeException e) {
+            return new Response<>(Response.FAIL, e.toString(), "catch异常");
+        }
+
         switch (courseApplication.getApplytype()){
             case "delete":{
-                courseManager.delete(course);
+                courseManager.deleteCourseById(courseApplication.getPre_courseId());
                 courseApplication.setResult("approve");
                 courseManager.save(courseApplication);
                 courseManager.deleteSchedulesByCourseId(courseApplication.getPre_courseId());
@@ -137,6 +157,7 @@ public class CourseService {
             }
             case "insert":{
                 courseManager.save(course);
+                courseApplication.setPre_courseId(course.getId());
                 addSchedules(getSchedulesFromApplication(courseApplication,course));
                 courseApplication.setResult("approve");
                 courseManager.save(courseApplication);
@@ -151,11 +172,16 @@ public class CourseService {
 
 
     public Response<String> modify(CourseApplication courseApplication){
-        if(!check(courseApplication)){
-            courseApplication.setResult("reject");
-            courseManager.save(courseApplication);
-            return new Response<>(Response.FAIL,"conflict","conflict");
+        try {
+            if(!check(courseApplication)){
+                courseApplication.setResult("reject");
+                courseManager.save(courseApplication);
+                return new Response<>(Response.FAIL,"conflict","conflict");
+            }
+        } catch (RuntimeException e) {
+            return new Response<>(Response.FAIL, e.toString(), "catch异常");
         }
+
         approve(courseApplication,true);
         return new Response<>(Response.SUCCESS,"success","modify success");
     }
@@ -193,7 +219,7 @@ public class CourseService {
             courseApplication.setResult(row.getField("result"));
             courseApplication.setCoursehour(row.getField("coursehour"));
             courseApplication.setCoursenum(row.getField("coursenum"));
-            courseApplication.setCapacity(row.getField("coursenum"));
+            courseApplication.setCapacity(row.getField("capacity"));
             courseApplication.setApplytype(row.getField("applytype"));
             courseApplication.setClassroomid(Integer.valueOf(row.getField("classroomid")));
             courseApplication.setCoursename(row.getField("coursename"));
@@ -203,7 +229,7 @@ public class CourseService {
             courseApplication.setCredit(row.getField("credit"));
             courseApplication.setSchedule(row.getField("schedule"));
             courseApplication.setTeacherid(Integer.valueOf(row.getField("teacherid")));
-            courseApplication.setResult(row.getField("Result"));
+            courseApplication.setPre_courseId(Integer.valueOf(row.getField("pre_courseId")));
             response=modify(courseApplication);
             if (response.getCode().equals(Response.FAIL)) {
                 result.append(count).append(",");

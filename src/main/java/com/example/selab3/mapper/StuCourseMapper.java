@@ -8,5 +8,13 @@ import java.util.List;
 
 @Repository
 public interface StuCourseMapper extends JpaRepository<StuCourse, Integer> {
+    Integer countByCourseid(Integer courseid);
+
     List<StuCourse> findAllByStudentid(Integer studentid);
+
+    List<StuCourse> findStuCoursesByStudentid(Integer studentid);
+
+    void deleteByStudentidAndCourseid(Integer studentid, Integer courseid);
+
+    List<StuCourse> findStuCoursesByStudentidAndCourseid(Integer studentid, Integer courseid);
 }

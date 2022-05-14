@@ -1,11 +1,8 @@
 package com.example.selab3.manager.admin;
 
 import com.example.selab3.mapper.*;
-import com.example.selab3.model.ClassAdapter;
-import com.example.selab3.model.entity.Calendar;
-import com.example.selab3.model.entity.Course;
-import com.example.selab3.model.entity.CourseApplication;
-import com.example.selab3.model.entity.Schedule;
+import com.example.selab3.util.ClassAdapter;
+import com.example.selab3.model.entity.*;
 import com.example.selab3.model.vo.CourseApplicationVO;
 import com.example.selab3.model.vo.CourseVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -146,11 +143,19 @@ public class CourseManager {
         return classroomMapper.findClassroomById(id).getName();
     }
 
+    public Classroom findClassroomById(Integer id) {
+        return classroomMapper.findClassroomById(id);
+    }
+
     public Course findCourseByCourseNum(String courseNum) {
         return courseMapper.findCourseByCoursenum(courseNum);
     }
 
     public Course findCourseByCourseId(Integer course_id) {
         return courseMapper.findCourseById(course_id);
+    }
+
+    public String findClassroomCapacityById(Integer classroomId) {
+        return classroomMapper.findClassroomById(classroomId).getCapacity();
     }
 }
