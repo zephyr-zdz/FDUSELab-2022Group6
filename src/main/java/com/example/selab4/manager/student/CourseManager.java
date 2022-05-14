@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 
+import static java.lang.Integer.parseInt;
+
 @Component("StudentCourseManager")
 public class CourseManager {
     private final MajorMapper majorMapper;
@@ -74,5 +76,49 @@ public class CourseManager {
         }
 
         return result;
+    }
+
+    public Course findCourseByCoursenum(String coursenum) {
+        return courseMapper.findCourseByCoursenum(coursenum);
+    }
+
+    public boolean checkCapacity(Course course) {
+        Integer capacity = parseInt(course.getCapacity());
+        Integer stuCount = stuCourseMapper.countByCourseid(course.getId());
+        return stuCount < capacity;
+    }
+
+    public boolean checkSchedule(Student student, Course course) {
+        List<StuCourse> stuCourseList = stuCourseMapper.findStuCoursesByStudentid(student.getId());
+        List<Schedule> studentScheduleList = new ArrayList<>();
+        for (StuCourse stuCourse : stuCourseList) {
+            List<Schedule> schedules = scheduleMapper.findSchedulesByCourseid(stuCourse.getCourseid());
+            studentScheduleList.addAll(schedules);
+        }
+
+        List<Schedule> courseScheduleList = scheduleMapper.findSchedulesByCourseid(course.getId());
+        for (Schedule schedule : courseScheduleList) {
+            if (studentScheduleList.contains(schedule)) {   // 挑选的课程的某个上课时间，学生本来就要上课
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public void choose(Student student, Course course) {
+        StuCourse stuCourse = new StuCourse();
+        stuCourse.setStudentid(student.getId());
+        stuCourse.setCourseid(course.getId());
+        stuCourseMapper.save(stuCourse);
+    }
+
+    public void delete(Student student, Course course) {
+        stuCourseMapper.deleteByStudentidAndCourseid(student.getId(), course.getId());
+    }
+
+    public boolean checkStuCourse(Student student, Course course) {
+        List<StuCourse> stuCourses = stuCourseMapper.findStuCoursesByStudentidAndCourseid(student.getId(), course.getId());
+        return stuCourses.size() > 0;
     }
 }

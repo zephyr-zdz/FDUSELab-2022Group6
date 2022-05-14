@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static java.lang.Integer.parseInt;
 import static org.aspectj.util.LangUtil.split;
 
 @Transactional
@@ -119,6 +120,19 @@ public class CourseService {
 
         // TODO
 
+
+        Integer classroomId=courseApplication.getClassroomid();
+        String classroomCapacity=courseManager.findClassroomCapacityById(classroomId);
+
+        // 教室on检查
+        if(courseManager.findClassroomById(courseApplication.getClassroomid()).getState().equals("off")) {
+            throw new RuntimeException("classroom is off");
+        }
+
+        // 教室capacity检查
+        if(parseInt(courseApplication.getCapacity()) > parseInt(classroomCapacity)) {
+            throw new RuntimeException("capacity overflow");
+        }
         return flag;
     }
 
@@ -173,6 +187,7 @@ public class CourseService {
             courseManager.save(courseApplication);
             return new Response<>(Response.FAIL,"产生逻辑错误，管理员不得修改课程，","conflict");
         }
+
         approve(courseApplication,true);
         return new Response<>(Response.SUCCESS,"管理员修改课程成功","modify success");
     }

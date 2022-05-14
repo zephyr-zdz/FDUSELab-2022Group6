@@ -34,6 +34,10 @@ public class ClassroomService {
 
     public Response<String> closeClassroomState(String Name){
         Classroom classroom=classroomManager.findClassroomByName(Name);
+
+        if (classroomManager.isClassroomUsed(classroom)) {
+            return new Response<>(Response.FAIL, "教室已经安排课程", "on");
+        }
         classroom.setState("off");
         classroomManager.save(classroom);
         return new Response<>(Response.SUCCESS,"success","off");

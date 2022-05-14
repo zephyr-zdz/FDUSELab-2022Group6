@@ -33,13 +33,19 @@ public class CourseController {
 
     // 学生查看自己的所有课程
     @GetMapping("/stunum")
-    public Response<List<CourseVO>> getAllByJobnum(@RequestParam("stunum") String stunum) {
+    public Response<List<CourseVO>> getAllByStunum(@RequestParam("stunum") String stunum) {
         return service.getAllByStunum(stunum);
     }
 
-    // 学生选课 TODO
+    // 学生选课
     @PostMapping
-    public Response<Course> choose(@RequestParam("courseid") String courseid) {
-        return service.choose(courseid);
+    public Response<String> choose(@RequestParam("stunum") String stunum, @RequestParam("coursenum") String coursenum) {
+        return service.choose(stunum, coursenum);
+    }
+
+    // 学生退课
+    @DeleteMapping
+    public Response<String> delete(@RequestParam("stunum") String stunum, @RequestParam("coursenum") String coursenum) {
+        return service.delete(stunum, coursenum);
     }
 }

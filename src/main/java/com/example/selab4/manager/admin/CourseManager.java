@@ -146,11 +146,23 @@ public class CourseManager {
         return classroomMapper.findClassroomById(id).getName();
     }
 
+    public Classroom findClassroomById(Integer id) {
+        return classroomMapper.findClassroomById(id);
+    }
+
+    public Course findCourseByCourseNum(String courseNum) {
+        return courseMapper.findCourseByCoursenum(courseNum);
+    }
+
     public Course findCourseByCourseId(Integer course_id) {
         return courseMapper.findCourseById(course_id);
     }
 
     public CourseTemplate getCourseTemplateByCoursenum(String coursenum) {
         return courseTemplateMapper.findCourseTemplateByCoursenum(coursenum);
+    }
+
+    public String findClassroomCapacityById(Integer classroomId) {
+        return classroomMapper.findClassroomById(classroomId).getCapacity();
     }
 }

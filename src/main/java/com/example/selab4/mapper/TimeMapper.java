@@ -5,4 +5,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TimeMapper extends JpaRepository<TimeTable,Integer> {
+    TimeTable findTimetableById(Integer id);
 }
