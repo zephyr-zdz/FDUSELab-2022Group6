@@ -4,7 +4,7 @@ import com.example.selab3.mapper.CourseMapper;
 import com.example.selab3.mapper.MajorMapper;
 import com.example.selab3.mapper.ScheduleMapper;
 import com.example.selab3.mapper.TeacherMapper;
-import com.example.selab3.model.ClassAdapter;
+import com.example.selab3.util.ClassAdapter;
 import com.example.selab3.model.entity.Major;
 import com.example.selab3.model.entity.Schedule;
 import com.example.selab3.model.entity.Teacher;

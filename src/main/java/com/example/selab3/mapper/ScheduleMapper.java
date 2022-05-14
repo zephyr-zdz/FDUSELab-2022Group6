@@ -13,4 +13,6 @@ public interface ScheduleMapper extends JpaRepository<Schedule,Integer> {
     List<Schedule> findSchedulesByCourseid(Integer courseId);
     void deleteSchedulesByCourseid(Integer courseId);
     List<Schedule> findAllByTeacherid(Integer teacherid);
+
+    List<Schedule> findSchedulesByClassroomid(Integer id);
 }

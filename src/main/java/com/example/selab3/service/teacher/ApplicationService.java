@@ -7,10 +7,14 @@ import com.example.selab3.util.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static java.lang.Integer.parseInt;
+
+@Transactional
 @Service("TeacherApplicationService")
 public class ApplicationService {
     private final ApplicationManager applicationManager;
@@ -48,17 +52,29 @@ public class ApplicationService {
                 flag=false;
         }
         addSchedules(schedules);
+        Integer classroomId=courseApplication.getClassroomid();
+        String classroomCapacity=applicationManager.findClassroomCapacityById(classroomId);
+        if(applicationManager.findClassroomById(courseApplication.getClassroomid()).getState().equals("off")) {
+            throw new RuntimeException("classroom is off");
+        }
+        if(parseInt(courseApplication.getCapacity()) > parseInt(classroomCapacity)) {
+            throw new RuntimeException("capacity overflow");
+        }
         return flag;
     }
 
 
     public Response<String> upload(CourseApplication courseApplication){
-        if(check(courseApplication)){
-            applicationManager.save(courseApplication);
-            return new Response<>(Response.SUCCESS,"success","application uploaded");
+        try {
+            if(check(courseApplication)){
+                applicationManager.save(courseApplication);
+                return new Response<>(Response.SUCCESS,"success","application uploaded");
+            }
+            else
+                return new Response<>(Response.FAIL,"err","conflict");
+        } catch (RuntimeException e) {
+            return new Response<>(Response.FAIL, e.toString(), "catch异常");
         }
-        else
-            return new Response<>(Response.FAIL,"err","conflict");
     }
 
     public Response<List<CourseApplication>> showMyApplication(String JobNum){

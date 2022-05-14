@@ -13,16 +13,18 @@ public class ApplicationManager {
     private final ApplicationMapper applicationMapper;
     private final CourseMapper courseMapper;
     private final TeacherMapper teacherMapper;
+    private final ClassroomMapper classroomMapper;
 
     @Autowired
     ApplicationManager(ScheduleMapper scheduleMapper, CalendarMapper calendarMapper,
                        ApplicationMapper applicationMapper, CourseMapper courseMapper,
-                       TeacherMapper teacherMapper){
+                       TeacherMapper teacherMapper,ClassroomMapper classroomMapper){
         this.scheduleMapper=scheduleMapper;
         this.calendarMapper=calendarMapper;
         this.applicationMapper=applicationMapper;
         this.courseMapper=courseMapper;
         this.teacherMapper=teacherMapper;
+        this.classroomMapper=classroomMapper;
     }
 
     public Integer getCalendarIdByDayAndNumber(String day, String number){
@@ -77,5 +79,13 @@ public class ApplicationManager {
 
     public void save(List<Schedule> schedules) {
         scheduleMapper.saveAll(schedules);
+    }
+
+    public String findClassroomCapacityById(Integer classroomId) {
+        return classroomMapper.findClassroomById(classroomId).getCapacity();
+    }
+
+    public Classroom findClassroomById(Integer id) {
+        return classroomMapper.findClassroomById(id);
     }
 }
