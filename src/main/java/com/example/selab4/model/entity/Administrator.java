@@ -25,9 +25,10 @@ public class Administrator {
     @Column(name = "semester", nullable = false, length = 10)
     private String semester;        // 学年学期，例如：2021-2022春
 
-    // 第一轮选课 开关
-
-    // 第二轮选课 开关
-
-    // 学期结束/开始 开关
+    @Column(name = "choosecourse1", nullable = false, length = 1)
+    private String choosecourse1;   // 第一轮选课 开关
+    @Column(name = "choosecourse2", nullable = false, length = 1)
+    private String choosecourse2;   // 第二轮选课 开关
+    @Column(name = "semesterbegin", nullable = false, length = 1)
+    private String semesterbegin;   // 学期结束/开始 开关
 }
