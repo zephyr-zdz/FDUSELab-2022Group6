@@ -15,5 +15,6 @@ public class ApplicationController {
         this.applicationService = applicationService;
     }
 
+    // TODO 学生提交选课申请
 
 }
