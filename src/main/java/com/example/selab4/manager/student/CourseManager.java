@@ -38,7 +38,7 @@ public class CourseManager {
         return majorMapper.findMajorByName(majorName);
     }
 
-    public List<CourseVO> findCoursesByMajor(Major major) {
+    public List<CourseVO> findCoursesByMajor(Major studentMajor) {
         List<Schedule> scheduleList = scheduleMapper.findAll();
         List<CourseVO> courseVOList = new ArrayList<>();
         List<CourseVO> result = new ArrayList<>();
@@ -47,11 +47,12 @@ public class CourseManager {
             courseVOList.add(courseVO);
         }
 
+        // 去重   // TODO
         LinkedHashSet<CourseVO> hashSet = new LinkedHashSet<>(courseVOList);
         courseVOList = new ArrayList<>(hashSet);
 
         for (CourseVO courseVO : courseVOList) {
-            if (courseVO.getMajorOfTeacher().equals(major)) {
+            if (courseVO.getMajorOfTeacher().equals(studentMajor)) {    // TODO
                 result.add(courseVO);
             }
         }
@@ -84,7 +85,7 @@ public class CourseManager {
 
     public boolean checkCapacity(Course course) {
         Integer capacity = parseInt(course.getCapacity());
-        Integer stuCount = stuCourseMapper.countByCourseid(course.getId());
+        Integer stuCount = parseInt(course.getCurrentcount());
         return stuCount < capacity;
     }
 
@@ -110,6 +111,11 @@ public class CourseManager {
         StuCourse stuCourse = new StuCourse();
         stuCourse.setStudentid(student.getId());
         stuCourse.setCourseid(course.getId());
+        stuCourse.setStatus("S");   // 已选S
+
+        course.addStudent();
+        courseMapper.save(course);
+
         stuCourseMapper.save(stuCourse);
     }
 

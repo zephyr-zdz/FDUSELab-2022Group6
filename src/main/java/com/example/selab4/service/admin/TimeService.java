@@ -1,8 +1,8 @@
-package com.example.selab3.service.admin;
+package com.example.selab4.service.admin;
 
-import com.example.selab3.manager.admin.TimeManager;
-import com.example.selab3.model.entity.TimeTable;
-import com.example.selab3.util.Response;
+import com.example.selab4.manager.admin.TimeManager;
+import com.example.selab4.model.entity.TimeTable;
+import com.example.selab4.util.Response;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

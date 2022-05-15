@@ -1,7 +1,7 @@
-package com.example.selab3.manager.admin;
+package com.example.selab4.manager.admin;
 
-import com.example.selab3.mapper.TimeMapper;
-import com.example.selab3.model.entity.TimeTable;
+import com.example.selab4.mapper.TimeMapper;
+import com.example.selab4.model.entity.TimeTable;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

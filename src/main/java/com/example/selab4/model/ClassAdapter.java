@@ -17,6 +17,7 @@ public class ClassAdapter {
     private final CalendarMapper calendarMapper;
     private final ClassroomMapper classroomMapper;
     private final CourseMapper courseMapper;
+    private final CourseTemplateMapper courseTemplateMapper;
     private final InstituteMapper instituteMapper;
     private final MajorMapper majorMapper;
     private final ScheduleMapper scheduleMapper;
@@ -27,12 +28,13 @@ public class ClassAdapter {
     private final CourseAndMajorMapper courseAndMajorMapper;
 
     @Autowired
-    public ClassAdapter(AdminMapper adminMapper, ApplicationMapper applicationMapper, CalendarMapper calendarMapper, ClassroomMapper classroomMapper, CourseMapper courseMapper, InstituteMapper instituteMapper, MajorMapper majorMapper, ScheduleMapper scheduleMapper, StuCourseMapper stuCourseMapper, StudentMapper studentMapper, TeacherMapper teacherMapper, TimeMapper timeMapper, CourseAndMajorMapper courseAndMajorMapper) {
+    public ClassAdapter(AdminMapper adminMapper, ApplicationMapper applicationMapper, CalendarMapper calendarMapper, ClassroomMapper classroomMapper, CourseMapper courseMapper, CourseTemplateMapper courseTemplateMapper, InstituteMapper instituteMapper, MajorMapper majorMapper, ScheduleMapper scheduleMapper, StuCourseMapper stuCourseMapper, StudentMapper studentMapper, TeacherMapper teacherMapper, TimeMapper timeMapper, CourseAndMajorMapper courseAndMajorMapper) {
         this.adminMapper = adminMapper;
         this.applicationMapper = applicationMapper;
         this.calendarMapper = calendarMapper;
         this.classroomMapper = classroomMapper;
         this.courseMapper = courseMapper;
+        this.courseTemplateMapper = courseTemplateMapper;
         this.instituteMapper = instituteMapper;
         this.majorMapper = majorMapper;
         this.scheduleMapper = scheduleMapper;
@@ -56,6 +58,7 @@ public class ClassAdapter {
     public CourseVO fromCourse2CourseVO(Course course) {
         CourseVO courseVO = new CourseVO();
         courseVO.setCourse(course);
+        courseVO.setCourseTemplate(courseTemplateMapper.findCourseTemplateById(course.getCoursetemplateid()));
         courseVO.setScheduleList(scheduleMapper.findSchedulesByCourseid(course.getId()));
         courseVO.setClassroom(classroomMapper.findClassroomById(courseVO.getScheduleList().get(0).getClassroomid()));
         courseVO.setTeacher(teacherMapper.findTeacherById(courseVO.getScheduleList().get(0).getTeacherid()));

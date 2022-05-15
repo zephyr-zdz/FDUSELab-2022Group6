@@ -12,6 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 public class CourseVO {
     private Course course;
+    private CourseTemplate courseTemplate;
     private Teacher teacher;
     private List<Schedule> scheduleList;
     private Classroom classroom;

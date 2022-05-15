@@ -1,7 +1,9 @@
 package com.example.selab4.manager.admin;
 
 import com.example.selab4.mapper.ClassroomMapper;
+import com.example.selab4.mapper.ScheduleMapper;
 import com.example.selab4.model.entity.Classroom;
+import com.example.selab4.model.entity.Schedule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

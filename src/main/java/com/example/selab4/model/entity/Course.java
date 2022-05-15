@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+import static java.lang.Integer.parseInt;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -24,6 +26,8 @@ public class Course {
     private String credit;  // 学分
     @Column(name = "capacity", nullable = false, length = 5)
     private String capacity;    // 选课人数上限
+    @Column(name = "currentcount", nullable = false, length = 5)
+    private String currentcount;    // 当前选课人数
     @Lob
     @Column(name = "intro", nullable = false, length = 65535)
     private String intro;
@@ -41,5 +45,13 @@ public class Course {
         this.coursehour = newCourse.getCoursehour();
         this.ispublic = newCourse.getIspublic();
         this.semester = newCourse.getSemester();
+    }
+
+    public void addStudent() {
+        setCurrentcount(Integer.toString(parseInt(getCurrentcount()) + 1));
+    }
+
+    public void reduceStudent() {
+        setCurrentcount(Integer.toString(parseInt(getCurrentcount()) - 1));
     }
 }
