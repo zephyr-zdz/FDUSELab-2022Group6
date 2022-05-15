@@ -1,6 +1,6 @@
 package com.example.selab4.service.teacher;
 import com.example.selab4.manager.teacher.ApplicationManager;
-import com.example.selab4.model.checker.CourseApplicationChecker;
+import com.example.selab4.model.checker.TeacherCourseApplicationChecker;
 import com.example.selab4.model.entity.Course;
 import com.example.selab4.model.entity.TeacherCourseApplication;
 import com.example.selab4.model.entity.Schedule;
@@ -18,10 +18,10 @@ import static java.lang.Integer.parseInt;
 @Service("TeacherApplicationService")
 public class ApplicationService {
     private final ApplicationManager applicationManager;
-    private final CourseApplicationChecker checker;
+    private final TeacherCourseApplicationChecker checker;
 
     @Autowired
-    ApplicationService(ApplicationManager applicationManager, CourseApplicationChecker checker){
+    ApplicationService(ApplicationManager applicationManager, TeacherCourseApplicationChecker checker){
         this.applicationManager=applicationManager;
         this.checker = checker;
     }
