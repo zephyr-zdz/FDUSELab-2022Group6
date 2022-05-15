@@ -16,7 +16,7 @@
       <el-input v-model="applicationForm.lessonNum" disabled></el-input>
     </el-form-item>
 
-    <el-form-item label="姓名" prop="lessonName">
+    <el-form-item label="课程名称" prop="lessonName">
       <el-input v-model="applicationForm.lessonName" disabled></el-input>
     </el-form-item>
 
