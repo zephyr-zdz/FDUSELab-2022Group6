@@ -20,4 +20,5 @@ public class CourseVO {
     private Major majorOfTeacher;
     private List<Calendar> calendarList;
     private List<Major> majorListOfCourse;
-}
+ }
+

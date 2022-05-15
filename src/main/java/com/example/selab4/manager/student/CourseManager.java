@@ -22,9 +22,11 @@ public class CourseManager {
     private final StudentMapper studentMapper;
     private final StuCourseMapper stuCourseMapper;
     private final ClassAdapter classAdapter;
+    private final CourseTemplateMapper courseTemplateMapper;
+    private final CourseAndMajorMapper courseAndMajorMapper;
 
     @Autowired
-    public CourseManager(MajorMapper majorMapper, ScheduleMapper scheduleMapper, CourseMapper courseMapper, AdminMapper adminMapper, StudentMapper studentMapper, StuCourseMapper stuCourseMapper, ClassAdapter classAdapter) {
+    public CourseManager(MajorMapper majorMapper, ScheduleMapper scheduleMapper, CourseMapper courseMapper, AdminMapper adminMapper, StudentMapper studentMapper, StuCourseMapper stuCourseMapper, ClassAdapter classAdapter, CourseTemplateMapper courseTemplateMapper, CourseAndMajorMapper courseAndMajorMapper) {
         this.majorMapper = majorMapper;
         this.scheduleMapper = scheduleMapper;
         this.courseMapper = courseMapper;
@@ -32,6 +34,8 @@ public class CourseManager {
         this.studentMapper = studentMapper;
         this.stuCourseMapper = stuCourseMapper;
         this.classAdapter = classAdapter;
+        this.courseTemplateMapper = courseTemplateMapper;
+        this.courseAndMajorMapper = courseAndMajorMapper;
     }
 
     public Major findMajorByName(String majorName) {
@@ -52,17 +56,21 @@ public class CourseManager {
         courseVOList = new ArrayList<>(hashSet);
 
         for (CourseVO courseVO : courseVOList) {
-            if (courseVO.getMajorOfTeacher().equals(studentMajor)) {    // TODO
+            if (majorQualified(courseVO,studentMajor)) {
                 result.add(courseVO);
             }
         }
-
         return result;
     }
 
-    public Administrator findAdminById(Integer id){
-        return adminMapper.findAdministratorById(id);
+    private boolean majorQualified(CourseVO courseVO, Major studentMajor) {
+        return courseAndMajorMapper.findCourseAndMajorByCourseidAndMajorid(courseVO.getCourse().getId(),studentMajor.getId()) != null;
     }
+
+    public Administrator findAdmin(){
+        return adminMapper.findAdministratorById(1);
+    }
+
 
     public Student findStudentByStunum(String stunum) {
         return studentMapper.findStudentByStunum(stunum);
@@ -83,9 +91,12 @@ public class CourseManager {
         return courseMapper.findCourseByCoursenum(coursenum);
     }
 
-    public boolean checkCapacity(Course course) {
-        Integer capacity = parseInt(course.getCapacity());
-        Integer stuCount = parseInt(course.getCurrentcount());
+    public boolean checkCapacity(Course course,Administrator administrator) {
+        //查询当前选课期
+        if(administrator.getChoosecourse1().equals("on"))
+            return true;
+        int capacity = parseInt(course.getCapacity());
+        int stuCount = parseInt(course.getCurrentcount());
         return stuCount < capacity;
     }
 
@@ -126,5 +137,37 @@ public class CourseManager {
     public boolean checkStuCourse(Student student, Course course) {
         List<StuCourse> stuCourses = stuCourseMapper.findStuCoursesByStudentidAndCourseid(student.getId(), course.getId());
         return stuCourses.size() > 0;
+    }
+
+    public Student findStudentByStudentid(Integer studentid) {
+        return studentMapper.findStudentById(studentid);
+    }
+
+    public Course findCourseByCourseid(Integer courseid) {
+        return courseMapper.findCourseById(courseid);
+    }
+
+    public CourseTemplate findCourseTemplateByCourse(Course course) {
+        return courseTemplateMapper.findCourseTemplateById(course.getCoursetemplateid());
+    }
+
+    public boolean courseTemplateConflict(Student student, Course course) {
+        int CourseTemplateId = findCourseTemplateByCourse(course).getId();
+        List<CourseVO> list = findCoursesByStudent(student);
+        for (CourseVO v : list){
+            if(v.getCourseTemplate().getId() == CourseTemplateId)
+                return true;
+        }
+        return false;
+    }
+
+    public List<CourseVO> findCoursesByStudentAndStatus(Student student, String s) {
+        List<StuCourse> stuCourseList = stuCourseMapper.findAllByStudentidAndStatus(student.getId(),s);
+        List<CourseVO> result = new ArrayList<>();
+        for (StuCourse stuCourse : stuCourseList) {
+            CourseVO courseVO = classAdapter.fromCourse2CourseVO(courseMapper.findCourseById(stuCourse.getCourseid()));
+            result.add(courseVO);
+        }
+        return result;
     }
 }

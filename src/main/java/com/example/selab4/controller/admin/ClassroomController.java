@@ -19,12 +19,12 @@ public class ClassroomController {
         this.classroomService=classroomService;
     }
 
-    @GetMapping("/getAllClassroom")
+    @GetMapping("/AllClassroom")
     public Response<List<Classroom>> getAllClassrooms(){
         return classroomService.findAllClassrooms();
     }
 
-    @GetMapping("/getOpenClassroom")
+    @GetMapping("/OpenClassroom")
     public Response<List<Classroom>> getOpenClassrooms(){
         return classroomService.findOpenClassrooms();
     }

@@ -26,7 +26,7 @@ public class CourseController {
     }
 
     // 学生查看本专业所有可选课程
-    @GetMapping
+    @GetMapping("/major")
     public Response<List<CourseVO>> getAllByMajor(@RequestParam("major") String majorName) {
         return service.getAllByMajor(majorName);
     }
@@ -37,14 +37,26 @@ public class CourseController {
         return service.getAllByStunum(stunum);
     }
 
+    // 学生查看所有已选课程
+    @GetMapping("/selected")
+    public Response<List<CourseVO>> getSelectedByStunum(@RequestParam("stunum") String stunum){
+        return service.getSelectedByStunum(stunum);
+    }
+
+    // 学生查看所有已修课程
+    @GetMapping("/finished")
+    public Response<List<CourseVO>> getFinishedByStunum(@RequestParam("stunum") String stunum){
+        return service.getFinishedByStunum(stunum);
+    }
+
     // 学生选课（学生看到的课都是能选课的专业）
-    @PostMapping
-    public Response<String> choose(@RequestParam("studentid") String studentid, @RequestParam("courseid") String courseid) {
+    @PostMapping("/choose")
+    public Response<String> choose(@RequestParam("studentid") Integer studentid, @RequestParam("courseid") Integer courseid) {
         return service.choose(studentid, courseid);
     }
 
     // 学生退课 TODO num=>id
-    @DeleteMapping
+    @DeleteMapping("/delete")
     public Response<String> delete(@RequestParam("stunum") String stunum, @RequestParam("coursenum") String coursenum) {
         return service.delete(stunum, coursenum);
     }

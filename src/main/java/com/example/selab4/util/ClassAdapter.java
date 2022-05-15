@@ -1,12 +1,13 @@
-package com.example.selab3.util;
+package com.example.selab4.util;
 
-import com.example.selab3.mapper.*;
-import com.example.selab3.model.entity.Calendar;
-import com.example.selab3.model.entity.Course;
-import com.example.selab3.model.entity.CourseApplication;
-import com.example.selab3.model.entity.Schedule;
-import com.example.selab3.model.vo.CourseApplicationVO;
-import com.example.selab3.model.vo.CourseVO;
+
+import com.example.selab4.mapper.*;
+import com.example.selab4.model.entity.Calendar;
+import com.example.selab4.model.entity.Course;
+import com.example.selab4.model.entity.CourseApplication;
+import com.example.selab4.model.entity.Schedule;
+import com.example.selab4.model.vo.CourseApplicationVO;
+import com.example.selab4.model.vo.CourseVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -67,8 +68,8 @@ public class ClassAdapter {
         courseVO.setScheduleList(scheduleMapper.findSchedulesByCourseid(course.getId()));
         courseVO.setClassroom(classroomMapper.findClassroomById(courseVO.getScheduleList().get(0).getClassroomid()));
         courseVO.setTeacher(teacherMapper.findTeacherById(courseVO.getScheduleList().get(0).getTeacherid()));
-        courseVO.setInstitute(instituteMapper.findInstituteByName(courseVO.getTeacher().getInstitute()));
-        courseVO.setMajor(majorMapper.findMajorByName(courseVO.getTeacher().getMajor()));
+        courseVO.setInstituteOfTeacher(instituteMapper.findInstituteByName(courseVO.getTeacher().getInstitute()));
+        courseVO.setMajorOfTeacher(majorMapper.findMajorByName(courseVO.getTeacher().getMajor()));
 
         List<Calendar> calendarList = new ArrayList<>();
         for (Schedule schedule : courseVO.getScheduleList()) {
