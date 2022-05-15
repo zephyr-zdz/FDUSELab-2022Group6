@@ -125,11 +125,6 @@ public class TeacherCourseManager {
         return schedule1 != null;
     }
 
-
-    public void deleteCourseById(Integer id){
-        courseMapper.deleteById(id);
-    }
-
     public List<Schedule> findSchedulesByCourseId(Integer id) {
         return scheduleMapper.findSchedulesByCourseid(id);
     }
@@ -138,20 +133,12 @@ public class TeacherCourseManager {
         return calendarMapper.findCalendarById(calendarId);
     }
 
-    public String findJobNumById(Integer id){
-        return teacherMapper.findTeacherById(id).getJobnum();
-    }
-
     public String findClassroomNumById(Integer id){
         return classroomMapper.findClassroomById(id).getName();
     }
 
     public Classroom findClassroomById(Integer id) {
         return classroomMapper.findClassroomById(id);
-    }
-
-    public Course findCourseByCourseNum(String courseNum) {
-        return courseMapper.findCourseByCoursenum(courseNum);
     }
 
     public Course findCourseByCourseId(Integer course_id) {

@@ -87,10 +87,6 @@ public class CourseManager {
         return result;
     }
 
-    public Course findCourseByCoursenum(String coursenum) {
-        return courseMapper.findCourseByCoursenum(coursenum);
-    }
-
     public boolean checkCapacity(Course course,Administrator administrator) {
         // 查询当前选课期
         // 第一轮选课忽视人数上限，随机剔除多余学生

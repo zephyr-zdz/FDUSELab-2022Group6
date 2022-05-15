@@ -6,5 +6,4 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CourseMapper extends JpaRepository<Course,Integer> {
     Course findCourseById(Integer id);
-    Course findCourseByCoursenum(String coursenum);
 }
