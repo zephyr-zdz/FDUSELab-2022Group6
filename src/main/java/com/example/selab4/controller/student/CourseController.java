@@ -55,9 +55,9 @@ public class CourseController {
         return service.choose(studentid, courseid);
     }
 
-    // 学生退课 TODO num=>id
+    // 学生退课
     @DeleteMapping("/delete")
-    public Response<String> delete(@RequestParam("stunum") String stunum, @RequestParam("coursenum") String coursenum) {
-        return service.delete(stunum, coursenum);
+    public Response<String> delete(@RequestParam("studentid") Integer studentid, @RequestParam("courseid") Integer courseid) {
+        return service.delete(studentid, courseid);
     }
 }

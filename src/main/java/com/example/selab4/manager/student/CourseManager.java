@@ -76,7 +76,7 @@ public class CourseManager {
         return studentMapper.findStudentByStunum(stunum);
     }
 
-    public List<CourseVO> findCoursesByStudent(Student student) {
+    public List<CourseVO> findCourseVOsByStudent(Student student) {
         List<StuCourse> stuCourseList = stuCourseMapper.findAllByStudentid(student.getId());
         List<CourseVO> result = new ArrayList<>();
         for (StuCourse stuCourse : stuCourseList) {
@@ -92,16 +92,19 @@ public class CourseManager {
     }
 
     public boolean checkCapacity(Course course,Administrator administrator) {
-        //查询当前选课期
+        // 查询当前选课期
+        // 第一轮选课忽视人数上限，随机剔除多余学生
         if(administrator.getChoosecourse1().equals("on"))
             return true;
+
+        // 第二轮选课有人数上限
         int capacity = parseInt(course.getCapacity());
         int stuCount = parseInt(course.getCurrentcount());
         return stuCount < capacity;
     }
 
     public boolean checkSchedule(Student student, Course course) {
-        List<StuCourse> stuCourseList = stuCourseMapper.findStuCoursesByStudentid(student.getId());
+        List<StuCourse> stuCourseList = stuCourseMapper.findStuCoursesByStudentidAndStatus(student.getId(), "S");
         List<Schedule> studentScheduleList = new ArrayList<>();
         for (StuCourse stuCourse : stuCourseList) {
             List<Schedule> schedules = scheduleMapper.findSchedulesByCourseid(stuCourse.getCourseid());
@@ -131,11 +134,12 @@ public class CourseManager {
     }
 
     public void delete(Student student, Course course) {
-        stuCourseMapper.deleteByStudentidAndCourseid(student.getId(), course.getId());
+        stuCourseMapper.deleteByStudentidAndCourseidAndStatus(student.getId(), course.getId(), "S");
+        course.reduceStudent();
     }
 
     public boolean checkStuCourse(Student student, Course course) {
-        List<StuCourse> stuCourses = stuCourseMapper.findStuCoursesByStudentidAndCourseid(student.getId(), course.getId());
+        List<StuCourse> stuCourses = stuCourseMapper.findStuCoursesByStudentidAndCourseidAndStatus(student.getId(), course.getId(), "S");
         return stuCourses.size() > 0;
     }
 
@@ -152,13 +156,23 @@ public class CourseManager {
     }
 
     public boolean courseTemplateConflict(Student student, Course course) {
-        int CourseTemplateId = findCourseTemplateByCourse(course).getId();
-        List<CourseVO> list = findCoursesByStudent(student);
-        for (CourseVO v : list){
-            if(v.getCourseTemplate().getId() == CourseTemplateId)
+        List<Course> list = findCoursesByStudent(student);
+        for (Course v : list){
+            if(v.getCoursetemplateid() == course.getCoursetemplateid())
                 return true;
         }
         return false;
+    }
+
+    private List<Course> findCoursesByStudent(Student student) {
+        List<StuCourse> stuCourseList = stuCourseMapper.findAllByStudentid(student.getId());
+        List<Course> result = new ArrayList<>();
+        for (StuCourse stuCourse : stuCourseList) {
+            Course course = courseMapper.findCourseById(stuCourse.getCourseid());
+            result.add(course);
+        }
+
+        return result;
     }
 
     public List<CourseVO> findCoursesByStudentAndStatus(Student student, String s) {
@@ -169,5 +183,9 @@ public class CourseManager {
             result.add(courseVO);
         }
         return result;
+    }
+
+    public boolean chooseCourseFunctionIsOn(Administrator administrator) {
+        return administrator.getSelectcoursefunction().equals("on");
     }
 }
