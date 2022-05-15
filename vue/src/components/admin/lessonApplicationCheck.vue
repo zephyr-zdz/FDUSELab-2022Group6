@@ -9,14 +9,14 @@
       label="课程名称"
       width="100">
       <template v-slot="scope">
-        <span>{{ scope.row.courseApplication.coursename }}</span>
+        <span>{{ scope.row.teacherCourseApplication.coursename }}</span>
       </template></el-table-column>
     <el-table-column
       prop="lessonNumber"
       label="课程编号"
       width="80">
       <template v-slot="scope">
-        <span>{{ scope.row.courseApplication.coursenum }}</span>
+        <span>{{ scope.row.teacherCourseApplication.coursenum }}</span>
       </template>
     </el-table-column>
     <el-table-column
@@ -40,7 +40,7 @@
       label="学时"
       width="50">
       <template v-slot="scope">
-        <span>{{ scope.row.courseApplication.coursehour }}</span>
+        <span>{{ scope.row.teacherCourseApplication.coursehour }}</span>
       </template>
     </el-table-column>
     <el-table-column
@@ -48,14 +48,14 @@
       label="学分"
       width="50">
       <template v-slot="scope">
-        <span>{{ scope.row.courseApplication.credit }}</span>
+        <span>{{ scope.row.teacherCourseApplication.credit }}</span>
       </template>
     </el-table-column>
     <el-table-column
       prop="intro"
       label="课程介绍">
       <template v-slot="scope">
-        <span>{{ scope.row.courseApplication.intro }}</span>
+        <span>{{ scope.row.teacherCourseApplication.intro }}</span>
       </template>
     </el-table-column>
     <el-table-column
@@ -63,7 +63,7 @@
       label="上课时间"
       width="120">
       <template v-slot="scope">
-        <span>{{ scope.row.courseApplication.schedule }}</span>
+        <span>{{ scope.row.teacherCourseApplication.schedule }}</span>
       </template>
     </el-table-column>
     <el-table-column
@@ -79,7 +79,7 @@
       label="课程容量"
       width="80">
       <template v-slot="scope">
-        <span>{{ scope.row.courseApplication.capacity }}</span>
+        <span>{{ scope.row.teacherCourseApplication.capacity }}</span>
       </template>
     </el-table-column>
     <el-table-column
@@ -87,7 +87,7 @@
       label="申请操作"
       width="80">
       <template v-slot="scope">
-        <span>{{ scope.row.courseApplication.applytype }}</span>
+        <span>{{ scope.row.teacherCourseApplication.applytype }}</span>
       </template>
     </el-table-column>
     <el-table-column
@@ -133,7 +133,7 @@ export default {
     // },
     approved (index) {
       this.$axios.post('/api/admin/course/approve',
-        this.lessonApplicationCheck[index].courseApplication,
+        this.lessonApplicationCheck[index].teacherCourseApplication,
         {params: { attitude: true }})
         .then(res => {
           if (res.data.code === 0) {
@@ -160,7 +160,7 @@ export default {
     },
     rejected (index) {
       this.$axios.post('/api/admin/course/approve',
-        this.lessonApplicationCheck[index].courseApplication,
+        this.lessonApplicationCheck[index].teacherCourseApplication,
         {params: { attitude: false }})
         .then(res => {
           if (res.data.code === 0) {

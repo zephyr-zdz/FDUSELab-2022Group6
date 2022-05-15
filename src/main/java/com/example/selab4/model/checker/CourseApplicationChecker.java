@@ -1,7 +1,7 @@
 package com.example.selab4.model.checker;
 
-import com.example.selab4.mapper.ApplicationMapper;
-import com.example.selab4.model.entity.CourseApplication;
+import com.example.selab4.mapper.TeacherApplicationMapper;
+import com.example.selab4.model.entity.TeacherCourseApplication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -9,20 +9,20 @@ import java.lang.reflect.Field;
 
 @Component
 public class CourseApplicationChecker {
-    private final ApplicationMapper applicationMapper;
+    private final TeacherApplicationMapper teacherApplicationMapper;
 
     @Autowired
-    public CourseApplicationChecker(ApplicationMapper applicationMapper) {
-        this.applicationMapper = applicationMapper;
+    public CourseApplicationChecker(TeacherApplicationMapper teacherApplicationMapper) {
+        this.teacherApplicationMapper = teacherApplicationMapper;
     }
 
 
-    public boolean infoComplete(CourseApplication courseApplication) {
-        Field[] fields = courseApplication.getClass().getDeclaredFields();
+    public boolean infoComplete(TeacherCourseApplication teacherCourseApplication) {
+        Field[] fields = teacherCourseApplication.getClass().getDeclaredFields();
         try {
             for (Field field : fields) {
                 field.setAccessible(true);
-                Object value = field.get(courseApplication);
+                Object value = field.get(teacherCourseApplication);
                 if (value != null) {
                     return false;
                 }

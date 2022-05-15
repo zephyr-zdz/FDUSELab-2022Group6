@@ -16,20 +16,20 @@ public class TeacherManager {
     private final MajorMapper majorMapper;
     private final ScheduleMapper scheduleMapper;
     private final CourseMapper courseMapper;
-    private final ApplicationMapper applicationMapper;
+    private final TeacherApplicationMapper teacherApplicationMapper;
 
     @Autowired
     public TeacherManager(TeacherMapper teacherMapper, StudentMapper studentMapper,
                           InstituteMapper instituteMapper, MajorMapper majorMapper,
                           ScheduleMapper scheduleMapper, CourseMapper courseMapper,
-                          ApplicationMapper applicationMapper) {
+                          TeacherApplicationMapper teacherApplicationMapper) {
         this.teacherMapper = teacherMapper;
         this.studentMapper = studentMapper;
         this.instituteMapper = instituteMapper;
         this.majorMapper = majorMapper;
         this.scheduleMapper = scheduleMapper;
         this.courseMapper = courseMapper;
-        this.applicationMapper = applicationMapper;
+        this.teacherApplicationMapper = teacherApplicationMapper;
     }
 
     public List<Teacher> getAllTeachers() {
@@ -84,7 +84,7 @@ public class TeacherManager {
         return courses;
     }
 
-    public List<CourseApplication> getCourseApplicationsByTeacher(Teacher teacher) {
-        return applicationMapper.findAllByTeacherid(teacher.getId());
+    public List<TeacherCourseApplication> getCourseApplicationsByTeacher(Teacher teacher) {
+        return teacherApplicationMapper.findAllByTeacherid(teacher.getId());
     }
 }

@@ -10,18 +10,18 @@ import java.util.List;
 public class ApplicationManager {
     private final ScheduleMapper scheduleMapper;
     private final CalendarMapper calendarMapper;
-    private final ApplicationMapper applicationMapper;
+    private final TeacherApplicationMapper teacherApplicationMapper;
     private final CourseMapper courseMapper;
     private final TeacherMapper teacherMapper;
     private final ClassroomMapper classroomMapper;
 
     @Autowired
     ApplicationManager(ScheduleMapper scheduleMapper, CalendarMapper calendarMapper,
-                       ApplicationMapper applicationMapper, CourseMapper courseMapper,
-                       TeacherMapper teacherMapper,ClassroomMapper classroomMapper){
+                       TeacherApplicationMapper teacherApplicationMapper, CourseMapper courseMapper,
+                       TeacherMapper teacherMapper, ClassroomMapper classroomMapper){
         this.scheduleMapper=scheduleMapper;
         this.calendarMapper=calendarMapper;
-        this.applicationMapper=applicationMapper;
+        this.teacherApplicationMapper = teacherApplicationMapper;
         this.courseMapper=courseMapper;
         this.teacherMapper=teacherMapper;
         this.classroomMapper=classroomMapper;
@@ -50,13 +50,13 @@ public class ApplicationManager {
         return schedule !=null;
     }
 
-    public void save(CourseApplication courseApplication) {
-        applicationMapper.save(courseApplication);
+    public void save(TeacherCourseApplication teacherCourseApplication) {
+        teacherApplicationMapper.save(teacherCourseApplication);
     }
 
-    public List<CourseApplication> getCourseApplicationByJobNum(String JobNum){
+    public List<TeacherCourseApplication> getCourseApplicationByJobNum(String JobNum){
         Teacher teacher=teacherMapper.findTeacherByJobnum(JobNum);
-        return applicationMapper.findAllByTeacherid(teacher.getId());
+        return teacherApplicationMapper.findAllByTeacherid(teacher.getId());
     }
 
     public Course findCourseById(Integer pre_courseId) {

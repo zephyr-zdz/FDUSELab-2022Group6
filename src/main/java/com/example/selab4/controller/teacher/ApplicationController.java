@@ -1,6 +1,6 @@
 package com.example.selab4.controller.teacher;
 
-import com.example.selab4.model.entity.CourseApplication;
+import com.example.selab4.model.entity.TeacherCourseApplication;
 import com.example.selab4.service.teacher.ApplicationService;
 import com.example.selab4.util.Response;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +22,12 @@ public class ApplicationController {
     }
 
     @PostMapping("/apply")
-    public Response<String> apply(@RequestBody CourseApplication courseApplication){
-        return applicationService.upload(courseApplication);
+    public Response<String> apply(@RequestBody TeacherCourseApplication teacherCourseApplication){
+        return applicationService.upload(teacherCourseApplication);
     }
 
     @PostMapping("/getMyApplicationByJobNum")
-    public Response<List<CourseApplication>> getMyApplication(String JobNum){
+    public Response<List<TeacherCourseApplication>> getMyApplication(String JobNum){
         return applicationService.showMyApplication(JobNum);
     }
 }

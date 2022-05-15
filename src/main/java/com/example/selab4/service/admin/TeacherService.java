@@ -2,7 +2,7 @@ package com.example.selab4.service.admin;
 
 import com.example.selab4.manager.admin.TeacherManager;
 import com.example.selab4.model.entity.Course;
-import com.example.selab4.model.entity.CourseApplication;
+import com.example.selab4.model.entity.TeacherCourseApplication;
 import com.example.selab4.model.entity.Teacher;
 import com.example.selab4.util.Response;
 import de.siegmar.fastcsv.reader.CsvContainer;
@@ -213,8 +213,8 @@ public class TeacherService {
         }
 
         // 如果教师有发出过选课申请，不允许删除教师
-        List<CourseApplication> courseApplications = manager.getCourseApplicationsByTeacher(teacher);
-        if (courseApplications.size() > 0) {
+        List<TeacherCourseApplication> teacherCourseApplications = manager.getCourseApplicationsByTeacher(teacher);
+        if (teacherCourseApplications.size() > 0) {
             return new Response<>(Response.FAIL, "工号为" + teacher.getJobnum() + "的教师仍有课程申请，删除教师失败", null);
         }
 

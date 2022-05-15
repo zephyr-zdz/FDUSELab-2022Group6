@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CourseApplicationVO {
-    private CourseApplication courseApplication;
+public class TeacherCourseApplicationVO {
+    private TeacherCourseApplication teacherCourseApplication;
     private Institute institute;
     private Major major;
     private Teacher teacher;

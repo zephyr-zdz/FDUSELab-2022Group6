@@ -4,9 +4,9 @@ package com.example.selab4.util;
 import com.example.selab4.mapper.*;
 import com.example.selab4.model.entity.Calendar;
 import com.example.selab4.model.entity.Course;
-import com.example.selab4.model.entity.CourseApplication;
+import com.example.selab4.model.entity.TeacherCourseApplication;
 import com.example.selab4.model.entity.Schedule;
-import com.example.selab4.model.vo.CourseApplicationVO;
+import com.example.selab4.model.vo.TeacherCourseApplicationVO;
 import com.example.selab4.model.vo.CourseVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -18,7 +18,7 @@ import java.util.List;
 @Component("ClassAdapter")
 public class ClassAdapter {
     private final AdminMapper adminMapper;
-    private final ApplicationMapper applicationMapper;
+    private final TeacherApplicationMapper teacherApplicationMapper;
     private final CalendarMapper calendarMapper;
     private final ClassroomMapper classroomMapper;
     private final CourseMapper courseMapper;
@@ -31,9 +31,9 @@ public class ClassAdapter {
     private final TimeMapper timeMapper;
 
     @Autowired
-    public ClassAdapter(AdminMapper adminMapper, ApplicationMapper applicationMapper, CalendarMapper calendarMapper, ClassroomMapper classroomMapper, CourseMapper courseMapper, InstituteMapper instituteMapper, MajorMapper majorMapper, ScheduleMapper scheduleMapper, StuCourseMapper stuCourseMapper, StudentMapper studentMapper, TeacherMapper teacherMapper, TimeMapper timeMapper) {
+    public ClassAdapter(AdminMapper adminMapper, TeacherApplicationMapper teacherApplicationMapper, CalendarMapper calendarMapper, ClassroomMapper classroomMapper, CourseMapper courseMapper, InstituteMapper instituteMapper, MajorMapper majorMapper, ScheduleMapper scheduleMapper, StuCourseMapper stuCourseMapper, StudentMapper studentMapper, TeacherMapper teacherMapper, TimeMapper timeMapper) {
         this.adminMapper = adminMapper;
-        this.applicationMapper = applicationMapper;
+        this.teacherApplicationMapper = teacherApplicationMapper;
         this.calendarMapper = calendarMapper;
         this.classroomMapper = classroomMapper;
         this.courseMapper = courseMapper;
@@ -46,17 +46,17 @@ public class ClassAdapter {
         this.timeMapper = timeMapper;
     }
 
-    public CourseApplicationVO fromCourseApplication2CourseApplicationVO(CourseApplication courseApplication) {
-        if (courseApplication == null) {
+    public TeacherCourseApplicationVO fromCourseApplication2CourseApplicationVO(TeacherCourseApplication teacherCourseApplication) {
+        if (teacherCourseApplication == null) {
             return null;
         }
-        CourseApplicationVO courseApplicationVO = new CourseApplicationVO();
-        courseApplicationVO.setCourseApplication(courseApplication);
-        courseApplicationVO.setTeacher(teacherMapper.findTeacherById(courseApplication.getTeacherid()));
-        courseApplicationVO.setMajor(majorMapper.findMajorByName(courseApplicationVO.getTeacher().getMajor()));
-        courseApplicationVO.setInstitute(instituteMapper.findInstituteByName(courseApplicationVO.getTeacher().getInstitute()));
-        courseApplicationVO.setClassroom(classroomMapper.findClassroomById(courseApplication.getClassroomid()));
-        return courseApplicationVO;
+        TeacherCourseApplicationVO teacherCourseApplicationVO = new TeacherCourseApplicationVO();
+        teacherCourseApplicationVO.setTeacherCourseApplication(teacherCourseApplication);
+        teacherCourseApplicationVO.setTeacher(teacherMapper.findTeacherById(teacherCourseApplication.getTeacherid()));
+        teacherCourseApplicationVO.setMajor(majorMapper.findMajorByName(teacherCourseApplicationVO.getTeacher().getMajor()));
+        teacherCourseApplicationVO.setInstitute(instituteMapper.findInstituteByName(teacherCourseApplicationVO.getTeacher().getInstitute()));
+        teacherCourseApplicationVO.setClassroom(classroomMapper.findClassroomById(teacherCourseApplication.getClassroomid()));
+        return teacherCourseApplicationVO;
     }
 
     public CourseVO fromCourse2CourseVO(Course course) {

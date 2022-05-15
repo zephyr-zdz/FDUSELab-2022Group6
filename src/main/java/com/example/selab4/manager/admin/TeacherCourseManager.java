@@ -3,7 +3,7 @@ package com.example.selab4.manager.admin;
 import com.example.selab4.mapper.*;
 import com.example.selab4.model.ClassAdapter;
 import com.example.selab4.model.entity.*;
-import com.example.selab4.model.vo.CourseApplicationVO;
+import com.example.selab4.model.vo.TeacherCourseApplicationVO;
 import com.example.selab4.model.vo.CourseVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -11,9 +11,9 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component("AdminCourseManager")
-public class CourseManager {
-    private final ApplicationMapper applicationMapper;
+@Component("AdminTeacherCourseManager")
+public class TeacherCourseManager {
+    private final TeacherApplicationMapper teacherApplicationMapper;
     private final CourseMapper courseMapper;
     private final ScheduleMapper scheduleMapper;
     private final CalendarMapper calendarMapper;
@@ -23,10 +23,10 @@ public class CourseManager {
     private final ClassAdapter classAdapter;
 
     @Autowired
-    CourseManager(ApplicationMapper applicationMapper, CourseMapper courseMapper,
-                  ScheduleMapper scheduleMapper, CalendarMapper calendarMapper,
-                  TeacherMapper teacherMapper, ClassroomMapper classroomMapper, CourseTemplateMapper courseTemplateMapper, ClassAdapter classAdapter){
-        this.applicationMapper=applicationMapper;
+    TeacherCourseManager(TeacherApplicationMapper teacherApplicationMapper, CourseMapper courseMapper,
+                         ScheduleMapper scheduleMapper, CalendarMapper calendarMapper,
+                         TeacherMapper teacherMapper, ClassroomMapper classroomMapper, CourseTemplateMapper courseTemplateMapper, ClassAdapter classAdapter){
+        this.teacherApplicationMapper = teacherApplicationMapper;
         this.courseMapper=courseMapper;
         this.scheduleMapper=scheduleMapper;
         this.calendarMapper=calendarMapper;
@@ -49,30 +49,30 @@ public class CourseManager {
         return teacherMapper.findTeacherByJobnum(JobNum).getId();
     }
 
-    public void save(CourseApplication courseApplication){
-        applicationMapper.save(courseApplication);
+    public void save(TeacherCourseApplication teacherCourseApplication){
+        teacherApplicationMapper.save(teacherCourseApplication);
     }
 
-    public List<CourseApplicationVO> findAllCourseApplication(){
-        List<CourseApplication> courseApplicationList = applicationMapper.findAll();
-        List<CourseApplicationVO> courseApplicationVOList = new ArrayList<>();
-        for (CourseApplication courseApplication : courseApplicationList) {
-            CourseApplicationVO courseApplicationVO = classAdapter.fromCourseApplication2CourseApplicationVO(courseApplication);
-            courseApplicationVOList.add(courseApplicationVO);
+    public List<TeacherCourseApplicationVO> findAllCourseApplication(){
+        List<TeacherCourseApplication> teacherCourseApplicationList = teacherApplicationMapper.findAll();
+        List<TeacherCourseApplicationVO> teacherCourseApplicationVOList = new ArrayList<>();
+        for (TeacherCourseApplication teacherCourseApplication : teacherCourseApplicationList) {
+            TeacherCourseApplicationVO teacherCourseApplicationVO = classAdapter.fromCourseApplication2CourseApplicationVO(teacherCourseApplication);
+            teacherCourseApplicationVOList.add(teacherCourseApplicationVO);
         }
 
-        return courseApplicationVOList;
+        return teacherCourseApplicationVOList;
     }
 
-    public List<CourseApplicationVO> findAllPendingCourseApplication() {
-        List<CourseApplication> courseApplicationList = applicationMapper.findAllByResult("pending");
-        List<CourseApplicationVO> courseApplicationVOList = new ArrayList<>();
-        for (CourseApplication courseApplication : courseApplicationList) {
-            CourseApplicationVO courseApplicationVO = classAdapter.fromCourseApplication2CourseApplicationVO(courseApplication);
-            courseApplicationVOList.add(courseApplicationVO);
+    public List<TeacherCourseApplicationVO> findAllPendingCourseApplication() {
+        List<TeacherCourseApplication> teacherCourseApplicationList = teacherApplicationMapper.findAllByResult("pending");
+        List<TeacherCourseApplicationVO> teacherCourseApplicationVOList = new ArrayList<>();
+        for (TeacherCourseApplication teacherCourseApplication : teacherCourseApplicationList) {
+            TeacherCourseApplicationVO teacherCourseApplicationVO = classAdapter.fromCourseApplication2CourseApplicationVO(teacherCourseApplication);
+            teacherCourseApplicationVOList.add(teacherCourseApplicationVO);
         }
 
-        return courseApplicationVOList;
+        return teacherCourseApplicationVOList;
     }
 
     public void delete(Course course){
