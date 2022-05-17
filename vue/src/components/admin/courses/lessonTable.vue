@@ -247,7 +247,7 @@ export default {
       return schedule
     },
     getLessons () {
-      this.$axios.get('/api/admin/course/all').then(res => {
+      this.$axios.get('/api/admin/teacher-course/all').then(res => {
         this.lessonTable = res.data.data
       })
     },
@@ -262,7 +262,7 @@ export default {
         })
     },
     getTeacherId (index) {
-      this.$axios.get('/api/admin/course/id-by-jobnum', {params: {JobNum: this.lessonTable[index].teacher.jobnum}})
+      this.$axios.get('/api/admin/teacher-course/id-by-jobnum', {params: {JobNum: this.lessonTable[index].teacher.jobnum}})
         .then(response => {
           console.log(response.data.data)
           if (response.data.code === 0) {
@@ -339,7 +339,7 @@ export default {
     },
     confirmRow (row, index) {
       this.makeApplication(index, 'update')
-      this.$axios.post('/api/admin/course/modify', this.application)
+      this.$axios.post('/api/admin/teacher-course/modify', this.application)
         .then(response => {
           if (response.data.code === 0) {
             this.getLessons()
@@ -371,7 +371,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$axios.post('/api/admin/course/modify', this.application, {params: {pre_courseId: this.lessonTable[index].course.id}}).then(res => {
+        this.$axios.post('/api/admin/teacher-course/modify', this.application, {params: {pre_courseId: this.lessonTable[index].course.id}}).then(res => {
           if (res.data.code === 0) {
             this.getLessons()
             this.$message({

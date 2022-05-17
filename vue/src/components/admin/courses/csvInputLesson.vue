@@ -3,7 +3,7 @@
     <el-upload style="text-align: center;margin-top: 100px"
       class="csvInput"
       drag
-      action="/api/admin/course/file"
+      action="/api/admin/teacher-course/file"
       accept=".csv"
       :on-success="handleResponse">
       <i class="el-icon-upload"></i>

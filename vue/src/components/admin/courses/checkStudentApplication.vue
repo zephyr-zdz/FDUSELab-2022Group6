@@ -90,7 +90,7 @@ export default {
       }
     },
     // getTeacherJobnumById (index, id) { // TODO: teacherid
-    //   this.$axios.get('/api/admin/course/getTeacherJobNumById', {params: {Id: id}}).then(response => {
+    //   this.$axios.get('/api/admin/teacher-course/getTeacherJobNumById', {params: {Id: id}}).then(response => {
     //     this.checkStudentApplication[index].jobnum = response.data.data
     //   })
     // },
@@ -101,7 +101,7 @@ export default {
     //   })
     // },
     approved (index) {
-      this.$axios.post('/api/admin/course/approve',
+      this.$axios.post('/api/admin/teacher-course/approve',
         this.checkStudentApplication[index].courseApplication,
         {params: { attitude: true }})
         .then(res => {
@@ -128,7 +128,7 @@ export default {
         })
     },
     rejected (index) {
-      this.$axios.post('/api/admin/course/approve',
+      this.$axios.post('/api/admin/teacher-course/approve',
         this.checkStudentApplication[index].courseApplication,
         {params: { attitude: false }})
         .then(res => {
@@ -149,7 +149,7 @@ export default {
     },
     // TODO：改为获取学生申请
     getApplication () {
-      this.$axios.get('/api/admin/course/pending')
+      this.$axios.get('/api/admin/teacher-course/pending')
         .then(response => {
           if (response.data.code === 0) {
             this.checkStudentApplication = response.data.data

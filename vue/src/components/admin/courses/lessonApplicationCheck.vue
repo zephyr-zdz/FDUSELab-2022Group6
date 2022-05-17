@@ -121,7 +121,7 @@ export default {
       }
     },
     // getTeacherJobnumById (index, id) { // TODO: teacherid
-    //   this.$axios.get('/api/admin/course/getTeacherJobNumById', {params: {Id: id}}).then(response => {
+    //   this.$axios.get('/api/admin/teacher-course/getTeacherJobNumById', {params: {Id: id}}).then(response => {
     //     this.lessonApplicationCheck[index].jobnum = response.data.data
     //   })
     // },
@@ -132,7 +132,7 @@ export default {
     //   })
     // },
     approved (index) {
-      this.$axios.post('/api/admin/course/approve',
+      this.$axios.post('/api/admin/teacher-course/approve',
         this.lessonApplicationCheck[index].courseApplication,
         {params: { attitude: true }})
         .then(res => {
@@ -159,7 +159,7 @@ export default {
         })
     },
     rejected (index) {
-      this.$axios.post('/api/admin/course/approve',
+      this.$axios.post('/api/admin/teacher-course/approve',
         this.lessonApplicationCheck[index].courseApplication,
         {params: { attitude: false }})
         .then(res => {
@@ -179,7 +179,7 @@ export default {
         })
     },
     getApplication () {
-      this.$axios.get('/api/admin/course/pending')
+      this.$axios.get('/api/admin/teacher-course/pending')
         .then(response => {
           if (response.data.code === 0) {
             this.lessonApplicationCheck = response.data.data
@@ -203,7 +203,7 @@ export default {
     //         this.$set(this.lessonApplicationCheck[index], 'institute', response.data.data)
     //       // this.lessonApplicationCheck[index].institute = response.data.data
     //       })
-    //       this.$axios.get('/api/admin/course/getTeacherJobNumById', {params: {Id: this.lessonApplicationCheck[index].teacherid}}).then(response => {
+    //       this.$axios.get('/api/admin/teacher-course/getTeacherJobNumById', {params: {Id: this.lessonApplicationCheck[index].teacherid}}).then(response => {
     //         this.$set(this.lessonApplicationCheck[index], 'jobnum', response.data.data)
     //       })
     //     })(index)
