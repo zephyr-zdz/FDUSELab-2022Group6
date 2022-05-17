@@ -179,7 +179,7 @@ export default {
         })
     },
     getApplication () {
-      this.$axios.get('/api/admin/course/getPendingApplication')
+      this.$axios.get('/api/admin/course/pending')
         .then(response => {
           if (response.data.code === 0) {
             this.lessonApplicationCheck = response.data.data

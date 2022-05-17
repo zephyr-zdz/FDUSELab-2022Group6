@@ -1,8 +1,25 @@
 <template>
   <el-card class="box-card">
+    <el-dialog
+      title="选课申请"
+      top="5vh"
+      width="50%"
+      :append-to-body="true"
+      :visible.sync="applicationVisible"
+      :before-close="handleClose">
+      <student-lesson-application></student-lesson-application>
+    </el-dialog>
     <el-table :data="lessonTable"
               style="width: 100%"
               pager="page">
+      <el-table-column
+        prop="semester"
+        label="开课学期"
+        width="80">
+        <template v-slot="scope">
+          <span>{{ scope.row.course.semester}}</span>
+        </template>
+      </el-table-column>
       <el-table-column
         prop="name"
         label="课程名称"
@@ -20,11 +37,11 @@
         </template>
       </el-table-column>
       <el-table-column
-        prop="school"
-        label="开课院系"
+        prop="type"
+        label="课程类型"
         width="80">
         <template v-slot="scope">
-          <span>{{ scope.row.institute.name }}</span>
+          <span>{{ scope.row.course.type }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -79,7 +96,7 @@
         label="课程容量"
         width="80">
         <template v-slot="scope">
-          <span>{{ scope.row.course.capacity }}</span>
+          <span>{{scope.row.course.chosen}}/{{ scope.row.course.capacity }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -89,22 +106,37 @@
         <el-button size="mini">选课</el-button>
       </el-table-column>
     </el-table>
+    <el-button size="mini" v-if="isFull() === true" @click="showApplication()">
+      选课申请
+    </el-button>
+<!--    TODO：到时候把按钮放到行内，要给选课按钮加v-if-->
   </el-card>
 </template>
 
 <script>
+import StudentLessonApplication from './studentLessonApplication'
 export default {
   name: 'studentCheckLesson',
   data () {
     return {
       lessonTable: [],
-      major: ''
+      major: '',
+      applicationVisible: false
     }
   },
   mounted () {
     this.getLessons()
   },
   methods: {
+    isFull () {
+      return true
+    },
+    showApplication () {
+      this.applicationVisible = true
+    },
+    handleClose () {
+      this.applicationVisible = false
+    },
     calendar (calendarList) {
       var schedule = ''
       for (var i = 0; i < calendarList.length; i++) {
@@ -126,6 +158,9 @@ export default {
         this.lessonTable = res.data.data
       })
     }
+  },
+  components: {
+    'student-lesson-application': StudentLessonApplication
   }
 }
 </script>

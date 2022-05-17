@@ -11,6 +11,8 @@
           <el-submenu index="2">
             <template slot="title"><i class="el-icon-menu"></i>选课事务</template>
               <el-menu-item @click="handleChange('studentCheckLesson')">选课</el-menu-item>
+              <el-menu-item @click="handleChange('studentLessonChosen')">已选课程</el-menu-item>
+              <el-menu-item @click="handleChange('studentLessonLearned')">已修课程</el-menu-item>
           </el-submenu>
         </el-menu>
       </el-aside>
@@ -41,6 +43,18 @@
             v-show="showRecord === 'studentCheckLesson'"
             id="studentCheckLesson"
             ref="studentCheckLesson"></student-check-lesson>
+          <student-lesson-chosen
+            label="studentLessonChosen"
+            v-show="showRecord === 'studentLessonChosen'"
+            id="studentLessonChosen"
+            ref="studentLessonChosen">
+          </student-lesson-chosen>
+          <student-lesson-learned
+            label="studentLessonLearned"
+            v-show="showRecord === 'studentLessonLearned'"
+            id="studentLessonLearned"
+            ref="studentLessonLearned">
+          </student-lesson-learned>
         </el-main>
       </el-container>
     </el-container>
@@ -48,9 +62,11 @@
 </template>
 
 <script>
-import NavMenu from '../common/NavMenu'
+import NavMenu from '../../common/NavMenu'
 import StudentInfoMaintain from './studentInfoMaintain'
 import StudentCheckLesson from './studentCheckLesson'
+import StudentLessonChosen from './studentLessonChosen'
+import StudentLessonLearned from './studentLessonLearned'
 
 export default {
   data () {
@@ -92,7 +108,7 @@ export default {
     isChoose () {
       // TODO:读取选课是否开放 get.path还没写
       var isChoose = false
-      this.$axios.get('/api/student/course/isValid').then(res => {
+      this.$axios.get('/api/student/course/valid').then(res => {
         if (res.data.code === 0) {
           if (res.data.data === 'on') {
             this.isValid = true
@@ -123,6 +139,12 @@ export default {
             this.showLesson()
           }
           break
+        case 'studentLessonChosen' :
+          this.showRecord = value
+          break
+        case 'studentLessonLearned' :
+          this.showRecord = value
+          break
         default :
           this.showRecord = ''
           break
@@ -132,7 +154,9 @@ export default {
   components: {
     'student-info-maintain': StudentInfoMaintain,
     'nav-menu': NavMenu,
-    'student-check-lesson': StudentCheckLesson
+    'student-check-lesson': StudentCheckLesson,
+    'student-lesson-chosen': StudentLessonChosen,
+    'student-lesson-learned': StudentLessonLearned
   }
 }
 
