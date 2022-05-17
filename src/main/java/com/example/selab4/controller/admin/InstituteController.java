@@ -34,7 +34,7 @@ public class InstituteController {
         return service.getAll();
     }
 
-    @PostMapping("")
+    @PostMapping
     public Response<Institute> create(@RequestBody Institute institute) {
         return service.create(institute);
     }
@@ -51,7 +51,7 @@ public class InstituteController {
         return service.update(institute);
     }
 
-    @GetMapping("/getNameById")
+    @GetMapping("/name-by-id")
     public Response<String> getNameById(Integer id){
         return new Response<>(0,"success", service.getNameById(id));
     }

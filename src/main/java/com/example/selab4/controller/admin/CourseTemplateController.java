@@ -11,7 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @RestController("AdminCourseTemplateController")
-@RequestMapping("admin/coursetemplate")
+@RequestMapping("/admin/course-template")
 public class CourseTemplateController {
     private final CourseTemplateService service;
 

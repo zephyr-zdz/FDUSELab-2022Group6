@@ -16,7 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @RestController("AdminTeacherCourseController")
-@RequestMapping("/admin/teachercourse")
+@RequestMapping("/admin/teacher-course")
 public class TeacherCourseController {
     private final TeacherCourseService service;
 
@@ -26,12 +26,12 @@ public class TeacherCourseController {
     }
 
     // 查看所有的课程申请
-    @GetMapping("/getApplication")
+    @GetMapping("/applications")
     public Response<List<TeacherCourseApplicationVO>> getApplication(){
         return service.showAllApplications();
     }
 
-    @GetMapping("/getPendingApplication")
+    @GetMapping("/pending")
     public Response<List<TeacherCourseApplicationVO>> getPendingApplication() {
         return service.showPendingApplications();
     }
@@ -48,12 +48,12 @@ public class TeacherCourseController {
         return service.modify(teacherCourseApplication);
     }
 
-    @GetMapping("/getTeacherJobNumById")
+    @GetMapping("/get-jobnum-by-id")
     public Response<String> getTeacherJobNum(@RequestParam(name = "Id") Integer Id){
         return new Response<>(0,"success", service.getTeacherJobnumById(Id));
     }
 
-    @GetMapping("/getTeacherIdByJobNum")
+    @GetMapping("/get-id-by-jobnum")
     public Response<Integer> getTeacherJobNum(@RequestParam(name = "JobNum") String JobNum){
         return new Response<>(0,"success", service.getTeacherIdByJobnum(JobNum));
     }
@@ -64,7 +64,7 @@ public class TeacherCourseController {
         return service.BatchModify(multipartFile);
     }
 
-    @GetMapping("/getCourse")
+    @GetMapping("/all")
     public Response<List<CourseVO>> getCourse(){
         return service.showAllCourse();
     }

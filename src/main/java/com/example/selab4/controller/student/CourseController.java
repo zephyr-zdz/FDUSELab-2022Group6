@@ -20,7 +20,7 @@ public class CourseController {
     }
 
     // 学生查看选课功能状态
-    @GetMapping("/isvalid")
+    @GetMapping("/valid")
     public Response<String> isValid() {
         return service.isValid();
     }
