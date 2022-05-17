@@ -12,7 +12,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/api': {
-        target: 'http://123.60.5.129:8080',
+        target: 'http://localhost:8080',
         changeOrigin: true,
         pathRewrite: {
           '^/api': '/api'
@@ -84,7 +84,7 @@ module.exports = {
   devServer:{
     proxy:{
       ["/dev-api"]:{
-      target:'http://123.60.5.129:8080',
+      target:'http://localhost:8080',
         changeOrigin:true,
           pathRewrite: {
               ['^' + "/dev-ap"]: ''
@@ -94,7 +94,7 @@ module.exports = {
   },
   proxyTable: {
     '/api': {
-      target: 'http://123.60.5.129:8080',
+      target: 'http://localhost:8080',
       changeOrigin: true,
       pathRewrite: {
         '^/api': '/api'
