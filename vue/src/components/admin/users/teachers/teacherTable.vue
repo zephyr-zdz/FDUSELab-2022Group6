@@ -188,7 +188,7 @@ export default {
       }
       console.log(school)
       console.log('111')
-      this.$axios.get('/api/admin/major/allbyinstitute', {params: {institute: school}})
+      this.$axios.get('/api/admin/major/all-by-institute', {params: {institute: school}})
         .then(response => {
           this.majorOptions = response.data.data
         })

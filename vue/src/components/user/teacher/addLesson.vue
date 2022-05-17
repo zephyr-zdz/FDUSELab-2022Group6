@@ -181,7 +181,7 @@ export default {
         })
     },
     getTeacherId () {
-      this.$axios.get('/api/admin/course/getTeacherIdByJobNum/', {params: {JobNum: this.addLesson.jobnum}})
+      this.$axios.get('/api/admin/course/id-by-jobnum/', {params: {JobNum: this.addLesson.jobnum}})
         .then(response => {
           console.log(response.data.data)
           if (response.data.code === 0) {
@@ -200,7 +200,7 @@ export default {
         })
     },
     getClassrooms () {
-      this.$axios.get('/api/admin/Classroom/getOpenClassroom')
+      this.$axios.get('/api/admin/classroom/open')
         .then(response => {
           if (response.data.code === 0) {
             console.log(response.data)

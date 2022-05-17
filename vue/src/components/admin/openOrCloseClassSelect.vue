@@ -46,7 +46,7 @@ export default {
     },
     getStats () {
       // TODO: 改为两轮选课。
-      this.$axios.get('/api/admin/admin/isValid').then(res => {
+      this.$axios.get('/api/admin/admin/valid').then(res => {
         if (res.data.code === 0) {
           if (res.data.data === 'on') {
             this.selectClassStatus = '开放'

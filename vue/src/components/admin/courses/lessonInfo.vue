@@ -250,7 +250,7 @@ export default {
         })
     },
     getClassrooms () {
-      this.$axios.get('/api/admin/Classroom/getOpenClassroom')
+      this.$axios.get('/api/admin/classroom/open')
         .then(response => {
           if (response.data.code === 0) {
             console.log(response.data)

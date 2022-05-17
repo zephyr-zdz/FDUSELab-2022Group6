@@ -108,7 +108,7 @@ export default {
     isChoose () {
       // TODO:读取选课是否开放 get.path还没写
       var isChoose = false
-      this.$axios.get('/api/student/course/isValid').then(res => {
+      this.$axios.get('/api/student/course/valid').then(res => {
         if (res.data.code === 0) {
           if (res.data.data === 'on') {
             this.isValid = true

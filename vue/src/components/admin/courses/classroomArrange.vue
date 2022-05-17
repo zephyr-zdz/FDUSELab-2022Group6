@@ -60,7 +60,7 @@ export default {
       location.reload()
     },
     getClassroom () {
-      this.$axios.get('/api/admin/Classroom/getAllClassroom')
+      this.$axios.get('/api/admin/classroom/all')
         .then(res => {
           console.log(res.data)
           if (res.data.code === 0) {
@@ -77,7 +77,7 @@ export default {
         })
     },
     disable (row, index) {
-      this.$axios.get('/api/admin/Classroom/closeClassroomState', {params: {
+      this.$axios.put('/api/admin/classroom/close', {params: {
         Name: row.name
       }}).then(res => {
         if (res.data.code === 0) {
@@ -95,7 +95,7 @@ export default {
       })
     },
     enable (row, index) {
-      this.$axios.get('/api/admin/Classroom/openClassroomState', {params: {
+      this.$axios.put('/api/admin/classroom/open', {params: {
         Name: row.name
       }}).then(res => {
         if (res.data.code === 0) {

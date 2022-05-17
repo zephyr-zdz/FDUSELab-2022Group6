@@ -149,7 +149,7 @@ export default {
     },
     // TODO：改为获取学生申请
     getApplication () {
-      this.$axios.get('/api/admin/course/getPendingApplication')
+      this.$axios.get('/api/admin/course/pending')
         .then(response => {
           if (response.data.code === 0) {
             this.checkStudentApplication = response.data.data
