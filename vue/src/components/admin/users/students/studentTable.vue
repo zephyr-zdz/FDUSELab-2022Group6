@@ -141,7 +141,7 @@
 </template>
 
 <script>
-import Register from './register'
+import Register from '../register'
 export default {
   name: 'studentTable',
   data () {

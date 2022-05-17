@@ -62,7 +62,7 @@
 </template>
 
 <script>
-import NavMenu from '../common/NavMenu'
+import NavMenu from '../../common/NavMenu'
 import StudentInfoMaintain from './studentInfoMaintain'
 import StudentCheckLesson from './studentCheckLesson'
 import StudentLessonChosen from './studentLessonChosen'

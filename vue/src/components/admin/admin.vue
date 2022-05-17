@@ -102,17 +102,17 @@
 <script>
 import NavMenu from '../common/NavMenu'
 
-import StudentTable from './studentTable'
-import TeacherTable from './teacherTable'
-import CsvInput from './csvInput'
-import LessonTable from './lessonTable'
-import CsvInputLesson from './csvInputLesson'
-import LessonTimeArrange from './lessonTimeArrange'
-import ClassroomArrange from './classroomArrange'
+import StudentTable from './users/students/studentTable'
+import TeacherTable from './users/teachers/teacherTable'
+import CsvInput from './users/csvInput'
+import LessonTable from './courses/lessonTable'
+import CsvInputLesson from './courses/csvInputLesson'
+import LessonTimeArrange from './courses/lessonTimeArrange'
+import ClassroomArrange from './courses/classroomArrange'
 import OpenOrCloseClassSelect from './openOrCloseClassSelect'
-import LessonApplicationCheck from './lessonApplicationCheck'
-import SchoolAndMajorTable from './schoolAndMajorTable'
-import CheckStudentApplication from './checkStudentApplication'
+import LessonApplicationCheck from './courses/lessonApplicationCheck'
+import SchoolAndMajorTable from './majorsAndSchools/schoolAndMajorTable'
+import CheckStudentApplication from './courses/checkStudentApplication'
 
 export default {
   data () {

@@ -54,9 +54,9 @@
 </template>
 
 <script>
-import NavMenu from '../common/NavMenu'
+import NavMenu from '../../common/NavMenu'
 import TeacherInfoMaintain from './teacherInfoMaintain'
-import MyLessonApplication from './myLessonApplication'
+import MyLessonApplication from '../student/myLessonApplication'
 import LessonTable from './lessonTable'
 
 export default {
