@@ -3,6 +3,10 @@
     <el-form class="reg-container" label-position="left" :model="addLesson" :rules="rules" ref="addLesson" label-width="100px">
       <h3 class="reg_title">新增课程</h3>
 
+      <el-form-item label="开课学期" prop="semester">
+        <el-input v-model="addLesson.semester" placeholder="请输入开课学期"></el-input>
+      </el-form-item>
+
       <el-form-item label="课程名称" prop="name">
         <el-input v-model="addLesson.name" placeholder="请输入课程名称"></el-input>
       </el-form-item>
@@ -11,10 +15,32 @@
         <el-input v-model="addLesson.number" placeholder="请输入课程编号"></el-input>
       </el-form-item>
 
-      <el-form-item label="开课院系" prop="institute">
-        <el-select placeholder="请选择学院" v-model="addLesson.institute">
+      <el-form-item label="课程类型" prop="type">
+        <el-select placeholder="请选择类型" v-model="addLesson.type">
           <el-option
-            v-for="item in schoolOptions"
+            v-for="item in typeOptions"
+            :key="item.name"
+            :label="item.name"
+            :value="item.id">
+          </el-option>
+        </el-select>
+      </el-form-item>
+
+      <el-form-item label="可选专业" prop="major" v-if="addLesson.type === '2' ">
+        <el-select placeholder="请选择专业" multiple v-model="addLesson.majorMulti">
+          <el-option
+            v-for="item in majorOptions"
+            :key="item.name"
+            :label="item.name"
+            :value="item.id">
+          </el-option>
+        </el-select>
+      </el-form-item>
+
+      <el-form-item label="可选专业" prop="major" v-if="addLesson.type === '3' ">
+        <el-select placeholder="请选择专业" v-model="addLesson.majorSingle">
+          <el-option
+            v-for="item in majorOptions"
             :key="item.name"
             :label="item.name"
             :value="item.id">
@@ -75,27 +101,47 @@ export default {
     return {
       res: {id: -1},
       addLesson: {
+        semester: '',
         jobnum: '',
         classroomid: '',
         name: '',
         number: '',
-        institute: '',
+        type: '',
+        majorSingle: '',
+        majorMulti: [],
         coursehour: '',
         credit: '',
         intro: '',
         schedule: '',
         capacity: ''
       },
-      schoolOptions: [],
+      majorOptions: [],
       classroomOptions: [],
+      typeOptions: [{
+        id: '1',
+        name: '通识课程'
+      }, {
+        id: '2',
+        name: '面向部分专业课程'
+      }, {
+        id: '3',
+        name: '专业课程'
+      }],
       rules: {
+        semester: [
+          {required: true, message: '请输入开课学期', trigger: 'blur'},
+          {pattern: /[0-9]{4}[-][0-9]{4}[\u4e00-\u9fa5]$/, message: '请输入正确的开课学期，如：2021-2022春', trigger: 'blur'}
+        ],
         name: [
           { required: true, message: '请输入课程名称', trigger: 'blur' }
         ],
         number: [
           { required: true, message: '请输入课程编号', trigger: 'blur' }
         ],
-        institute: [
+        type: [
+          { required: true, message: '请输入课程类型', trigger: 'blur' }
+        ],
+        major: [
           { required: true, message: '请选择学院', trigger: 'blur' }
         ],
         coursehour: [
@@ -124,22 +170,22 @@ export default {
   },
   mounted () {
     console.log('mounted')
-    this.getSchool()
+    this.getMajor()
     this.getClassrooms()
   },
   methods: {
-    getSchool () {
-      this.$axios.get('/api/admin/institute/all')
+    getMajor () {
+      this.$axios.get('/api/admin/major/all')
         .then(response => {
           console.log(response.data)
-          this.schoolOptions = response.data.data
+          this.majorOptions = response.data.data
         })
         .catch(error => {
           console.log(error)
         })
     },
     getTeacherId () {
-      this.$axios.get('/api/admin/course/getTeacherIdByJobNum/', {params: {JobNum: this.addLesson.jobnum}})
+      this.$axios.get('/api/admin/course/id-by-jobnum/', {params: {JobNum: this.addLesson.jobnum}})
         .then(response => {
           console.log(response.data.data)
           if (response.data.code === 0) {
@@ -158,7 +204,7 @@ export default {
         })
     },
     getClassrooms () {
-      this.$axios.get('/api/admin/Classroom/getOpenClassroom')
+      this.$axios.get('/api/admin/classroom/open')
         .then(response => {
           if (response.data.code === 0) {
             console.log(response.data)

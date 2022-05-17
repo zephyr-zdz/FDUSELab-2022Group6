@@ -26,6 +26,7 @@
             <el-submenu index="4">
               <template slot="title"><i class="el-icon-s-promotion"></i>选课事务</template>
               <el-menu-item @click="handleChange('openOrCloseClassSelect')">开放/关闭选课</el-menu-item>
+              <el-menu-item @click="handleChange('checkStudentApplication')">学生选课申请</el-menu-item>
             </el-submenu>
           </el-menu>
         </el-aside>
@@ -87,6 +88,10 @@
                                     label="schoolAndMajorTable"
                                     v-show="showRecord === 'schoolAndMajorTable'"
                                     ref="schoolAndMajorTable"></school-and-major-table>
+            <check-student-application id="checkStudentApplication"
+                                       label="checkStudentApplication"
+                                       v-show="showRecord === 'checkStudentApplication'"
+                                       ref="checkStudentApplication"></check-student-application>
           </el-main>
         </el-container>
       </el-container>
@@ -97,16 +102,17 @@
 <script>
 import NavMenu from '../common/NavMenu'
 
-import StudentTable from './studentTable'
-import TeacherTable from './teacherTable'
-import CsvInput from './csvInput'
-import LessonTable from './lessonTable'
-import CsvInputLesson from './csvInputLesson'
-import LessonTimeArrange from './lessonTimeArrange'
-import ClassroomArrange from './classroomArrange'
+import StudentTable from './users/students/studentTable'
+import TeacherTable from './users/teachers/teacherTable'
+import CsvInput from './users/csvInput'
+import LessonTable from './courses/lessonTable'
+import CsvInputLesson from './courses/csvInputLesson'
+import LessonTimeArrange from './courses/lessonTimeArrange'
+import ClassroomArrange from './courses/classroomArrange'
 import OpenOrCloseClassSelect from './openOrCloseClassSelect'
-import LessonApplicationCheck from './lessonApplicationCheck'
-import SchoolAndMajorTable from './schoolAndMajorTable'
+import LessonApplicationCheck from './courses/lessonApplicationCheck'
+import SchoolAndMajorTable from './majorsAndSchools/schoolAndMajorTable'
+import CheckStudentApplication from './courses/checkStudentApplication'
 
 export default {
   data () {
@@ -189,6 +195,9 @@ export default {
           this.showSchoolAndMajor()
           this.showRecord = value
           break
+        case 'checkStudentApplication' :
+          this.showRecord = value
+          break
         default :
           this.showRecord = ''
           break
@@ -206,7 +215,8 @@ export default {
     'classroom-arrange': ClassroomArrange,
     'open-or-close-class-select': OpenOrCloseClassSelect,
     'lesson-application-check': LessonApplicationCheck,
-    'school-and-major-table': SchoolAndMajorTable
+    'school-and-major-table': SchoolAndMajorTable,
+    'check-student-application': CheckStudentApplication
   }
 }
 

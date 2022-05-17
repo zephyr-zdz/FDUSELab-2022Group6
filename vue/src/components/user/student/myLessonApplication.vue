@@ -109,7 +109,7 @@ export default {
     getApplication () {
       console.log('getApplication')
       console.log(this.$store.getters.username)
-      this.$axios.post('/api/teacher/application/getMyApplicationByJobNum', null, {params: {JobNum: this.jobnum}})
+      this.$axios.get('/api/teacher/application/', {params: {JobNum: this.jobnum}})
         .then(response => {
           if (response.data.code === 0) {
             this.myLessonApplication = response.data.data

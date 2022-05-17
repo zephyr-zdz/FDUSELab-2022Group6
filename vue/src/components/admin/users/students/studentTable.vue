@@ -141,7 +141,7 @@
 </template>
 
 <script>
-import Register from './register'
+import Register from '../register'
 export default {
   name: 'studentTable',
   data () {
@@ -184,7 +184,7 @@ export default {
       }
       console.log(school)
       console.log('111')
-      this.$axios.get('/api/admin/major/allbyinstitute', {params: {institute: school}})
+      this.$axios.get('/api/admin/major/all-by-institute', {params: {institute: school}})
         .then(response => {
           console.log(response.data)
           console.log(response.data.data)
