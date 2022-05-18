@@ -8,11 +8,14 @@
       </el-form-item>
 
       <el-form-item label="课程名称" prop="name">
-        <el-input v-model="addLesson.name" placeholder="请输入课程名称"></el-input>
-      </el-form-item>
-
-      <el-form-item label="课程编号" prop="number">
-        <el-input v-model="addLesson.number" placeholder="请输入课程编号"></el-input>
+        <el-select placeholder="请选择课程名称" v-model="addLesson.name">
+          <el-option
+            v-for="item in templateOptions"
+            :key="item.name"
+            :label="item.name"
+            :value="item.name">
+          </el-option>
+        </el-select>
       </el-form-item>
 
       <el-form-item label="课程类型" prop="type">
@@ -114,6 +117,7 @@ export default {
         capacity: ''
       },
       majorOptions: [],
+      templateOptions: [],
       classroomOptions: [],
       typeOptions: [{
         id: '1',
