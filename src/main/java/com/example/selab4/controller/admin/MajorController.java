@@ -29,7 +29,7 @@ public class MajorController {
         return service.getAll();
     }
 
-    @GetMapping("/allbyinstitute")
+    @GetMapping("/all-by-institute")
     public Response<List<Major>> getAllByInstitute(@RequestParam("institute") String instituteName) {
         return service.getAllByInstitute(instituteName);
     }
@@ -41,7 +41,7 @@ public class MajorController {
 
     // 如果专业还有学生/教师，不允许删除专业(此处可以不考虑课程申请)
     @DeleteMapping
-    public Response<Major> delete(@RequestParam("majorid") Integer majorId) {
+    public Response<Major> delete(@RequestParam("majorId") Integer majorId) {
         return service.delete(majorId);
     }
 
