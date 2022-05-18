@@ -151,6 +151,9 @@ export default {
     showLessons () {
       this.$refs.lessonTable.getLessons()
     },
+    showTemplate () {
+      this.$refs.templateTable.getTemplate()
+    },
     showLessonTime () {
       this.$refs.lessonTimeArrange.getLessonTime()
     },
@@ -206,6 +209,7 @@ export default {
           this.showRecord = value
           break
         case 'templateTable' :
+          this.showTemplate()
           this.showRecord = value
           break
         default :

@@ -21,7 +21,7 @@
 <!--      :before-close="handleClose">-->
 <!--      <delete-template></delete-template>-->
 <!--    </el-dialog>-->
-    <el-button :disabled="templateEdit" type="success" size="small" @click="addSchool()">新增课程模板</el-button>
+    <el-button :disabled="templateEdit" type="success" size="small" @click="addTemplate()">新增课程模板</el-button>
 <!--    <el-button :disabled="templateEdit" type="danger" size="small" @click="deleteSchool()">删除课程模板</el-button>-->
     <el-table :data="templateTable"
               style="width: 100%"
@@ -95,8 +95,7 @@ export default {
       this.getTemplate()
     },
     getTemplate () {
-      // TODO：接口名可能有错
-      this.$axios.get('/api/admin/course-template')
+      this.$axios.get('/api/admin/course-template/all')
         .then(res => {
           console.log(res.data)
           if (res.data.code === 0) {
@@ -109,13 +108,13 @@ export default {
     addTemplate () {
       // this.$refs.addMajor.getSchoolOptions()
       this.getTemplate()
-      this.addSchoolVisible = true
+      this.addTemplateVisible = true
     },
 
     deleteTemplate () {
       // this.$refs.addMajor.getSchoolOptions()
       this.getTemplate()
-      this.deleteSchoolVisible = true
+      this.deleteTemplateVisible = true
     },
 
     editRow (row, index) {
@@ -150,7 +149,6 @@ export default {
       console.log('confirm')
       // 发送
       console.log(this.templateTable[index])
-      // TODO:接口名可能有误
       this.$axios.put('/api/admin/course-template', this.templateTable[index])
         .then(res => {
           console.log('res ok')
