@@ -24,7 +24,6 @@
 <script>
 export default {
   name: 'deleteTemplate',
-  // TODO:显示的是课程名称还是课程序号还是both？发送过去的？
   data () {
     return {
       templateOptions: [],
@@ -40,7 +39,6 @@ export default {
   },
   methods: {
     getTemplate () {
-      // TODO:接口可能有误
       this.$axios.get('/api/admin/course-template').then(res => {
         this.schoolOptions = res.data.data
       })
