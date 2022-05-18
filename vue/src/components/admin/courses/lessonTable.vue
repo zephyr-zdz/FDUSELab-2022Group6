@@ -18,6 +18,17 @@
       :before-close="handleClose">
       <lesson-info></lesson-info>
     </el-dialog>
+
+    <el-dialog
+      title="详细信息"
+      top="5vh"
+      width="50%"
+      :append-to-body="true"
+      :visible.sync="chosenStudentVisible"
+      :before-close="handleClose">
+      <chosen-student-list></chosen-student-list>
+    </el-dialog>
+
     <el-button :disabled="lessonEdit" type="success" size="small" @click="addRow()">增加</el-button>
     <el-table :data="lessonTable"
               style="width: 100%"
@@ -64,14 +75,6 @@
         label="课程类型"
         width="100">
         <template v-slot="scope">
-<!--          <el-select v-model="scope.row.institute.id" v-show="(lessonEdit&&(scope.$index===editingIndex))" placeholder="请选择" size="mini">-->
-<!--            <el-option-->
-<!--              v-for="item in schoolOptions"-->
-<!--              :key="item.name"-->
-<!--              :label="item.name"-->
-<!--              :value="item.id">-->
-<!--            </el-option>-->
-<!--          </el-select>-->
           <span v-show="!(lessonEdit&&(scope.$index===editingIndex))">{{ scope.row.institute.name }}</span>
         </template>
       </el-table-column>
@@ -80,7 +83,6 @@
         label="学时"
         width="80">
         <template v-slot="scope">
-<!--          <el-input-number controls size="mini" v-show="(lessonEdit&&(scope.$index===editingIndex))" v-model="scope.row.course.coursehour" :min="0.5" :step="0.5"></el-input-number>-->
           <span v-show="!(lessonEdit&&(scope.$index===editingIndex))">{{ scope.row.course.coursehour }}</span>
         </template>
       </el-table-column>
@@ -89,7 +91,6 @@
         label="学分"
         width="80">
         <template v-slot="scope">
-<!--          <el-input-number controls size="mini" v-show="(lessonEdit&&(scope.$index===editingIndex))" v-model="scope.row.course.credit" :min="0.5" :step="0.5"></el-input-number>-->
           <span v-show="!(lessonEdit&&(scope.$index===editingIndex))">{{ scope.row.course.credit }}</span>
         </template>
       </el-table-column>
@@ -155,20 +156,20 @@
         label="操作"
        >
         <template v-slot="scope">
-<!--          <el-button v-if="!(lessonEdit&&(scope.$index===editingIndex))" size="mini" type="warning" @click="editRow(scope.row,scope.$index)">修改</el-button>-->
-<!--          <el-button v-if="!(lessonEdit&&(scope.$index===editingIndex))" size="mini" type="danger" @click="deleteRow(scope.row,scope.$index)">删除</el-button>-->
-<!--          <el-button v-if="(lessonEdit&&(scope.$index===editingIndex))" size="mini" type="success" @click="confirmRow(scope.row,scope.$index)">确定</el-button>-->
-<!--          <el-button v-if="(lessonEdit&&(scope.$index===editingIndex))" size="mini" type="info" @click="cancelRow(scope.row,scope.$index)">取消</el-button>-->
-          <el-button size="mini" type="info" @click="showInfo()">查看详细信息</el-button>
+          <el-button size="mini" type="success" @click="showInfo()">查看详细信息</el-button>
+          <el-button size="mini" type="info" @click="showChosenStudent()">查看已选学生名单</el-button>
         </template>
       </el-table-column>
     </el-table>
+    <el-button size="mini" type="info" @click="showChosenStudent()">查看已选学生名单</el-button>
   </el-card>
 </template>
 
 <script>
 import AddLesson from './addLesson'
 import LessonInfo from './lessonInfo'
+import AdminCheckChosenStudentList from './adminCheckChosenStudentList'
+
 export default {
   name: 'lessonTable',
   data () {
@@ -179,6 +180,7 @@ export default {
       lessonEdit: false,
       dialogVisible: false,
       infoVisible: false,
+      chosenStudentVisible: false,
       editingIndex: -1,
       school: '',
       application: {},
@@ -195,9 +197,13 @@ export default {
       this.getLessons()
       this.dialogVisible = false
       this.infoVisible = false
+      this.chosenStudentVisible = false
     },
     showInfo () {
       this.infoVisible = true
+    },
+    showChosenStudent () {
+      this.chosenStudentVisible = true
     },
     isValid (row, index) {
       var coursehour = parseInt(this.lessonTable[index].course.coursehour)
@@ -396,7 +402,8 @@ export default {
   },
   components: {
     'add-lesson': AddLesson,
-    'lesson-info': LessonInfo
+    'lesson-info': LessonInfo,
+    'chosen-student-list': AdminCheckChosenStudentList
   }
 }
 
