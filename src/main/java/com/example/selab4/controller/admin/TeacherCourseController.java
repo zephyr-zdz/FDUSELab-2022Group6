@@ -48,7 +48,7 @@ public class TeacherCourseController {
         return service.modify(teacherCourseApplication);
     }
 
-    @GetMapping("/get-jobnum-by-id")
+    @GetMapping("/jobnum-by-id")
     public Response<String> getTeacherJobNum(@RequestParam(name = "Id") Integer Id){
         return new Response<>(0,"success", service.getTeacherJobnumById(Id));
     }
