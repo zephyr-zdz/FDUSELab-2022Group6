@@ -18,6 +18,15 @@
       :before-close="handleClose">
       <lesson-info></lesson-info>
     </el-dialog>
+    <el-dialog
+      title="详细信息"
+      top="5vh"
+      width="50%"
+      :append-to-body="true"
+      :visible.sync="chosenStudentVisible"
+      :before-close="handleClose">
+      <chosen-student-list></chosen-student-list>
+    </el-dialog>
     <el-button :disabled="lessonEdit" type="success" size="small" @click="addRow()">增加</el-button>
     <el-table :data="lessonTable"
               style="width: 100%"
@@ -155,20 +164,20 @@
         label="操作"
         >
         <template v-slot="scope">
-          <!--          <el-button v-if="!(lessonEdit&&(scope.$index===editingIndex))" size="mini" type="warning" @click="editRow(scope.row,scope.$index)">修改</el-button>-->
-          <!--          <el-button v-if="!(lessonEdit&&(scope.$index===editingIndex))" size="mini" type="danger" @click="deleteRow(scope.row,scope.$index)">删除</el-button>-->
-          <!--          <el-button v-if="(lessonEdit&&(scope.$index===editingIndex))" size="mini" type="success" @click="confirmRow(scope.row,scope.$index)">确定</el-button>-->
-          <!--          <el-button v-if="(lessonEdit&&(scope.$index===editingIndex))" size="mini" type="info" @click="cancelRow(scope.row,scope.$index)">取消</el-button>-->
           <el-button size="mini" type="info" @click="showInfo()">查看详细信息</el-button>
+          <el-button size="mini" type="info" @click="showChosenStudent()">查看已选学生名单</el-button>
         </template>
       </el-table-column>
     </el-table>
+    <el-button size="mini" type="info" @click="showChosenStudent()">查看已选学生名单</el-button>
   </el-card>
 </template>
 
 <script>
 import AddLesson from './addLesson'
 import LessonInfo from './lessonInfo'
+import TeacherCheckChosenStudentList from './teacherCheckChosenStudentList'
+
 export default {
   name: 'lessonTable',
   data () {
@@ -181,6 +190,7 @@ export default {
       lessonEdit: false,
       dialogVisible: false,
       infoVisible: false,
+      chosenStudentVisible: false,
       editingIndex: -1,
       majorOptions: [],
       application: {},
@@ -199,6 +209,7 @@ export default {
       this.getLessons()
       this.dialogVisible = false
       this.infoVisible = false
+      this.chosenStudentVisible = false
     },
     getMajor () {
       this.$axios.get('/api/admin/major/all')
@@ -212,6 +223,9 @@ export default {
     },
     showInfo () {
       this.infoVisible = true
+    },
+    showChosenStudent () {
+      this.chosenStudentVisible = true
     },
     isValid (row, index) {
       var coursehour = parseInt(this.lessonTable[index].course.coursehour)
@@ -397,7 +411,8 @@ export default {
   },
   components: {
     'add-lesson': AddLesson,
-    'lesson-info': LessonInfo
+    'lesson-info': LessonInfo,
+    'chosen-student-list': TeacherCheckChosenStudentList
   }
 }
 
