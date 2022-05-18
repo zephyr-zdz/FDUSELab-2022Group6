@@ -1,6 +1,7 @@
 package com.example.selab4.controller.teacher;
 
 import com.example.selab4.model.vo.CourseVO;
+import com.example.selab4.model.vo.StudentVO;
 import com.example.selab4.service.teacher.CourseService;
 import com.example.selab4.util.Response;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,10 @@ public class CourseController {
         return service.getAllByJobnum(jobnum);
     }
 
-
-    // TODO 教师查看自己的某个课程的选课名单
+    // 教师查看自己的某个课程的选课学生名单
+    @GetMapping("/student-list")
+    public Response<List<StudentVO>> getStudentListByCourseid(@RequestParam("courseid") Integer courseid) {
+        return service.getStudentListByCourseid(courseid);
+    }
 
 }

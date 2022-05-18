@@ -4,6 +4,7 @@ import com.example.selab4.manager.teacher.CourseManager;
 import com.example.selab4.model.entity.Major;
 import com.example.selab4.model.entity.Teacher;
 import com.example.selab4.model.vo.CourseVO;
+import com.example.selab4.model.vo.StudentVO;
 import com.example.selab4.util.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,5 +37,9 @@ public class CourseService {
         }
 
         return new Response<>(Response.SUCCESS, "根据工号查找课程成功", manager.findCoursesByTeacher(teacher));
+    }
+
+    public Response<List<StudentVO>> getStudentListByCourseid(Integer courseid) {
+        return new Response<>(Response.SUCCESS, "查找选课学生名单成功", manager.getStudentListByCourseid(courseid));
     }
 }
