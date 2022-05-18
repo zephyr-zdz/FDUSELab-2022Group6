@@ -265,7 +265,7 @@ export default {
       console.log(this.editingRow)
     },
     deleteRow (row, index) {
-      this.$axios.delete('/api/admin/student', {params: {stunum: row.stunum}})
+      this.$axios.delete('/api/admin/student', {params: {studentId: row.id}})
         .then(res => {
           console.log(res.data)
           if (res.data.code === 0) {
