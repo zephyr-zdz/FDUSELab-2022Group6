@@ -56,7 +56,7 @@
 <script>
 import NavMenu from '../../common/NavMenu'
 import TeacherInfoMaintain from './teacherInfoMaintain'
-import MyLessonApplication from '../student/myLessonApplication'
+import MyLessonApplication from './myLessonApplication'
 import LessonTable from './lessonTable'
 
 export default {
