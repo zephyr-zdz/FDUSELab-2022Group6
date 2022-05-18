@@ -1,8 +1,6 @@
 <template>
   <body id="post">
     <el-form  label-position="left" ref="regForm" label-width="100px">
-      <h3 class="reg_title">新增学院</h3>
-
       <el-form-item label="学院名称" prop="schoolName">
         <el-input v-model="schoolForm.name"></el-input>
       </el-form-item>

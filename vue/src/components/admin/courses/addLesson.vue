@@ -1,8 +1,6 @@
 <template>
   <body id="post">
     <el-form class="reg-container" label-position="left" :model="addLesson" :rules="rules" ref="addLesson" label-width="100px">
-      <h3 class="reg_title">新增课程</h3>
-
       <el-form-item label="开课学期" prop="semester">
         <el-input v-model="addLesson.semester" placeholder="请输入开课学期"></el-input>
       </el-form-item>

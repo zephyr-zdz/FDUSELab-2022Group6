@@ -1,8 +1,6 @@
 <template>
   <body id="post">
   <el-form  label-position="left" label-width="100px">
-    <h3 class="reg_title">新增课程模板</h3>
-
     <el-form-item label="课程序号" prop="coursenum">
       <el-input v-model="templateForm.coursenum"></el-input>
     </el-form-item>
