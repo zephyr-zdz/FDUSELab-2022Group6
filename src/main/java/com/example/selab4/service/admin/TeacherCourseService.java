@@ -25,11 +25,11 @@ import static org.aspectj.util.LangUtil.split;
 @Transactional
 @Service("AdminTeacherCourseService")
 public class TeacherCourseService {
-    private final TeacherCourseManager teacherCourseManager;
+    private final TeacherCourseManager manager;
 
     @Autowired
     TeacherCourseService(TeacherCourseManager teacherCourseManager){
-        this.teacherCourseManager = teacherCourseManager;
+        this.manager = teacherCourseManager;
     }
 
     Course fromApplicationToCourse(TeacherCourseApplication teacherCourseApplication){
@@ -39,17 +39,17 @@ public class TeacherCourseService {
         course.setCapacity(teacherCourseApplication.getCapacity());
         course.setIntro(teacherCourseApplication.getIntro());
 
-        CourseTemplate courseTemplate = teacherCourseManager.getCourseTemplateByCoursenum(teacherCourseApplication.getCoursenum());
+        CourseTemplate courseTemplate = manager.getCourseTemplateByCoursenum(teacherCourseApplication.getCoursenum());
         course.setCoursetemplateid(courseTemplate.getId());
         return course;
     }
 
     List<Schedule> deleteScheduleByCourseId(Integer courseId){
-        return teacherCourseManager.deleteSchedulesByCourseId(courseId);
+        return manager.deleteSchedulesByCourseId(courseId);
     }
 
     void addSchedules(List<Schedule> schedules){
-        teacherCourseManager.save(schedules);
+        manager.save(schedules);
     }
 
     List<Integer> getCalendarIDsFromApplication(TeacherCourseApplication teacherCourseApplication){
@@ -57,17 +57,17 @@ public class TeacherCourseService {
         List<Integer> CalendarIdList = new ArrayList<>();
         for (String s : schedule){
             String[] info=s.split(",");
-            CalendarIdList.add(teacherCourseManager.findCalendarIdByDayAndNumber(info[0],info[1]));
+            CalendarIdList.add(manager.findCalendarIdByDayAndNumber(info[0],info[1]));
         }
         return CalendarIdList;
     }
 
     public String getTeacherJobnumById(Integer Id){
-        return teacherCourseManager.findTeacherJobNumById(Id);
+        return manager.findTeacherJobNumById(Id);
     }
 
     public Integer getTeacherIdByJobnum(String JobNum){
-        return teacherCourseManager.findTeacherIdByJobNum(JobNum);
+        return manager.findTeacherIdByJobNum(JobNum);
     }
 
     List<Schedule> getSchedulesFromApplication(TeacherCourseApplication teacherCourseApplication){
@@ -85,7 +85,7 @@ public class TeacherCourseService {
     }
 
     boolean check(TeacherCourseApplication teacherCourseApplication){
-        Course course = teacherCourseManager.findCourseByCourseId(teacherCourseApplication.getPre_courseId());
+        Course course = manager.findCourseByCourseId(teacherCourseApplication.getPre_courseId());
         switch (teacherCourseApplication.getApplytype()) {
             case "delete" : case "update" :
                 if (course == null) {
@@ -106,10 +106,10 @@ public class TeacherCourseService {
         Integer TeacherId= teacherCourseApplication.getTeacherid();
 
         // 得到被修改课程的上课时间、教室
-        List<Schedule> schedules= teacherCourseManager.deleteSchedulesByCourseId(teacherCourseApplication.getPre_courseId());
+        List<Schedule> schedules= manager.deleteSchedulesByCourseId(teacherCourseApplication.getPre_courseId());
         boolean flag=true;
         for (Integer i : CalendarIdListId){
-            if(teacherCourseManager.scheduleExistByCalendarIdAndClassroomId(i,ClassroomId)|| teacherCourseManager.scheduleExistByCalendarIdAndTeacherId(i,TeacherId)) {
+            if(manager.scheduleExistByCalendarIdAndClassroomId(i,ClassroomId)|| manager.scheduleExistByCalendarIdAndTeacherId(i,TeacherId)) {
                 flag=false;
                 System.out.println(i);
             }
@@ -120,10 +120,10 @@ public class TeacherCourseService {
 
 
         Integer classroomId= teacherCourseApplication.getClassroomid();
-        String classroomCapacity= teacherCourseManager.findClassroomCapacityById(classroomId);
+        String classroomCapacity= manager.findClassroomCapacityById(classroomId);
 
         // 教室on检查
-        if(teacherCourseManager.findClassroomById(teacherCourseApplication.getClassroomid()).getState().equals("off")) {
+        if(manager.findClassroomById(teacherCourseApplication.getClassroomid()).getState().equals("off")) {
             throw new RuntimeException("classroom is off");
         }
 
@@ -137,7 +137,7 @@ public class TeacherCourseService {
     public Response<String> approve(TeacherCourseApplication teacherCourseApplication, boolean attitude){
         if (!attitude){ // 管理员不通过申请
             teacherCourseApplication.setResult("reject");
-            teacherCourseManager.save(teacherCourseApplication);
+            manager.save(teacherCourseApplication);
             return new Response<>(Response.SUCCESS,"课程申请处理成功，管理员不通过申请","disapproval");
         }
         Course course = fromApplicationToCourse(teacherCourseApplication);
@@ -148,32 +148,32 @@ public class TeacherCourseService {
 
         switch (teacherCourseApplication.getApplytype()){
             case "delete":{
-                teacherCourseManager.delete(course);
+                manager.delete(course);
                 teacherCourseApplication.setResult("approve");
-                teacherCourseManager.save(teacherCourseApplication);
-                teacherCourseManager.deleteSchedulesByCourseId(teacherCourseApplication.getPre_courseId());
+                manager.save(teacherCourseApplication);
+                manager.deleteSchedulesByCourseId(teacherCourseApplication.getPre_courseId());
                 return new Response<>(Response.SUCCESS,"管理员通过申请，删除申请处理成功","delete succeed");
             }
             case "update":{
-                Course originCourse= teacherCourseManager.findCourseByCourseId(teacherCourseApplication.getPre_courseId());
-                teacherCourseManager.deleteSchedulesByCourseId(teacherCourseApplication.getPre_courseId());
+                Course originCourse= manager.findCourseByCourseId(teacherCourseApplication.getPre_courseId());
+                manager.deleteSchedulesByCourseId(teacherCourseApplication.getPre_courseId());
                 originCourse.update(course);
-                teacherCourseManager.save(originCourse);
+                manager.save(originCourse);
                 addSchedules(getSchedulesFromApplication(teacherCourseApplication));
                 teacherCourseApplication.setResult("approve");
-                teacherCourseManager.save(teacherCourseApplication);
+                manager.save(teacherCourseApplication);
                 return new Response<>(Response.SUCCESS,"管理员通过申请，修改申请处理成功","update succeed");
             }
             case "insert":{
-                teacherCourseManager.save(course);
+                manager.save(course);
                 addSchedules(getSchedulesFromApplication(teacherCourseApplication));
                 teacherCourseApplication.setResult("approve");
-                teacherCourseManager.save(teacherCourseApplication);
+                manager.save(teacherCourseApplication);
                 return new Response<>(Response.SUCCESS,"管理员通过申请，新增申请处理成功","insert succeed");
             }
             default:
                 teacherCourseApplication.setResult("reject");
-                teacherCourseManager.save(teacherCourseApplication);
+                manager.save(teacherCourseApplication);
                 return new Response<>(Response.FAIL,"课程申请的类型非法，管理员不得通过申请","illegal application type");
         }
     }
@@ -182,7 +182,7 @@ public class TeacherCourseService {
     public Response<String> modify(TeacherCourseApplication teacherCourseApplication){
         if(!check(teacherCourseApplication)){
             teacherCourseApplication.setResult("reject");
-            teacherCourseManager.save(teacherCourseApplication);
+            manager.save(teacherCourseApplication);
             return new Response<>(Response.FAIL,"产生逻辑错误，管理员不得修改课程，","conflict");
         }
 
@@ -242,14 +242,14 @@ public class TeacherCourseService {
     }
 
     public Response<List<TeacherCourseApplicationVO>> showAllApplications(){
-        return new Response<>(Response.SUCCESS,"success", teacherCourseManager.findAllCourseApplication());
+        return new Response<>(Response.SUCCESS,"success", manager.findAllCourseApplication());
     }
 
     public Response<List<TeacherCourseApplicationVO>> showPendingApplications() {
-        return new Response<>(Response.SUCCESS, "success", teacherCourseManager.findAllPendingCourseApplication());
+        return new Response<>(Response.SUCCESS, "success", manager.findAllPendingCourseApplication());
     }
 
     public Response<List<CourseVO>> showAllCourse(){
-        return new Response<>(Response.SUCCESS,"success", teacherCourseManager.findAllCourse());
+        return new Response<>(Response.SUCCESS,"success", manager.findAllCourse());
     }
 }

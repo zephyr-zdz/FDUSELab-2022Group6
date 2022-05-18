@@ -37,7 +37,7 @@ public class TeacherCourseManager {
     }
 
     public Integer findCalendarIdByDayAndNumber(String day, String number){
-        Calendar calendar=calendarMapper.findCalendarByDayAndNumber(day,number);
+        Calendar calendar = calendarMapper.findCalendarByDayAndNumber(day,number);
         return calendar.getId();
     }
 

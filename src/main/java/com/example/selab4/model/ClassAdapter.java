@@ -2,6 +2,7 @@ package com.example.selab4.model;
 
 import com.example.selab4.mapper.*;
 import com.example.selab4.model.entity.*;
+import com.example.selab4.model.vo.StudentVO;
 import com.example.selab4.model.vo.TeacherCourseApplicationVO;
 import com.example.selab4.model.vo.CourseVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,5 +81,14 @@ public class ClassAdapter {
         courseVO.setMajorListOfCourse(majorListOfCourse);
 
         return courseVO;
+    }
+
+    public StudentVO fromStudent2StudentVO(Student student) {
+        StudentVO studentVO = new StudentVO();
+        studentVO.setStudent(student);
+        studentVO.setMajor(majorMapper.findMajorByName(student.getMajor()));
+        studentVO.setInstitute(instituteMapper.findInstituteByName(student.getInstitute()));
+
+        return studentVO;
     }
 }

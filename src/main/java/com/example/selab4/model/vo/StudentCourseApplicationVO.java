@@ -10,4 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class StudentCourseApplicationVO {
     private StudentCourseApplication studentCourseApplication;
+
+    // TODO 字段有待讨论
 }
