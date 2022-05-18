@@ -11,18 +11,18 @@
       <add-template></add-template>
     </el-dialog>
 
-    <el-dialog
-      title="删除课程模板"
-      top="5vh"
-      width="50%"
-      :append-to-body="true"
-      v-if="this.deleteTemplateVisible===true"
-      :visible.sync="deleteTemplateVisible"
-      :before-close="handleClose">
-      <delete-template></delete-template>
-    </el-dialog>
+<!--    <el-dialog-->
+<!--      title="删除课程模板"-->
+<!--      top="5vh"-->
+<!--      width="50%"-->
+<!--      :append-to-body="true"-->
+<!--      v-if="this.deleteTemplateVisible===true"-->
+<!--      :visible.sync="deleteTemplateVisible"-->
+<!--      :before-close="handleClose">-->
+<!--      <delete-template></delete-template>-->
+<!--    </el-dialog>-->
     <el-button :disabled="templateEdit" type="success" size="small" @click="addSchool()">新增课程模板</el-button>
-    <el-button :disabled="templateEdit" type="danger" size="small" @click="deleteSchool()">删除课程模板</el-button>
+<!--    <el-button :disabled="templateEdit" type="danger" size="small" @click="deleteSchool()">删除课程模板</el-button>-->
     <el-table :data="templateTable"
               style="width: 100%"
               stripe
