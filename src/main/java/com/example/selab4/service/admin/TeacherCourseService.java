@@ -39,6 +39,7 @@ public class TeacherCourseService {
         course.setCapacity(teacherCourseApplication.getCapacity());
         course.setIntro(teacherCourseApplication.getIntro());
         course.setIspublic(teacherCourseApplication.getIspublic());
+        course.setSemester(teacherCourseApplication.getSemester());
 
         CourseTemplate courseTemplate = manager.getCourseTemplateByCoursenum(teacherCourseApplication.getCoursenum());
         course.setCoursetemplateid(courseTemplate.getId());

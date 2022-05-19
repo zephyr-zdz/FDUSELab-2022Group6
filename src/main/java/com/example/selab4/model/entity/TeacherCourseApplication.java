@@ -45,5 +45,7 @@ public class TeacherCourseApplication {
     private String applytime;   // 申请时间（以此作为列表的排序依据// ）
     @Column(name = "pre_courseId",nullable = false)
     private Integer pre_courseId;
+    @Column(name = "semester", nullable = false, length = 10)
+    private String semester;
 }
 
