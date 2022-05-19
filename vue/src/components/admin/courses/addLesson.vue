@@ -188,7 +188,6 @@ export default {
   },
   methods: {
     handleClose () {
-      console.log(this.$refs.addLessonForm.templateid)
       this.$nextTick(() => {
         this.$emit('afterAddLesson')
         this.dialogVisible = false

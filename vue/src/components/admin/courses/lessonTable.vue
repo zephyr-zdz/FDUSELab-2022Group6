@@ -1,7 +1,7 @@
 <template>
   <el-card class="box-card">
     <add-lesson ref="addLesson" @afterAddLesson="handleClose"></add-lesson>
-    <edit-lesson ref="editLesson" @afterAddLesson="handleClose"></edit-lesson>
+    <edit-lesson ref="editLesson" @afterEditLesson="handleClose"></edit-lesson>
     <lesson-info ref="lessonInfo" @afterLessonInfo="handleClose"></lesson-info>
     <chosen-student-list ref="lessonStudentList"></chosen-student-list>
 
@@ -124,8 +124,8 @@
         width="180"
        >
         <template v-slot="scope">
-          <el-button size="mini" type="text" @click="showInfo()">修改</el-button>
-          <el-button size="mini" type="text" @click="showInfo()">详细</el-button>
+          <el-button size="mini" type="text" @click="showEditLesson(scope.$index)">修改</el-button>
+          <el-button size="mini" type="text" @click="showInfo(scope.$index)">详细</el-button>
           <el-button size="mini" type="text" @click="showChosenStudent(scope.$index)">已选学生名单</el-button>
         </template>
       </el-table-column>
@@ -157,13 +157,13 @@ export default {
     handleClose () {
       this.getLessons()
     },
-    showAddLesson (index) {
+    showAddLesson () {
       this.$refs.addLesson.dialogVisible = true
-      this.$refs.addLesson.course = this.lessonTable[index].course
     },
     showEditLesson (index) {
       this.$refs.editLesson.dialogVisible = true
-      this.$refs.editLesson.course = this.lessonTable[index].course
+      this.$refs.editLesson.course = this.lessonTable[index]
+      this.$refs.editLesson.course2Form()
     },
     showInfo (index) {
       this.$refs.lessonInfo.dialogVisible = true
