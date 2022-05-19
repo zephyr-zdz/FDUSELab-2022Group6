@@ -51,7 +51,7 @@ public class CourseManager {
             courseVOList.add(courseVO);
         }
 
-        // 去重   // TODO
+        // 去重
         LinkedHashSet<CourseVO> hashSet = new LinkedHashSet<>(courseVOList);
         courseVOList = new ArrayList<>(hashSet);
 
