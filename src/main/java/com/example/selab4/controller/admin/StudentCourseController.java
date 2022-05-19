@@ -34,7 +34,6 @@ public class StudentCourseController {
         return service.getStudentCourseApplicationVOList();
     }
 
-
     // TODO 管理员审核学生的选课申请
 
 }

@@ -38,9 +38,17 @@ public class TeacherCourseService {
         course.setCredit(teacherCourseApplication.getCredit());
         course.setCapacity(teacherCourseApplication.getCapacity());
         course.setIntro(teacherCourseApplication.getIntro());
+        course.setIspublic(teacherCourseApplication.getIspublic());
 
         CourseTemplate courseTemplate = manager.getCourseTemplateByCoursenum(teacherCourseApplication.getCoursenum());
         course.setCoursetemplateid(courseTemplate.getId());
+
+        if (teacherCourseApplication.getPre_courseId() == -1) {
+            course.setCurrentcount("0");
+        } else {
+            course.setCurrentcount(manager.findCourseByCourseId(teacherCourseApplication.getPre_courseId()).getCapacity());
+        }
+
         return course;
     }
 
