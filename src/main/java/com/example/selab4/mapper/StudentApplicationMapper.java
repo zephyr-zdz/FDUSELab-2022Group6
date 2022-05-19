@@ -10,4 +10,6 @@ import java.util.List;
 public interface StudentApplicationMapper extends JpaRepository<StudentCourseApplication, Integer> {
 
     List<StudentCourseApplication> findAllByStudentid(Integer studentid);
+
+    List<StudentCourseApplication> findAllByCourseid(Integer pre_courseId);
 }
