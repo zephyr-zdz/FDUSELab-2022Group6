@@ -39,7 +39,7 @@ public class ApplicationManager {
         boolean timing = administrator.getChoosecourse2().equals("on");
         boolean enough_space = parseInt(course.getCurrentcount()) < space_capacity;
 
-        return full&timing&enough_space;
+        return full && timing && enough_space;
     }
 
     public void save(StudentCourseApplication studentCourseApplication) {
