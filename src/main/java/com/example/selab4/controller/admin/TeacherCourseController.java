@@ -48,15 +48,15 @@ public class TeacherCourseController {
         return service.modify(teacherCourseApplication);
     }
 
-//    @GetMapping("/jobnum-by-id")
-//    public Response<String> getTeacherJobNum(@RequestParam(name = "Id") Integer Id){
-//        return new Response<>(0,"success", service.getTeacherJobnumById(Id));
-//    }
-//
-//    @GetMapping("/id-by-jobnum")
-//    public Response<Integer> getTeacherJobNum(@RequestParam(name = "JobNum") String JobNum){
-//        return new Response<>(0,"success", service.getTeacherIdByJobnum(JobNum));
-//    }
+    @GetMapping("/jobnum-by-id")
+    public Response<String> getTeacherJobNum(@RequestParam(name = "Id") Integer Id){
+        return new Response<>(0,"success", service.getTeacherJobnumById(Id));
+    }
+
+    @GetMapping("/id-by-jobnum")
+    public Response<Integer> getTeacherJobNum(@RequestParam(name = "JobNum") String JobNum){
+        return new Response<>(0,"success", service.getTeacherIdByJobnum(JobNum));
+    }
 
     // 批量导入课程（csv文件中存的是相对应的课程申请）
     @PostMapping("/file")
