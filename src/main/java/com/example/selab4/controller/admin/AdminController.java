@@ -23,13 +23,19 @@ public class AdminController {
         return adminService.isValid();
     }
 
-    @PostMapping("/open")
-    Response<String> open_select_course(){
-        return adminService.openCourseSelect();
-    }
+//    @PostMapping("/open")
+//    Response<String> open_select_course(){
+//        return adminService.openCourseSelect();
+//    }
 
-    @PostMapping("/close")
-    Response<String> close_select_course(){
-        return adminService.closeCourseSelect();
+//    @PostMapping("/close")
+//    Response<String> close_select_course(){
+//        return adminService.closeCourseSelect();
+//    }
+
+
+    @PostMapping("/open/first")
+    Response<String> open_first(){
+        return adminService.openFirstCourseSelect();
     }
 }
