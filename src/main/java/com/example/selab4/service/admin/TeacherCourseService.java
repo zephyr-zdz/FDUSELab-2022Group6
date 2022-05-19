@@ -41,10 +41,7 @@ public class TeacherCourseService {
         course.setIntro(teacherCourseApplication.getIntro());
         course.setIspublic(teacherCourseApplication.getIspublic());
         course.setSemester(teacherCourseApplication.getSemester());
-
-        CourseTemplate courseTemplate = manager.getCourseTemplateById(teacherCourseApplication.getCoursetemplateid());
-
-        course.setCoursetemplateid(courseTemplate.getId());
+        course.setCoursetemplateid(teacherCourseApplication.getCoursetemplateid());
 
         if (teacherCourseApplication.getPrecourseid() == -1) { // insert
             course.setCurrentcount("0");
@@ -103,6 +100,9 @@ public class TeacherCourseService {
                 break;
             case "insert" :
                 if (course != null) {
+                    return false;
+                }
+                if (teacherCourseApplication.getIspublic().equals("N") && teacherCourseApplication.getMajoridlist().length() == 0) {
                     return false;
                 }
                 break;
