@@ -1,6 +1,7 @@
 package com.example.selab4.service.student;
 
 import com.example.selab4.manager.student.CourseManager;
+import com.example.selab4.model.checker.ScheduleChecker;
 import com.example.selab4.model.entity.*;
 import com.example.selab4.model.vo.CourseVO;
 import com.example.selab4.util.Response;
@@ -12,10 +13,12 @@ import java.util.List;
 @Service("StudentCourseService")
 public class CourseService {
     private final CourseManager manager;
+    private final ScheduleChecker scheduleChecker;
 
     @Autowired
-    public CourseService(CourseManager manager) {
+    public CourseService(CourseManager manager, ScheduleChecker scheduleChecker) {
         this.manager = manager;
+        this.scheduleChecker = scheduleChecker;
     }
 
     public Response<List<CourseVO>> getAllByMajor(String studentMajor) {
@@ -68,7 +71,7 @@ public class CourseService {
         }
 
         // 3、学生的时间日程是否冲突
-        if (!manager.checkSchedule(student, course)) {
+        if (!scheduleChecker.checkSchedule(student, course)) {
             return new Response<>(Response.FAIL, "学生id: " + studentid + "的学生上课时间发生冲突", null);
         }
 

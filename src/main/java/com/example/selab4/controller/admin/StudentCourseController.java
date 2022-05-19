@@ -1,14 +1,14 @@
 package com.example.selab4.controller.admin;
 
+import com.example.selab4.model.entity.StudentCourseApplication;
+import com.example.selab4.model.entity.TeacherCourseApplication;
 import com.example.selab4.model.vo.StudentCourseApplicationVO;
 import com.example.selab4.model.vo.StudentVO;
+import com.example.selab4.model.vo.TeacherCourseApplicationVO;
 import com.example.selab4.service.admin.StudentCourseService;
 import com.example.selab4.util.Response;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -35,5 +35,10 @@ public class StudentCourseController {
     }
 
     // TODO 管理员审核学生的选课申请
+    @PostMapping("/approve")
+    public Response<String> approve(@RequestBody StudentCourseApplication studentCourseApplication, @RequestParam(name = "attitude") boolean attitude){
+        return service.approve(studentCourseApplication,attitude);
+    }
+
 
 }

@@ -99,23 +99,7 @@ public class CourseManager {
         return stuCount < capacity;
     }
 
-    public boolean checkSchedule(Student student, Course course) {
-        List<StuCourse> stuCourseList = stuCourseMapper.findStuCoursesByStudentidAndStatus(student.getId(), "S");
-        List<Schedule> studentScheduleList = new ArrayList<>();
-        for (StuCourse stuCourse : stuCourseList) {
-            List<Schedule> schedules = scheduleMapper.findSchedulesByCourseid(stuCourse.getCourseid());
-            studentScheduleList.addAll(schedules);
-        }
 
-        List<Schedule> courseScheduleList = scheduleMapper.findSchedulesByCourseid(course.getId());
-        for (Schedule schedule : courseScheduleList) {
-            if (studentScheduleList.contains(schedule)) {   // 挑选的课程的某个上课时间，学生本来就要上课
-                return false;
-            }
-        }
-
-        return true;
-    }
 
     public void choose(Student student, Course course) {
         StuCourse stuCourse = new StuCourse();
