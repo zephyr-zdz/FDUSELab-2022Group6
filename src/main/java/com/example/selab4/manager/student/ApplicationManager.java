@@ -8,9 +8,12 @@ import com.example.selab4.model.entity.Administrator;
 import com.example.selab4.model.entity.Classroom;
 import com.example.selab4.model.entity.Course;
 import com.example.selab4.model.entity.StudentCourseApplication;
+import com.example.selab4.model.vo.StudentCourseApplicationVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import static java.lang.Integer.parseInt;
@@ -44,5 +47,16 @@ public class ApplicationManager {
 
     public void save(StudentCourseApplication studentCourseApplication) {
         studentApplicationMapper.save(studentCourseApplication);
+    }
+
+    public List<StudentCourseApplicationVO> getCourseApplicationsByStudentid(Integer studentid) {
+        List<StudentCourseApplication> studentCourseApplicationList = studentApplicationMapper.findAllByStudentid(studentid);
+        List<StudentCourseApplicationVO> studentCourseApplicationVOList = new ArrayList<>();
+        for (StudentCourseApplication studentCourseApplication : studentCourseApplicationList) {
+            StudentCourseApplicationVO studentCourseApplicationVO = classAdapter.fromStudentCourseApplication2StudentCourseApplicationVO(studentCourseApplication);
+            studentCourseApplicationVOList.add(studentCourseApplicationVO);
+        }
+
+        return studentCourseApplicationVOList;
     }
 }

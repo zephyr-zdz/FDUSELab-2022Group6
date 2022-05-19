@@ -76,7 +76,7 @@ public class TeacherCourseManager {
     }
 
     public void delete(Course course){
-        courseMapper.delete(course);
+        courseMapper.deleteById(course.getId());
     }
 
 
@@ -151,5 +151,9 @@ public class TeacherCourseManager {
 
     public String findClassroomCapacityById(Integer classroomId) {
         return classroomMapper.findClassroomById(classroomId).getCapacity();
+    }
+
+    public CourseTemplate getCourseTemplateById(Integer coursetemplateid) {
+        return courseTemplateMapper.findCourseTemplateById(coursetemplateid);
     }
 }

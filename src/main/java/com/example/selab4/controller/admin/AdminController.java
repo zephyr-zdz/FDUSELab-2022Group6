@@ -39,6 +39,7 @@ public class AdminController {
         return adminService.openFirstCourseSelect();
     }
 
+    // 第一轮结束：按优先级踢人
     @PostMapping("/close/first")
     Response<String> close_first(){
         return adminService.closeFirstCourseSelect();
@@ -49,6 +50,7 @@ public class AdminController {
         return adminService.openSecondCourseSelect();
     }
 
+    // TODO 第二轮结束：学生选课申请清空
     @PostMapping("/close/second")
     Response<String> close_second(){
         return adminService.closeSecondCourseSelect();
@@ -59,6 +61,7 @@ public class AdminController {
         return adminService.beginSemester();
     }
 
+    // TODO 学期结束：已选=>已修；Schedule清空。
     @PostMapping("/end/semester")
     Response<String> end_semester(){
         return adminService.endSemester();
