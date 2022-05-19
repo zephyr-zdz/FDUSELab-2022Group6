@@ -30,8 +30,14 @@
     </el-dialog>
 
     <el-button :disabled="lessonEdit" type="success" size="small" @click="addRow()">增加</el-button>
-
-    <el-table :data="lessonTable"
+    <el-input v-model="searchLessonName" size="mini" style="width: 15%" placeholder="输入课程名称模糊搜索"></el-input>
+    <el-input v-model="searchCourseNum" size="mini" style="width: 15%" placeholder="输入课程编号模糊搜索"></el-input>
+    <el-input v-model="searchTeacherName" size="mini" style="width: 15%" placeholder="输入教师姓名模糊搜索"></el-input>
+    <el-input v-model="searchTime" size="mini" style="width: 15%" placeholder="输入上课时间模糊搜索"></el-input>
+    <el-table :data="lessonTable.filter(data => !searchLessonName || data.course.name.toLowerCase().includes(searchLessonName.toLowerCase()))
+                     .filter(data => !searchCourseNum || data.course.coursenum.toLowerCase().includes(searchCourseNum.toLowerCase()))
+                     .filter(data => !searchTeacherName || data.teacher.name.toLowerCase().includes(searchTeacherName.toLowerCase()))
+                     .filter(data => !searchTime || data.calendarList.toLowerCase().includes(searchTime.toLowerCase()))"
               style="width: 100%"
               stripe
               pager="page">
@@ -39,7 +45,7 @@
       <el-table-column
         prop="semester"
         label="开课学期"
-        width="150"
+        width="100"
         :filters="semesterList"
         :filter-method="filterHandler">
         <template v-slot="scope">
@@ -50,7 +56,7 @@
       <el-table-column
         prop="name"
         label="课程名称"
-        width="80">
+        width="150">
         <template v-slot="scope">
           <span v-show="!(lessonEdit&&(scope.$index===editingIndex))">{{ scope.row.course.name }}</span>
         </template>
@@ -167,7 +173,11 @@ export default {
       editingCalendar: '',
       rowSchedule: '',
       semesterList: [{text: '2021-2022春', value: '2021-2022春'}],
-      calendarList: [{text: '第一节', value: '1'}]
+      calendarList: [{text: '第一节', value: '1'}],
+      searchLessonName: '',
+      searchCourseNum: '',
+      searchTeacherName: '',
+      searchTime: ''
     }
   },
   // TODO: 将原来的开课院系改为课程类型
