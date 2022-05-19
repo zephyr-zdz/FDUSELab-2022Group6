@@ -1,5 +1,6 @@
 package com.example.selab4.controller.admin;
 
+import com.example.selab4.model.vo.StudentCourseApplicationVO;
 import com.example.selab4.model.vo.StudentVO;
 import com.example.selab4.service.admin.StudentCourseService;
 import com.example.selab4.util.Response;
@@ -25,6 +26,12 @@ public class StudentCourseController {
     @GetMapping("/student-list")
     public Response<List<StudentVO>> getStudentListByCourseid(@RequestParam("courseid") Integer courseid) {
         return service.getStudentListByCourseid(courseid);
+    }
+
+    // TODO 管理员查看所有的学生选课申请
+    @GetMapping("/student-application-list")
+    public Response<List<StudentCourseApplicationVO>> getStudentCourseApplicationVOList() {
+        return service.getStudentCourseApplicationVOList();
     }
 
 
