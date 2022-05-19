@@ -7,18 +7,29 @@
 
     <el-button :disabled="lessonEdit" type="success" size="small" @click="addRow()">新建课程</el-button>
 
-    <el-table :data="lessonTable"
+    <el-input v-model="searchLessonName" size="mini" style="width: 15%" placeholder="输入课程名称模糊搜索"></el-input>
+    <el-input v-model="searchCourseNum" size="mini" style="width: 15%" placeholder="输入课程编号模糊搜索"></el-input>
+    <el-input v-model="searchTeacherName" size="mini" style="width: 15%" placeholder="输入教师姓名模糊搜索"></el-input>
+    <el-input v-model="searchTime" size="mini" style="width: 15%" placeholder="输入上课时间模糊搜索"></el-input>
+    <el-table :data="lessonTable.filter(data => !searchLessonName || data.course.name.toLowerCase().includes(searchLessonName.toLowerCase()))
+                     .filter(data => !searchCourseNum || data.course.coursenum.toLowerCase().includes(searchCourseNum.toLowerCase()))
+                     .filter(data => !searchTeacherName || data.teacher.name.toLowerCase().includes(searchTeacherName.toLowerCase()))
+                     .filter(data => !searchTime || data.calendarList.toLowerCase().includes(searchTime.toLowerCase()))"
               style="width: 100%"
               stripe
               pager="page">
+
       <el-table-column
         prop="semester"
         label="开课学期"
-        width="150">
+        width="100"
+        :filters="semesterList"
+        :filter-method="filterHandler">
         <template v-slot="scope">
           <span>{{ scope.row.course.semester }}</span>
         </template>
       </el-table-column>
+
       <el-table-column
         prop="name"
         label="课程名称">
@@ -26,6 +37,7 @@
           <span>{{ scope.row.courseTemplate.name }}</span>
         </template>
       </el-table-column>
+
       <el-table-column
         prop="number"
         label="课程编号"
@@ -34,6 +46,7 @@
           <span>{{ scope.row.courseTemplate.coursenum }}</span>
         </template>
       </el-table-column>
+
       <el-table-column
         prop="school"
         label="课程类型"
@@ -50,6 +63,7 @@
           <span>{{ scope.row.instituteOfTeacher.name }}</span>
         </template>
       </el-table-column>
+
       <el-table-column
         prop="hours"
         label="学时"
@@ -58,6 +72,7 @@
           <span>{{ scope.row.course.coursehour }}</span>
         </template>
       </el-table-column>
+
       <el-table-column
         prop="points"
         label="学分"
@@ -66,6 +81,7 @@
           <span>{{ scope.row.course.credit }}</span>
         </template>
       </el-table-column>
+
       <el-table-column
         prop="teacher"
         label="任课教师"
@@ -82,14 +98,18 @@
           <span>{{ calendar(scope.row.calendarList) }}</span>
         </template>
       </el-table-column>
+
       <el-table-column
         prop="place"
         label="上课地点"
-        width="80">
+        width="90"
+        :filters="classroomOptions"
+        :filter-method="filterHandler">
         <template v-slot="scope">
           <span>{{ scope.row.classroom.name }}</span>
         </template>
       </el-table-column>
+
       <el-table-column
         prop="capacity"
         label="已选人数"
@@ -123,7 +143,12 @@ export default {
   name: 'lessonTable',
   data () {
     return {
-      lessonTable: []
+      lessonTable: [],
+      semesterList: [{text: '2021-2022春', value: '2021-2022春'}],
+      searchLessonName: '',
+      searchCourseNum: '',
+      searchTeacherName: '',
+      searchTime: ''
     }
   },
   methods: {
@@ -166,6 +191,10 @@ export default {
       this.$axios.get('/api/admin/teacher-course/all').then(res => {
         this.lessonTable = res.data.data
       })
+    },
+    filterHandler (value, row, column) {
+      const property = column['property']
+      return row[property] === value
     }
   },
   components: {
