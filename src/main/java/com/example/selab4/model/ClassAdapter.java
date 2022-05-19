@@ -2,6 +2,7 @@ package com.example.selab4.model;
 
 import com.example.selab4.mapper.*;
 import com.example.selab4.model.entity.*;
+import com.example.selab4.model.vo.StudentCourseApplicationVO;
 import com.example.selab4.model.vo.StudentVO;
 import com.example.selab4.model.vo.TeacherCourseApplicationVO;
 import com.example.selab4.model.vo.CourseVO;
@@ -90,5 +91,14 @@ public class ClassAdapter {
         studentVO.setInstitute(instituteMapper.findInstituteByName(student.getInstitute()));
 
         return studentVO;
+    }
+
+    public StudentCourseApplicationVO fromStudentCourseApplication2StudentCourseApplicationVO(StudentCourseApplication studentCourseApplication) {
+        StudentCourseApplicationVO studentCourseApplicationVO = new StudentCourseApplicationVO();
+        studentCourseApplicationVO.setStudentCourseApplication(studentCourseApplication);
+        studentCourseApplicationVO.setStudent(studentMapper.findStudentById(studentCourseApplication.getStudentid()));
+        studentCourseApplicationVO.setCourseVO(fromCourse2CourseVO(courseMapper.findCourseById(studentCourseApplication.getCourseid())));
+
+        return studentCourseApplicationVO;
     }
 }
