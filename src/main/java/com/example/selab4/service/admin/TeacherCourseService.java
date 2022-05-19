@@ -75,13 +75,13 @@ public class TeacherCourseService {
         return manager.findTeacherIdByJobNum(JobNum);
     }
 
-    List<Schedule> getSchedulesFromApplication(TeacherCourseApplication teacherCourseApplication){
+    List<Schedule> getSchedulesFromApplicationAndCourseid(TeacherCourseApplication teacherCourseApplication, Integer courseid){
         List<Integer> CalendarIdList = getCalendarIDsFromApplication(teacherCourseApplication);
         List<Schedule> schedules = new ArrayList<>();
         for(Integer c : CalendarIdList) {
             Schedule schedule = new Schedule();
             schedule.setCalendarid(c);
-            schedule.setCourseid(teacherCourseApplication.getPrecourseid());
+            schedule.setCourseid(courseid);
             schedule.setClassroomid(teacherCourseApplication.getClassroomid());
             schedule.setTeacherid(teacherCourseApplication.getTeacherid());
             schedules.add(schedule);
@@ -175,11 +175,11 @@ public class TeacherCourseService {
                 return new Response<>(Response.SUCCESS,"管理员通过申请，删除申请处理成功","delete succeed");
             }
             case "update":{
-                // 更新Schedule
-                manager.deleteSchedulesByCourseId(teacherCourseApplication.getPrecourseid());
-                addSchedules(getSchedulesFromApplication(teacherCourseApplication));
                 // 更新Course
                 manager.save(course);
+                // 更新Schedule
+                manager.deleteSchedulesByCourseId(teacherCourseApplication.getPrecourseid());
+                addSchedules(getSchedulesFromApplicationAndCourseid(teacherCourseApplication, course.getId()));
                 // 更新TeacherCourseApplication
                 teacherCourseApplication.setResult("approve");
                 manager.save(teacherCourseApplication);
@@ -194,7 +194,7 @@ public class TeacherCourseService {
                 // 更新Course
                 manager.save(course);
                 // 更新Schedule
-                addSchedules(getSchedulesFromApplication(teacherCourseApplication));
+                addSchedules(getSchedulesFromApplicationAndCourseid(teacherCourseApplication, course.getId()));
                 // 更新TeacherCourseApplication
                 teacherCourseApplication.setResult("approve");
                 manager.save(teacherCourseApplication);
