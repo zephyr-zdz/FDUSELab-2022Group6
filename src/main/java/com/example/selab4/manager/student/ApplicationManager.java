@@ -34,17 +34,6 @@ public class ApplicationManager {
     }
 
 
-    public boolean check(StudentCourseApplication studentCourseApplication) {
-        Course course =  courseMapper.findCourseById(studentCourseApplication.getCourseid());
-        Administrator administrator = adminMapper.findAdministratorById(1);
-        int space_capacity = parseInt(classAdapter.fromCourse2CourseVO(course).getClassroom().getCapacity());
-        boolean full = (Objects.equals(course.getCapacity(), course.getCurrentcount()));
-        boolean timing = administrator.getChoosecourse2().equals("on");
-        boolean enough_space = parseInt(course.getCurrentcount()) < space_capacity;
-
-        return full && timing && enough_space;
-    }
-
     public void save(StudentCourseApplication studentCourseApplication) {
         studentApplicationMapper.save(studentCourseApplication);
     }
