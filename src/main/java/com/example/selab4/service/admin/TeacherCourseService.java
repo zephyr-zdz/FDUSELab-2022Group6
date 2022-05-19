@@ -199,7 +199,9 @@ public class TeacherCourseService {
                 teacherCourseApplication.setResult("approve");
                 manager.save(teacherCourseApplication);
                 // TODO 写入CourseAndMajor
-                manager.addCourseAndMajor(course.getId(), teacherCourseApplication.getMajoridlist());
+                if (teacherCourseApplication.getMajoridlist().length() == 0) {
+                    manager.addCourseAndMajor(course.getId(), teacherCourseApplication.getMajoridlist());
+                }
                 // 由于是新创建的课程，其id不可能与学生/教师的选课申请或学生选课情况相关联
                 return new Response<>(Response.SUCCESS,"管理员通过申请，新增申请处理成功","insert succeed");
             }

@@ -64,6 +64,9 @@ public class CourseManager {
     }
 
     private boolean majorQualified(CourseVO courseVO, Major studentMajor) {
+        if (courseVO.getCourse().getIspublic().equals("Y")) {
+            return true;
+        }
         return courseAndMajorMapper.findCourseAndMajorByCourseidAndMajorid(courseVO.getCourse().getId(),studentMajor.getId()) != null;
     }
 
