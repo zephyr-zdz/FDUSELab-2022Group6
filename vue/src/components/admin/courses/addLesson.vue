@@ -1,17 +1,24 @@
 <template>
-  <body id="post">
+  <el-dialog
+    title="新增课程"
+    top="5vh"
+    width="50%"
+    :append-to-body="true"
+    :visible.sync="dialogVisible"
+    :before-close="handleClose">
+
     <el-form class="reg-container" label-position="left" :model="addLesson" :rules="rules" ref="addLesson" label-width="100px">
       <el-form-item label="开课学期" prop="semester">
-        <el-input v-model="addLesson.semester" placeholder="请输入开课学期"></el-input>
+        <el-input v-model="addLesson.semester" placeholder="请输入开课学期" disabled></el-input>
       </el-form-item>
 
       <el-form-item label="课程名称" prop="name">
-        <el-select placeholder="请选择课程名称" v-model="addLesson.name">
+        <el-select placeholder="请选择课程名称" v-model="addLesson.templateid">
           <el-option
             v-for="item in templateOptions"
             :key="item.name"
             :label="item.name"
-            :value="item.name">
+            :value="item.id">
           </el-option>
         </el-select>
       </el-form-item>
@@ -92,7 +99,7 @@
         <el-button type="primary" style="width: 100%;background: #505458;border: none" @click="submit">增加</el-button>
       </el-form-item>
     </el-form>
-  </body>
+  </el-dialog>
 </template>
 
 <script>
@@ -100,9 +107,10 @@ export default {
   name: 'addLesson',
   data () {
     return {
+      dialogVisible: false,
       res: {id: -1},
       addLesson: {
-        semester: '',
+        semester: '2021-2022春',
         jobnum: '',
         classroomid: '',
         name: '',
@@ -114,9 +122,9 @@ export default {
         credit: '',
         intro: '',
         schedule: '',
-        capacity: ''
+        capacity: '',
+        templateid: ''
       },
-      majorOptions: [],
       templateOptions: [],
       classroomOptions: [],
       typeOptions: [{
@@ -143,9 +151,9 @@ export default {
         type: [
           { required: true, message: '请输入课程类型', trigger: 'blur' }
         ],
-        major: [
-          { required: true, message: '请选择学院', trigger: 'blur' }
-        ],
+        // major: [
+        //   { required: true, message: '请选择学院', trigger: 'blur' }
+        // ],
         coursehour: [
           { required: true, message: '请选择学时', trigger: 'blur' }
         ],
@@ -172,19 +180,13 @@ export default {
   },
   mounted () {
     console.log('mounted')
-    this.getMajor()
+    this.getTemplates()
     this.getClassrooms()
   },
   methods: {
-    getMajor () {
-      this.$axios.get('/api/admin/major/all')
-        .then(response => {
-          console.log(response.data)
-          this.majorOptions = response.data.data
-        })
-        .catch(error => {
-          console.log(error)
-        })
+    handleClose () {
+      this.$emit('afterAddLesson')
+      this.dialogVisible = false
     },
     getTeacherId () {
       this.$axios.get('/api/admin/teacher-course/id-by-jobnum/', {params: {JobNum: this.addLesson.jobnum}})
@@ -222,6 +224,23 @@ export default {
           console.log(error)
         })
     },
+    getTemplates () {
+      this.$axios.get('/api/admin/course-template/all')
+        .then(response => {
+          if (response.data.code === 0) {
+            console.log(response.data)
+            this.templateOptions = response.data.data
+          } else {
+            this.$message({
+              message: response.data.msg,
+              type: 'error'
+            })
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    },
     submit () {
       this.getTeacherId()
       console.log('submit' + this.res.id)
@@ -238,9 +257,11 @@ export default {
             schedule: this.addLesson.time,
             classroomid: this.addLesson.place,
             capacity: this.addLesson.capacity,
+            templateid: this.addLesson.templateid,
             applytype: 'insert',
             result: 'success',
             pre_courseId: -1,
+            ispublic: this.addLesson.type === 1 ? 'Y' : 'N',
             applytime: new Date().getTime()
           }
           console.log('post')

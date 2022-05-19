@@ -1,33 +1,8 @@
 <template>
   <el-card class="box-card">
-    <el-dialog
-      title="新增"
-      top="5vh"
-      width="50%"
-      :append-to-body="true"
-      :visible.sync="dialogVisible"
-      :before-close="handleClose">
-      <add-lesson></add-lesson>
-    </el-dialog>
-    <el-dialog
-      title="详细信息"
-      top="5vh"
-      width="50%"
-      :append-to-body="true"
-      :visible.sync="infoVisible"
-      :before-close="handleClose">
-      <lesson-info></lesson-info>
-    </el-dialog>
-
-    <el-dialog
-      title="详细信息"
-      top="5vh"
-      width="50%"
-      :append-to-body="true"
-      :visible.sync="chosenStudentVisible"
-      :before-close="handleClose">
-      <chosen-student-list></chosen-student-list>
-    </el-dialog>
+    <add-lesson ref="addLesson" @afterAddLesson="handleClose"></add-lesson>
+    <lesson-info ref="lessonInfo"></lesson-info>
+    <chosen-student-list ref="lessonStudentList"></chosen-student-list>
 
     <el-button :disabled="lessonEdit" type="success" size="small" @click="addRow()">增加</el-button>
     <el-table :data="lessonTable"
@@ -47,13 +22,7 @@
         label="课程名称"
         width="80">
         <template v-slot="scope">
-<!--          <el-input-->
-<!--              size="mini"-->
-<!--              v-model="scope.row.course.name"-->
-<!--              v-show="(lessonEdit&&(scope.$index===editingIndex))"-->
-<!--              placeholder="请输入课程名称">-->
-<!--          </el-input>-->
-          <span v-show="!(lessonEdit&&(scope.$index===editingIndex))">{{ scope.row.course.name }}</span>
+          <span v-show="!(lessonEdit&&(scope.$index===editingIndex))">{{ scope.row.courseTemplate.name }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -61,13 +30,7 @@
         label="课程编号"
         width="150">
         <template v-slot="scope">
-<!--          <el-input-->
-<!--              size="mini"-->
-<!--              v-model="scope.row.course.coursenum"-->
-<!--              v-show="(lessonEdit&&(scope.$index===editingIndex))"-->
-<!--              placeholder="请输入课程编号">-->
-<!--          </el-input>-->
-          <span v-show="!(lessonEdit&&(scope.$index===editingIndex))">{{ scope.row.course.coursenum }}</span>
+          <span v-show="!(lessonEdit&&(scope.$index===editingIndex))">{{ scope.row.courseTemplate.coursenum }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -75,7 +38,7 @@
         label="课程类型"
         width="100">
         <template v-slot="scope">
-          <span v-show="!(lessonEdit&&(scope.$index===editingIndex))">{{ scope.row.institute.name }}</span>
+          <span v-show="!(lessonEdit&&(scope.$index===editingIndex))">{{ scope.row.instituteOfTeacher.name }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -99,30 +62,15 @@
         label="任课教师"
         width="100">
         <template v-slot="scope">
-<!--          <el-input size="mini" v-show="(lessonEdit&&(scope.$index===editingIndex))" v-model="scope.row.teacher.jobnum" oninput="value=value.replace(/[^\d]/g,'')"-->
-<!--                  placeholder="请输入教师工号" maxlength="8" @change="getTeacherId(scope.$index)"></el-input>-->
           <span v-show="!(lessonEdit&&(scope.$index===editingIndex))">{{ scope.row.teacher.name }}</span>
         </template>
       </el-table-column>
-<!--      <el-table-column-->
-<!--        prop="intro"-->
-<!--        label="课程介绍">-->
-<!--        <template v-slot="scope">-->
-<!--          <el-input-->
-<!--            size="mini"-->
-<!--            v-show="(lessonEdit&&(scope.$index===editingIndex))"-->
-<!--            placeholder='请填写课程简介'-->
-<!--            v-model="scope.row.course.intro">-->
-<!--          </el-input>-->
-<!--          <span v-show="!(lessonEdit&&(scope.$index===editingIndex))">{{ scope.row.course.intro }}</span>-->
-<!--        </template>-->
-<!--      </el-table-column>-->
+
       <el-table-column
         prop="time"
         label="上课时间"
         width="100">
         <template v-slot="scope">
-<!--          <el-input size="mini" v-show="(lessonEdit&&(scope.$index===editingIndex))" v-model="editingCalendar" placeholder="请输入上课时间"></el-input>-->
           <span v-show="!(lessonEdit&&(scope.$index===editingIndex))">{{ calendar(scope.row.calendarList) }}</span>
         </template>
       </el-table-column>
@@ -131,14 +79,6 @@
         label="上课地点"
         width="80">
         <template v-slot="scope">
-<!--          <el-select size="mini" v-show="(lessonEdit&&(scope.$index===editingIndex))" placeholder="请选择上课地点" v-model="scope.row.classroom.id">-->
-<!--            <el-option-->
-<!--              v-for="item in classroomOptions"-->
-<!--              :key="item.name"-->
-<!--              :label="item.name"-->
-<!--              :value="item.id">-->
-<!--            </el-option>-->
-<!--          </el-select>-->
           <span v-show="!(lessonEdit&&(scope.$index===editingIndex))">{{ scope.row.classroom.name }}</span>
         </template>
       </el-table-column>
@@ -147,7 +87,6 @@
         label="课程容量"
         width="150">
         <template v-slot="scope">
-<!--          <el-input-number size="mini" v-show="(lessonEdit&&(scope.$index===editingIndex))" v-model="scope.row.course.capacity" :min="0"></el-input-number>-->
           <span v-show="!(lessonEdit&&(scope.$index===editingIndex))">{{ scope.row.course.capacity }}</span>
         </template>
       </el-table-column>
@@ -157,11 +96,11 @@
        >
         <template v-slot="scope">
           <el-button size="mini" type="success" @click="showInfo()">查看详细信息</el-button>
-          <el-button size="mini" type="info" @click="showChosenStudent()">查看已选学生名单</el-button>
+          <el-button size="mini" type="info" @click="showChosenStudent(scope.$index)">查看已选学生名单</el-button>
         </template>
       </el-table-column>
     </el-table>
-    <el-button size="mini" type="info" @click="showChosenStudent()">查看已选学生名单</el-button>
+    <el-button size="mini" type="info" @click="showChosenStudent(scope.$index)">查看已选学生名单</el-button>
   </el-card>
 </template>
 
@@ -189,21 +128,17 @@ export default {
       rowSchedule: ''
     }
   },
-  // TODO: 将原来的开课院系改为课程类型
   methods: {
-    // "{\"schedule"Credit\""Intro\":\"Capacity\",\"classroomNum\":,\"Hour\",\"Coursenum\,\"teacherNum\":\"\"Id\"\"Name\":\3\"}"
     handleClose () {
-      // location.reload()
       this.getLessons()
-      this.dialogVisible = false
-      this.infoVisible = false
-      this.chosenStudentVisible = false
     },
-    showInfo () {
-      this.infoVisible = true
+    showInfo (index) {
+      this.$refs.lessonInfo.infoVisible = true
+      this.$refs.lessonInfo.course = this.lessonTable[index].course
     },
-    showChosenStudent () {
+    showChosenStudent (index) {
       this.chosenStudentVisible = true
+      this.$refs.lessonStudentList.courseid = this.lessonTable[index].course.id
     },
     isValid (row, index) {
       var coursehour = parseInt(this.lessonTable[index].course.coursehour)
@@ -326,22 +261,8 @@ export default {
     },
     // 增，改开，改关，改取消，删
     addRow () {
-      this.getClassrooms()
-      this.getSchool()
-      this.dialogVisible = true
-    },
-    editRow (row, index) {
-      this.calendar(row.calendarList)
-      this.editingCalendar = this.rowSchedule
-      this.getClassrooms()
-      this.getSchool()
-      this.editingIndex = index
-      this.lessonEdit = true
-    },
-    cancelRow (row, index) {
-      this.editingRow = -1
-      this.lessonEdit = false
-      this.getLessons()
+      this.$refs.addLesson.getClassrooms()
+      this.$refs.addLesson.dialogVisible = true
     },
     confirmRow (row, index) {
       this.makeApplication(index, 'update')
