@@ -41,8 +41,8 @@ public class TeacherCourseApplication {
     private String result;  // 申请的结果：pending/approve/reject
     @Column(name = "applytime", nullable = false, length = 45)
     private String applytime;   // 申请时间（以此作为列表的排序依据// ）
-    @Column(name = "pre_courseId",nullable = false)
-    private Integer pre_courseId;
+    @Column(name = "precourseid",nullable = false)
+    private Integer precourseid;
     @Column(name = "semester", nullable = false, length = 10)
     private String semester;
     @Column(name = "majoridlist", nullable = false, length = 45)

@@ -41,7 +41,7 @@ public class ApplicationService {
             return false;
         }
 
-        Course course= applicationManager.findCourseById(teacherCourseApplication.getPre_courseId());
+        Course course= applicationManager.findCourseById(teacherCourseApplication.getPrecourseid());
         switch (teacherCourseApplication.getApplytype()) {
             case "delete" : case "update" :
                 if (course == null) {
@@ -58,7 +58,7 @@ public class ApplicationService {
         }
 
         // 2、时空检查，人时检查
-        List<Schedule> schedules=applicationManager.deleteSchedulesByCourseId(teacherCourseApplication.getPre_courseId());
+        List<Schedule> schedules=applicationManager.deleteSchedulesByCourseId(teacherCourseApplication.getPrecourseid());
         String[] schedule=split(teacherCourseApplication.getSchedule());
         List<Integer> CalendarIdList = new ArrayList<>();
         for (String s : schedule){

@@ -59,13 +59,8 @@ public class ApplicationManager {
         teacherApplicationMapper.save(teacherCourseApplication);
     }
 
-    public List<TeacherCourseApplication> getCourseApplicationByJobNum(String JobNum){
-        Teacher teacher=teacherMapper.findTeacherByJobnum(JobNum);
-        return teacherApplicationMapper.findAllByTeacherid(teacher.getId());
-    }
-
-    public Course findCourseById(Integer pre_courseId) {
-        return courseMapper.findCourseById(pre_courseId);
+    public Course findCourseById(Integer courseid) {
+        return courseMapper.findCourseById(courseid);
     }
 
     public List<Schedule> deleteSchedulesByCourseId(Integer pre_courseId) {
@@ -87,7 +82,7 @@ public class ApplicationManager {
     }
 
     public boolean changeIspublic(TeacherCourseApplication teacherCourseApplication) {
-        Course course = courseMapper.findCourseById(teacherCourseApplication.getPre_courseId());
+        Course course = courseMapper.findCourseById(teacherCourseApplication.getPrecourseid());
         return !teacherCourseApplication.getIspublic().equals(course.getIspublic());
     }
 

@@ -46,11 +46,11 @@ public class TeacherCourseService {
 
         course.setCoursetemplateid(courseTemplate.getId());
 
-        if (teacherCourseApplication.getPre_courseId() == -1) { // insert
+        if (teacherCourseApplication.getPrecourseid() == -1) { // insert
             course.setCurrentcount("0");
         } else {    // delete or update
-            course.setId(teacherCourseApplication.getPre_courseId());
-            course.setCurrentcount(manager.findCourseByCourseId(teacherCourseApplication.getPre_courseId()).getCapacity());
+            course.setId(teacherCourseApplication.getPrecourseid());
+            course.setCurrentcount(manager.findCourseByCourseId(teacherCourseApplication.getPrecourseid()).getCapacity());
         }
 
         return course;
@@ -84,7 +84,7 @@ public class TeacherCourseService {
         for(Integer c : CalendarIdList) {
             Schedule schedule = new Schedule();
             schedule.setCalendarid(c);
-            schedule.setCourseid(teacherCourseApplication.getPre_courseId());
+            schedule.setCourseid(teacherCourseApplication.getPrecourseid());
             schedule.setClassroomid(teacherCourseApplication.getClassroomid());
             schedule.setTeacherid(teacherCourseApplication.getTeacherid());
             schedules.add(schedule);
@@ -94,7 +94,7 @@ public class TeacherCourseService {
 
     boolean check(TeacherCourseApplication teacherCourseApplication){
         // 1、检查申请的类型与pre_courseid的情形是否符合预期
-        Course course = manager.findCourseByCourseId(teacherCourseApplication.getPre_courseId());
+        Course course = manager.findCourseByCourseId(teacherCourseApplication.getPrecourseid());
         switch (teacherCourseApplication.getApplytype()) {
             case "delete" : case "update" :
                 if (course == null) {
@@ -117,7 +117,7 @@ public class TeacherCourseService {
         Integer TeacherId= teacherCourseApplication.getTeacherid();
 
         // 得到被修改课程的上课时间、教室
-        List<Schedule> schedules= manager.deleteSchedulesByCourseId(teacherCourseApplication.getPre_courseId());
+        List<Schedule> schedules= manager.deleteSchedulesByCourseId(teacherCourseApplication.getPrecourseid());
         boolean flag=true;
         for (Integer i : CalendarIdListId){
             if(manager.scheduleExistByCalendarIdAndClassroomId(i,ClassroomId)|| manager.scheduleExistByCalendarIdAndTeacherId(i,TeacherId)) {
@@ -163,20 +163,20 @@ public class TeacherCourseService {
                 teacherCourseApplication.setResult("approve");
                 manager.save(teacherCourseApplication);
                 // 更新Schedule
-                manager.deleteSchedulesByCourseId(teacherCourseApplication.getPre_courseId());
+                manager.deleteSchedulesByCourseId(teacherCourseApplication.getPrecourseid());
                 // TODO StuCourse级联删除
-                manager.deleteStuCourseByCourseid(teacherCourseApplication.getPre_courseId());
+                manager.deleteStuCourseByCourseid(teacherCourseApplication.getPrecourseid());
                 // TODO CourseAndMajor级联删除
-                manager.deleteCourseAndMajorByCourseid(teacherCourseApplication.getPre_courseId());
+                manager.deleteCourseAndMajorByCourseid(teacherCourseApplication.getPrecourseid());
                 // TODO StudentCourseApplication相关的被reject
-                manager.rejectStudentApplicationByCourseid(teacherCourseApplication.getPre_courseId());
+                manager.rejectStudentApplicationByCourseid(teacherCourseApplication.getPrecourseid());
                 // TODO TeacherCourseApplication相关的被reject
-                manager.rejectTeacherCourseApplicationByPre_courseId(teacherCourseApplication.getPre_courseId());
+                manager.rejectTeacherCourseApplicationByPrecourseid(teacherCourseApplication.getPrecourseid());
                 return new Response<>(Response.SUCCESS,"管理员通过申请，删除申请处理成功","delete succeed");
             }
             case "update":{
                 // 更新Schedule
-                manager.deleteSchedulesByCourseId(teacherCourseApplication.getPre_courseId());
+                manager.deleteSchedulesByCourseId(teacherCourseApplication.getPrecourseid());
                 addSchedules(getSchedulesFromApplication(teacherCourseApplication));
                 // 更新Course
                 manager.save(course);
@@ -186,7 +186,7 @@ public class TeacherCourseService {
                 // 课程可选专业不允许修改（忽视majoridlist，逻辑检查保证ispublic不会变），CourseAndMajor不变
                 // StuCourse不变
                 // TODO StudentCourseApplication相关的被reject
-                manager.rejectStudentApplicationByCourseid(teacherCourseApplication.getPre_courseId());
+                manager.rejectStudentApplicationByCourseid(teacherCourseApplication.getPrecourseid());
                 // TeacherCourseApplication不变
                 return new Response<>(Response.SUCCESS,"管理员通过申请，修改申请处理成功","update succeed");
             }

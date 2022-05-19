@@ -181,8 +181,8 @@ public class TeacherCourseManager {
         }
     }
 
-    public void rejectTeacherCourseApplicationByPre_courseId(Integer pre_courseId) {
-        List<TeacherCourseApplication> to_be_rejected = teacherApplicationMapper.findAllByCourseid(pre_courseId);
+    public void rejectTeacherCourseApplicationByPrecourseid(Integer precourseid) {
+        List<TeacherCourseApplication> to_be_rejected = teacherApplicationMapper.findAllByPrecourseid(precourseid);
         for(TeacherCourseApplication object : to_be_rejected){
             object.setResult("reject");
             teacherApplicationMapper.save(object);
