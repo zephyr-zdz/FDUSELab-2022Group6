@@ -15,7 +15,6 @@ public class ApplicationService {
         this.applicationManager = applicationManager;
     }
 
-
     public Response<String> submit(StudentCourseApplication studentCourseApplication) {
         if(!applicationManager.check(studentCourseApplication)){
             return new Response<>(Response.FAIL,"err","conflict");
