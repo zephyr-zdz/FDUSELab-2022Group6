@@ -43,4 +43,14 @@ public class AdminController {
     Response<String> close_first(){
         return adminService.closeFirstCourseSelect();
     }
+
+    @PostMapping("/open/second")
+    Response<String> open_second(){
+        return adminService.openSecondCourseSelect();
+    }
+
+    @PostMapping("/close/second")
+    Response<String> close_second(){
+        return adminService.closeSecondCourseSelect();
+    }
 }
