@@ -38,4 +38,9 @@ public class AdminController {
     Response<String> open_first(){
         return adminService.openFirstCourseSelect();
     }
+
+    @PostMapping("/close/first")
+    Response<String> close_first(){
+        return adminService.closeFirstCourseSelect();
+    }
 }
