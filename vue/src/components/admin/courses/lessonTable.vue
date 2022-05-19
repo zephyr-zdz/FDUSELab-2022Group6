@@ -5,7 +5,7 @@
     <lesson-info ref="lessonInfo" @afterLessonInfo="handleClose"></lesson-info>
     <chosen-student-list ref="lessonStudentList"></chosen-student-list>
 
-    <el-button type="success" size="small" @click="addRow()">新建课程</el-button>
+    <el-button type="success" size="small" @click="showAddLesson()">新建课程</el-button>
 
     <el-input v-model="searchLessonName" size="mini" style="width: 15%" placeholder="输入课程名称模糊搜索"></el-input>
     <el-input v-model="searchCourseNum" size="mini" style="width: 15%" placeholder="输入课程编号模糊搜索"></el-input>
@@ -144,7 +144,7 @@ export default {
   data () {
     return {
       lessonTable: [],
-      semesterList: [{text: '2021-2022春', value: '2021-2022春'}],
+      semesterList: [],
       classroomOptions: [],
       classroomList: [],
       searchLessonName: '',
@@ -156,6 +156,10 @@ export default {
   methods: {
     handleClose () {
       this.getLessons()
+    },
+    showAddLesson (index) {
+      this.$refs.addLesson.dialogVisible = true
+      this.$refs.addLesson.course = this.lessonTable[index].course
     },
     showEditLesson (index) {
       this.$refs.editLesson.dialogVisible = true
@@ -193,6 +197,23 @@ export default {
       this.$axios.get('/api/admin/teacher-course/all').then(res => {
         this.lessonTable = res.data.data
       })
+    },
+    getSemesters () {
+      this.$axios.get('/api/admin/course/semester')
+        .then(response => {
+          if (response.data.code === 0) {
+            console.log(response.data)
+            this.semesterList = response.data.data
+          } else {
+            this.$message({
+              message: response.data.msg,
+              type: 'error'
+            })
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        })
     },
     getClassrooms () {
       this.$axios.get('/api/admin/classroom/open')

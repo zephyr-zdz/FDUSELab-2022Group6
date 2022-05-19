@@ -151,6 +151,7 @@ export default {
     showLessons () {
       this.$refs.lessonTable.getClassrooms()
       this.$refs.lessonTable.getLessons()
+      this.$refs.lessonTable.getSemesters()
     },
     showTemplate () {
       this.$refs.templateTable.getTemplate()
