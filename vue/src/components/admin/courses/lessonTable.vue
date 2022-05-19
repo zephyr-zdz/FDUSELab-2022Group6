@@ -5,16 +5,16 @@
     <lesson-info ref="lessonInfo" @afterLessonInfo="handleClose"></lesson-info>
     <chosen-student-list ref="lessonStudentList"></chosen-student-list>
 
-    <el-button :disabled="lessonEdit" type="success" size="small" @click="addRow()">新建课程</el-button>
+    <el-button type="success" size="small" @click="addRow()">新建课程</el-button>
 
     <el-input v-model="searchLessonName" size="mini" style="width: 15%" placeholder="输入课程名称模糊搜索"></el-input>
     <el-input v-model="searchCourseNum" size="mini" style="width: 15%" placeholder="输入课程编号模糊搜索"></el-input>
     <el-input v-model="searchTeacherName" size="mini" style="width: 15%" placeholder="输入教师姓名模糊搜索"></el-input>
     <el-input v-model="searchTime" size="mini" style="width: 15%" placeholder="输入上课时间模糊搜索"></el-input>
-    <el-table :data="lessonTable.filter(data => !searchLessonName || data.course.name.toLowerCase().includes(searchLessonName.toLowerCase()))
-                     .filter(data => !searchCourseNum || data.course.coursenum.toLowerCase().includes(searchCourseNum.toLowerCase()))
+    <el-table :data="lessonTable.filter(data => !searchLessonName || data.courseTemplate.name.toLowerCase().includes(searchLessonName.toLowerCase()))
+                     .filter(data => !searchCourseNum || data.courseTemplate.coursenum.toLowerCase().includes(searchCourseNum.toLowerCase()))
                      .filter(data => !searchTeacherName || data.teacher.name.toLowerCase().includes(searchTeacherName.toLowerCase()))
-                     .filter(data => !searchTime || data.calendarList.toLowerCase().includes(searchTime.toLowerCase()))"
+                     .filter(data => !searchTime || calendar(data.calendarList).toLowerCase().includes(searchTime.toLowerCase()))"
               style="width: 100%"
               stripe
               pager="page">
@@ -22,9 +22,9 @@
       <el-table-column
         prop="semester"
         label="开课学期"
-        width="100"
+        width="120"
         :filters="semesterList"
-        :filter-method="filterHandler">
+        :filter-method="semesterFilterHandler">
         <template v-slot="scope">
           <span>{{ scope.row.course.semester }}</span>
         </template>
@@ -103,8 +103,8 @@
         prop="place"
         label="上课地点"
         width="90"
-        :filters="classroomOptions"
-        :filter-method="filterHandler">
+        :filters="classroomList"
+        :filter-method="classroomFilterHandler">
         <template v-slot="scope">
           <span>{{ scope.row.classroom.name }}</span>
         </template>
@@ -145,6 +145,8 @@ export default {
     return {
       lessonTable: [],
       semesterList: [{text: '2021-2022春', value: '2021-2022春'}],
+      classroomOptions: [],
+      classroomList: [],
       searchLessonName: '',
       searchCourseNum: '',
       searchTeacherName: '',
@@ -192,9 +194,35 @@ export default {
         this.lessonTable = res.data.data
       })
     },
-    filterHandler (value, row, column) {
-      const property = column['property']
-      return row[property] === value
+    getClassrooms () {
+      this.$axios.get('/api/admin/classroom/open')
+        .then(response => {
+          if (response.data.code === 0) {
+            console.log(response.data.data)
+            this.classroomOptions = response.data.data
+            this.classroomList = this.classroomOptions.map(item => {
+              return {
+                text: item.name,
+                value: item.name
+              }
+            })
+            console.log(this.classroomList)
+          } else {
+            this.$message({
+              message: response.data.msg,
+              type: 'error'
+            })
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    },
+    semesterFilterHandler (value, row) {
+      return row.course.semester === value
+    },
+    classroomFilterHandler (value, row) {
+      return row.classroom.name === value
     }
   },
   components: {

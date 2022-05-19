@@ -149,6 +149,7 @@ export default {
       this.$refs.teacherTable.getTeachers()
     },
     showLessons () {
+      this.$refs.lessonTable.getClassrooms()
       this.$refs.lessonTable.getLessons()
     },
     showTemplate () {
