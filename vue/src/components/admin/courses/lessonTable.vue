@@ -173,7 +173,6 @@ export default {
       editingCalendar: '',
       rowSchedule: '',
       semesterList: [{text: '2021-2022春', value: '2021-2022春'}],
-      calendarList: [{text: '第一节', value: '1'}],
       searchLessonName: '',
       searchCourseNum: '',
       searchTeacherName: '',
