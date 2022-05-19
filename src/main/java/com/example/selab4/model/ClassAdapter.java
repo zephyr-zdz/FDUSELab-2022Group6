@@ -47,7 +47,7 @@ public class ClassAdapter {
         this.courseAndMajorMapper = courseAndMajorMapper;
     }
 
-    public TeacherCourseApplicationVO fromCourseApplication2CourseApplicationVO(TeacherCourseApplication teacherCourseApplication) {
+    public TeacherCourseApplicationVO fromTeacherCourseApplication2TeacherCourseApplicationVO(TeacherCourseApplication teacherCourseApplication) {
         TeacherCourseApplicationVO teacherCourseApplicationVO = new TeacherCourseApplicationVO();
         teacherCourseApplicationVO.setTeacherCourseApplication(teacherCourseApplication);
         teacherCourseApplicationVO.setTeacher(teacherMapper.findTeacherById(teacherCourseApplication.getTeacherid()));

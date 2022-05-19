@@ -28,7 +28,7 @@ public class StudentCourseController {
         return service.getStudentListByCourseid(courseid);
     }
 
-    // TODO 管理员查看所有的学生选课申请
+    // 管理员查看所有的学生选课申请
     @GetMapping("/student-application-list")
     public Response<List<StudentCourseApplicationVO>> getStudentCourseApplicationVOList() {
         return service.getStudentCourseApplicationVOList();

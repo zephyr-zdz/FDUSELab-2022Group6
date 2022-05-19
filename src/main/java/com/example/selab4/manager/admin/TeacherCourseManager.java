@@ -57,7 +57,7 @@ public class TeacherCourseManager {
         List<TeacherCourseApplication> teacherCourseApplicationList = teacherApplicationMapper.findAll();
         List<TeacherCourseApplicationVO> teacherCourseApplicationVOList = new ArrayList<>();
         for (TeacherCourseApplication teacherCourseApplication : teacherCourseApplicationList) {
-            TeacherCourseApplicationVO teacherCourseApplicationVO = classAdapter.fromCourseApplication2CourseApplicationVO(teacherCourseApplication);
+            TeacherCourseApplicationVO teacherCourseApplicationVO = classAdapter.fromTeacherCourseApplication2TeacherCourseApplicationVO(teacherCourseApplication);
             teacherCourseApplicationVOList.add(teacherCourseApplicationVO);
         }
 
@@ -68,7 +68,7 @@ public class TeacherCourseManager {
         List<TeacherCourseApplication> teacherCourseApplicationList = teacherApplicationMapper.findAllByResult("pending");
         List<TeacherCourseApplicationVO> teacherCourseApplicationVOList = new ArrayList<>();
         for (TeacherCourseApplication teacherCourseApplication : teacherCourseApplicationList) {
-            TeacherCourseApplicationVO teacherCourseApplicationVO = classAdapter.fromCourseApplication2CourseApplicationVO(teacherCourseApplication);
+            TeacherCourseApplicationVO teacherCourseApplicationVO = classAdapter.fromTeacherCourseApplication2TeacherCourseApplicationVO(teacherCourseApplication);
             teacherCourseApplicationVOList.add(teacherCourseApplicationVO);
         }
 

@@ -116,9 +116,6 @@ public class TeacherCourseService {
         }
         addSchedules(schedules);
 
-        // TODO
-
-
         Integer classroomId= teacherCourseApplication.getClassroomid();
         String classroomCapacity= manager.findClassroomCapacityById(classroomId);
 
