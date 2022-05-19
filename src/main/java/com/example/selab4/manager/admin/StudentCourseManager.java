@@ -4,6 +4,7 @@ import com.example.selab4.mapper.StuCourseMapper;
 import com.example.selab4.mapper.StudentMapper;
 import com.example.selab4.model.ClassAdapter;
 import com.example.selab4.model.entity.StuCourse;
+import com.example.selab4.model.vo.StudentCourseApplicationVO;
 import com.example.selab4.model.vo.StudentVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -33,5 +34,9 @@ public class StudentCourseManager {
         }
 
         return studentVOList;
+    }
+
+    public List<StudentCourseApplicationVO> getStudentCourseApplicationVOList() {
+        return null;
     }
 }
