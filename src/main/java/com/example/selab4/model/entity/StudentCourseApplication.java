@@ -16,6 +16,10 @@ public class StudentCourseApplication {
     @Id
     @Column(name = "id", nullable = false)
     private Integer id;
-
-    // TODO 字段有待讨论
+    @Column(name = "studentid", nullable = false)
+    private Integer studentid;
+    @Column(name = "courseid", nullable = false)
+    private Integer courseid;
+    @Column(name = "explanation", nullable = false)
+    private String  explanation;
 }
