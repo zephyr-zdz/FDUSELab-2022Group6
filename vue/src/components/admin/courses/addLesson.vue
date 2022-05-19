@@ -5,20 +5,21 @@
     width="50%"
     :append-to-body="true"
     :visible.sync="dialogVisible"
-    :before-close="handleClose">
+    :before-close="handleClose"
+    @open="show()">
 
-    <el-form class="reg-container" label-position="left" :model="addLesson" :rules="rules" ref="addLesson" label-width="100px">
+    <el-form class="reg-container" label-position="left" :model="addLesson" :rules="rules" ref="addLessonForm" label-width="100px">
       <el-form-item label="开课学期" prop="semester">
         <el-input v-model="addLesson.semester" placeholder="请输入开课学期" disabled></el-input>
       </el-form-item>
 
-      <el-form-item label="课程名称" prop="name">
-        <el-select placeholder="请选择课程名称" v-model="addLesson.templateid">
+      <el-form-item label="课程名称" prop="coursenum">
+        <el-select placeholder="请选择课程名称" v-model="addLesson.coursenum">
           <el-option
             v-for="item in templateOptions"
             :key="item.name"
             :label="item.name"
-            :value="item.id">
+            :value="item.coursenum">
           </el-option>
         </el-select>
       </el-form-item>
@@ -76,12 +77,12 @@
         </el-input>
       </el-form-item>
 
-      <el-form-item label="上课时间" prop="time">
-        <el-input v-model="addLesson.time" placeholder="请输入上课时间"></el-input>
+      <el-form-item label="上课时间" prop="schedule">
+        <el-input v-model="addLesson.schedule" placeholder="请输入上课时间"></el-input>
       </el-form-item>
 
-      <el-form-item label="上课地点" prop="place">
-        <el-select placeholder="请选择上课地点" v-model="addLesson.place">
+      <el-form-item label="上课地点" prop="classroomid">
+        <el-select placeholder="请选择上课地点" v-model="addLesson.classroomid">
           <el-option
             v-for="item in classroomOptions"
             :key="item.name"
@@ -96,7 +97,8 @@
       </el-form-item>
 
       <el-form-item style="width: 100%">
-        <el-button type="primary" style="width: 100%;background: #505458;border: none" @click="submit">增加</el-button>
+        <el-button type="success" style="width: 30%;border: none" @click="submit">增加</el-button>
+        <el-button type="danger" style="width: 30%;border: none" @click="cleanForm">清空表单</el-button>
       </el-form-item>
     </el-form>
   </el-dialog>
@@ -123,7 +125,7 @@ export default {
         intro: '',
         schedule: '',
         capacity: '',
-        templateid: ''
+        coursenum: ''
       },
       templateOptions: [],
       classroomOptions: [],
@@ -142,7 +144,7 @@ export default {
           {required: true, message: '请输入开课学期', trigger: 'blur'},
           {pattern: /[0-9]{4}[-][0-9]{4}[\u4e00-\u9fa5]$/, message: '请输入正确的开课学期，如：2021-2022春', trigger: 'blur'}
         ],
-        name: [
+        coursenum: [
           { required: true, message: '请输入课程名称', trigger: 'blur' }
         ],
         number: [
@@ -166,10 +168,10 @@ export default {
         ],
         intro: [
         ],
-        time: [
+        schedule: [
           { required: true, message: '请输入上课时间', trigger: 'blur' }
         ],
-        place: [
+        classroomid: [
           { required: true, message: '请选择上课地点', trigger: 'blur' }
         ],
         capacity: [
@@ -179,14 +181,22 @@ export default {
     }
   },
   mounted () {
-    console.log('mounted')
     this.getTemplates()
     this.getClassrooms()
   },
   methods: {
     handleClose () {
-      this.$emit('afterAddLesson')
-      this.dialogVisible = false
+      console.log(this.$refs.addLessonForm.templateid)
+      this.$nextTick(() => {
+        this.$emit('afterAddLesson')
+        this.dialogVisible = false
+      })
+    },
+    cleanForm () {
+      this.$refs.addLessonForm.resetFields()
+    },
+    show () {
+      this.$refs.addLessonForm.resetFields()
     },
     getTeacherId () {
       this.$axios.get('/api/admin/teacher-course/id-by-jobnum/', {params: {JobNum: this.addLesson.jobnum}})
@@ -244,20 +254,18 @@ export default {
     submit () {
       this.getTeacherId()
       console.log('submit' + this.res.id)
-      this.$refs.addLesson.validate((valid) => {
+      this.$refs.addLessonForm.validate((valid) => {
         if ((valid) && (this.res.id !== -1)) {
           var application = {
-            coursename: this.addLesson.name,
-            coursenum: this.addLesson.number,
             coursehour: this.addLesson.coursehour,
             credit: this.addLesson.credit,
             teacherid: this.res.id,
             instituteid: this.addLesson.institute,
             intro: this.addLesson.intro,
-            schedule: this.addLesson.time,
-            classroomid: this.addLesson.place,
+            schedule: this.addLesson.schedule,
+            classroomid: this.addLesson.classroomid,
             capacity: this.addLesson.capacity,
-            templateid: this.addLesson.templateid,
+            coursenum: this.addLesson.coursenum,
             applytype: 'insert',
             result: 'success',
             pre_courseId: -1,

@@ -32,7 +32,7 @@ export default {
   name: 'adminCheckChosenStudentList',
   data () {
     return {
-      courseid: 0,
+      courseid: 0, // default
       chosenStudentTable: []
     }
   },
