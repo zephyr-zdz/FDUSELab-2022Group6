@@ -94,6 +94,7 @@ public class TeacherCourseService {
     }
 
     boolean check(TeacherCourseApplication teacherCourseApplication){
+        // 1、检查申请的类型与pre_courseid的情形是否符合预期
         Course course = manager.findCourseByCourseId(teacherCourseApplication.getPre_courseId());
         switch (teacherCourseApplication.getApplytype()) {
             case "delete" : case "update" :
@@ -110,6 +111,8 @@ public class TeacherCourseService {
                 return false;
         }
 
+        // 2、检查申请的上课时间内，其上课地点是否在上其他的课
+        // 3、检查申请的上课时间内，其上课教师是否也在上其他的课
         List<Integer> CalendarIdListId=getCalendarIDsFromApplication(teacherCourseApplication);
         Integer ClassroomId= teacherCourseApplication.getClassroomid();
         Integer TeacherId= teacherCourseApplication.getTeacherid();
@@ -128,12 +131,12 @@ public class TeacherCourseService {
         Integer classroomId= teacherCourseApplication.getClassroomid();
         String classroomCapacity= manager.findClassroomCapacityById(classroomId);
 
-        // 教室on检查
+        // 4、教室的状态为on
         if(manager.findClassroomById(teacherCourseApplication.getClassroomid()).getState().equals("off")) {
             throw new RuntimeException("classroom is off");
         }
 
-        // 教室capacity检查
+        // 5、教室的capacity > 课程的capacity
         if(parseInt(teacherCourseApplication.getCapacity()) > parseInt(classroomCapacity)) {
             throw new RuntimeException("capacity overflow");
         }
