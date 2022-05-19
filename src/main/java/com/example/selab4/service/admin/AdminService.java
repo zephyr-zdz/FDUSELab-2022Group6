@@ -99,4 +99,36 @@ public class AdminService {
 
         return new Response<>(Response.SUCCESS, "第一轮选课开关成功关闭", null);
     }
+
+    public Response<String> beginSemester() {
+        Administrator administrator = adminManager.findAdmin();
+        if (administrator.getSemesterbegin().equals("on")) {
+            return new Response<>(Response.FAIL, "学期已经开始", null);
+        }
+
+        // 前置条件：学期未开始
+        administrator.setSemesterbegin("on");
+        adminManager.saveAdmin(administrator);
+
+        return new Response<>(Response.SUCCESS, "开始学期成功", null);
+    }
+
+    public Response<String> endSemester() {
+        Administrator administrator = adminManager.findAdmin();
+        if (administrator.getSemesterbegin().equals("off")) {
+            return new Response<>(Response.FAIL, "学期已经结束", null);
+        }
+        if (administrator.getChoosecourse1().equals("on")) {
+            return new Response<>(Response.FAIL, "第一轮选课开关尚未关闭", null);
+        }
+        if (administrator.getChoosecourse2().equals("on")) {
+            return new Response<>(Response.FAIL, "第二轮选课开关尚未关闭", null);
+        }
+
+        // 前置条件：学期已经开始，且1、2轮开关均为off
+        administrator.setSemesterbegin("off");
+        adminManager.saveAdmin(administrator);
+
+        return new Response<>(Response.SUCCESS, "结束学期成功", null);
+    }
 }
