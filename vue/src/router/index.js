@@ -4,12 +4,11 @@ import Router from 'vue-router'
 
 import AppIndex from '@/components/home/AppIndex'
 import Home from '@/components/home/Home'
-import Test from '@/components/home/test'
 
 import CommonLogin from '@/components/login/commonLogin'
 import AdminLogin from '@/components/login/adminLogin'
 
-import Register from '@/components/admin/register'
+import Register from '@/components/admin/users/register'
 import Adm from '@/components/admin/admin'
 
 import User from '@/components/user/user'
@@ -29,11 +28,6 @@ export const constantRouterMap = [
         path: '/',
         name: 'AppIndex',
         component: AppIndex,
-      },
-      {
-        path: '/test',
-        name: 'test',
-        component: Test
       }
     ]
   },
@@ -72,7 +66,7 @@ export const constantRouterMap = [
       {
         path: 'teacher',
         name: 'teacher',
-        component: () => import('@/components/user/teacher'),
+        component: () => import('@/components/user/teacher/teacher'),
         meta: {
           requireAuth: true,
           roles: ['admin','teacher'],
@@ -82,7 +76,7 @@ export const constantRouterMap = [
       {
         path: 'student',
         name: 'student',
-        component: () => import('@/components/user/student'),
+        component: () => import('@/components/user/student/student'),
         meta: {
           requireAuth: true,
           roles: ['admin','student'],
