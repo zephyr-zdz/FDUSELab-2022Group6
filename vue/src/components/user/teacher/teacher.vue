@@ -93,8 +93,9 @@ export default {
       this.$refs.myLessonApplication.getApplication()
     },
     showLesson () {
-      this.$refs.lessonTable.getTeacher()
+      this.$refs.lessonTable.getClassrooms()
       this.$refs.lessonTable.getLessons()
+      this.$refs.lessonTable.getSemesters()
     },
     handleChange (value) {
       switch (value) {

@@ -1,6 +1,12 @@
 <template>
+   <el-dialog
+    title="编辑课程"
+    top="5vh"
+    width="80%"
+    :append-to-body="true"
+    :visible.sync="dialogVisible"
+    :before-close="handleClose">
     <el-form class="lesson-info-container" :model="lessonInfoForm" :rules="rules" ref="lessonInfoForm">
-
       <div>
         <h2>开课学期</h2>
         <span class="elements" v-if="lessonEdit === false">{{lessonInfo.semester}}</span>
@@ -137,6 +143,7 @@
       <el-button type="info" v-if="lessonEdit === true" @click="cancel()">取消</el-button>
     <el-button type="danger" v-if="lessonEdit === false" @click="deleteLesson()">删除</el-button>
     </el-form>
+  </el-dialog>
 </template>
 
 <script>
@@ -144,6 +151,7 @@ export default {
   name: 'lessonInfo',
   data () {
     return {
+      dialogVisible: false,
       majorOptions: [],
       classroomOptions: [],
       typeOptions: [{
@@ -226,45 +234,38 @@ export default {
     this.getClassrooms()
   },
   methods: {
-    changeLesson () {
-      this.lessonEdit = true
+    handleClose () {
+      this.$nextTick(() => {
+        this.$emit('afterLessonInfo')
+        this.dialogVisible = false
+      })
     },
-    confirmLesson () {
-      this.lessonEdit = false
-      // TODO: 上传数据
+    type () {
+      if (this.course.course.ispublic === 'Y') {
+        return '通识课程'
+      } else if (this.course.majorListOfCourse.length === 1) {
+        return '专业课程'
+      } else return '面向部分专业课程'
     },
-    deleteLesson () {
-      // TODO： 删除
-    },
-    cancel () {
-      this.lessonEdit = false
-    },
-    getMajor () {
-      this.$axios.get('/api/admin/major/all')
-        .then(response => {
-          console.log(response.data)
-          this.majorOptions = response.data.data
+    choseableMajor (majorListOfCourse) {
+      if (this.course.ispublic === 'Y') {
+        return '通识课程'
+      } else {
+        let majorList = ''
+        majorListOfCourse.forEach(item => {
+          majorList += item.name + ' '
         })
-        .catch(error => {
-          console.log(error)
-        })
+        return majorList
+      }
     },
-    getClassrooms () {
-      this.$axios.get('/api/admin/classroom/open')
-        .then(response => {
-          if (response.data.code === 0) {
-            console.log(response.data)
-            this.classroomOptions = response.data.data
-          } else {
-            this.$message({
-              message: response.data.msg,
-              type: 'error'
-            })
-          }
-        })
-        .catch(error => {
-          console.log(error)
-        })
+    calendar (calendarList) {
+      var schedule = ''
+      for (var i = 0; i < calendarList.length; i++) {
+        schedule += (calendarList[i].day + ',' + calendarList[i].number)
+        schedule += ' '
+      }
+      this.rowSchedule = schedule
+      return schedule
     }
   }
 }
