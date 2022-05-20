@@ -148,7 +148,7 @@ export default {
       })
     },
     submit (index) {
-      this.$axios.post('/api/student/course/delete', null,
+      this.$axios.delete('/api/student/course/delete',
         {params: {
           courseid: this.lessonTable[index].course.id,
           studentid: this.id
