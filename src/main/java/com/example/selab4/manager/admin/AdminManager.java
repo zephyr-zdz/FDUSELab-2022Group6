@@ -63,6 +63,8 @@ public class AdminManager {
         for(String stunum : to_be_deleted){
             Integer studentid = studentMapper.findStudentByStunum(stunum).getId();
             stuCourseMapper.deleteByStudentidAndCourseid(studentid,courseid);
+            Course course = courseMapper.findCourseById(courseid);
+            course.reduceStudent();
         }
     }
 
