@@ -87,7 +87,7 @@ export default {
     },
     changePassword () {
       var role = this.$store.getters.role
-      var path = '/api/'+role+'/'+role+'/'+'changepassword'
+      var path = '/api/'+role+'/'+role+'/'+'change-password'
       var param = new FormData()
       console.log(path)
       param.append('username', this.Form.username)

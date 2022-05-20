@@ -6,7 +6,6 @@ const path = require('path')
 
 module.exports = {
   dev: {
-
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
@@ -15,13 +14,13 @@ module.exports = {
         target: 'http://localhost:8080',
         changeOrigin: true,
         pathRewrite: {
-          '^/api': '/'
+          '^/api': '/api'
         }
       }
     },
 
     // Various Dev Server settings
-    host: '192.168.1.3', // can be overwritten by process.env.HOST
+    host: 'localhost', // can be overwritten by process.env.HOST
     port: 80, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: false,
     errorOverlay: true,
@@ -58,7 +57,7 @@ module.exports = {
     // Paths
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
-    assetsPublicPath: './',
+    assetsPublicPath: '/',
 
     /**
      * Source Maps
@@ -97,7 +96,7 @@ module.exports = {
       target: 'http://localhost:8080',
       changeOrigin: true,
       pathRewrite: {
-        '^/api': '/'
+        '^/api': '/api'
       }
     }
   }
