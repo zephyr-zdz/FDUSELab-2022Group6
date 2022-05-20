@@ -47,7 +47,7 @@ public class TeacherCourseService {
             course.setCurrentcount("0");
         } else {    // delete or update
             course.setId(teacherCourseApplication.getPrecourseid());
-            course.setCurrentcount(manager.findCourseByCourseId(teacherCourseApplication.getPrecourseid()).getCapacity());
+            course.setCurrentcount(manager.findCourseByCourseId(teacherCourseApplication.getPrecourseid()).getCurrentcount());
         }
 
         return course;
