@@ -1,97 +1,112 @@
 <template>
   <el-card class="box-card">
-    <el-table :data="myLessonApplication"
-              stripe
-              style="width: 100%"
-              pager="page">
-      <el-table-column
-        prop="name"
-        label="申请操作类型"
-        width="120">
-        <template slot-scope="scope">
-          <span>{{ scope.row.applytype }}</span>
-        </template>
-        </el-table-column>
-      <el-table-column
-        prop="name"
-        label="课程名称"
-        width="100">
-        <template slot-scope="scope">
-          <span>{{ scope.row.coursename }}</span>
-        </template>
-        </el-table-column>
-      <el-table-column
-        prop="lessonNumber"
-        label="课程编号"
-        width="80">
-        <template slot-scope="scope">
-          <span>{{ scope.row.coursenum }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column
+  <el-table :data="myLessonApplicationList"
+            style="width: 100%"
+            pager="page"
+            stripe>
+    <el-table-column
+      prop="lessonName"
+      label="课程名称"
+      width="100">
+      <template v-slot="scope">
+        <span>{{ templateList[scope.row.teacherCourseApplication.coursetemplateid].name }}</span>
+      </template></el-table-column>
+    <el-table-column
+      prop="lessonNumber"
+      label="课程编号"
+      width="80">
+      <template v-slot="scope">
+        <span>{{ templateList[scope.row.teacherCourseApplication.coursetemplateid].coursenum }}</span>
+      </template>
+    </el-table-column>
+    <el-table-column
+      prop="school"
+      label="开课院系"
+      width="80">
+      <template v-slot="scope">
+        <span>{{ scope.row.institute.name }}</span>
+      </template>
+    </el-table-column>
+    <el-table-column
         prop="school"
-        label="开课院系"
-        width="80">
-        <template slot-scope="scope">
-          <span>{{ scope.row.instituteid }}</span>
+        label="课程类型"
+        width="100">
+        <template v-slot="scope">
+          <span>{{ isPubilc(scope.row.teacherCourseApplication.ispublic) }}</span>
         </template>
-      </el-table-column>
-      <el-table-column
-        prop="hours"
-        label="学时"
-        width="50">
-        <template slot-scope="scope">
-          <span>{{ scope.row.coursehour }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        prop="points"
-        label="学分"
-        width="50">
-        <template slot-scope="scope">
-          <span>{{ scope.row.credit }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        prop="intro"
-        label="课程介绍">
-        <template slot-scope="scope">
-          <span>{{ scope.row.intro }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        prop="time"
-        label="上课时间"
-        width="120">
-        <template slot-scope="scope">
-          <span>{{ scope.row.schedule }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        prop="place"
-        label="上课地点"
-        width="80">
-        <template slot-scope="scope">
-          <span>{{ scope.row.classroomid }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        prop="capacity"
-        label="课程容量"
-        width="80">
-        <template slot-scope="scope">
-          <span>{{ scope.row.capacity }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        prop="status"
-        label="状态"
-        width="80">
-        <template slot-scope="scope">
-          <span>{{ scope.row.result }}</span>
-        </template>
-      </el-table-column>
-    </el-table>
+    </el-table-column>
+    <el-table-column
+      prop="jobnum"
+      label="教师姓名"
+      width="80">
+      <template v-slot="scope">
+        <span>{{ scope.row.teacher.name }}</span>
+      </template>
+    </el-table-column>
+    <el-table-column
+      prop="hours"
+      label="学时"
+      width="50">
+      <template v-slot="scope">
+        <span>{{ scope.row.teacherCourseApplication.coursehour }}</span>
+      </template>
+    </el-table-column>
+    <el-table-column
+      prop="points"
+      label="学分"
+      width="50">
+      <template v-slot="scope">
+        <span>{{ scope.row.teacherCourseApplication.credit }}</span>
+      </template>
+    </el-table-column>
+    <el-table-column
+      prop="intro"
+      label="课程介绍">
+      <template v-slot="scope">
+        <span>{{ scope.row.teacherCourseApplication.intro }}</span>
+      </template>
+    </el-table-column>
+    <el-table-column
+      prop="time"
+      label="上课时间"
+      width="120">
+      <template v-slot="scope">
+        <span>{{ scope.row.teacherCourseApplication.schedule }}</span>
+      </template>
+    </el-table-column>
+    <el-table-column
+      prop="place"
+      label="上课地点"
+      width="80">
+      <template v-slot="scope">
+        <span>{{ scope.row.classroom.name }}</span>
+      </template>
+    </el-table-column>
+    <el-table-column
+      prop="capacity"
+      label="课程容量"
+      width="80">
+      <template v-slot="scope">
+        <span>{{ scope.row.teacherCourseApplication.capacity }}</span>
+      </template>
+    </el-table-column>
+    <el-table-column
+      prop="capacity"
+      label="申请操作"
+      width="80">
+      <template v-slot="scope">
+        <span>{{ scope.row.teacherCourseApplication.applytype }}</span>
+      </template>
+    </el-table-column>
+    <el-table-column
+      prop="capacity"
+      label="申请结果"
+      width="80">
+      <template v-slot="scope">
+        <span>{{ scope.row.teacherCourseApplication.result }}</span>
+      </template>
+    </el-table-column>
+  </el-table>
   </el-card>
 </template>
 
@@ -101,22 +116,48 @@ export default {
   data () {
     var temp = this.$store.getters.username
     return {
+      teacherid: 0,
       jobnum: temp,
-      myLessonApplication: []
+      myLessonApplicationList: [],
+      templateList: []
     }
   },
   methods: {
+    handleApproval (attitude, index) {
+      if (attitude === 'true') {
+        this.approved(index)
+      } else {
+        this.rejected(index)
+      }
+    },
+    isPubilc (YN) {
+      if (YN === 'Y') {
+        return '通识课程'
+      } else {
+        return '专业课程'
+      }
+    },
     getApplication () {
-      console.log('getApplication')
-      console.log(this.$store.getters.username)
-      this.$axios.get('/api/teacher/application/', {params: {JobNum: this.jobnum}})
+      this.$axios.get('/api/teacher/application/all', {params: {teacherid: this.teacherid}})
         .then(response => {
           if (response.data.code === 0) {
-            this.myLessonApplication = response.data.data
+            this.myLessonApplicationList = response.data.data
             // this.$message.success(response.data.msg)
           } else {
             this.$message.error(response.data.msg)
           }
+        })
+      this.$axios.get('/api/admin/course-template/all')
+        .then(response => {
+          if (response.data.code === 0) {
+            this.templateList = response.data.data
+            // this.$message.success(response.data.msg)
+          } else {
+            this.$message.error(response.data.msg)
+          }
+        })
+        .catch(error => {
+          this.$message.error(error)
         })
     }
   }
