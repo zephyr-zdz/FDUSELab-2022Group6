@@ -1,21 +1,13 @@
 <template>
   <el-card class="box-card">
-    <el-dialog
-      title="选课申请"
-      top="5vh"
-      width="50%"
-      :append-to-body="true"
-      :visible.sync="applicationVisible"
-      :before-close="handleClose">
-      <student-lesson-application></student-lesson-application>
-    </el-dialog>
+    <student-lesson-application ref="studentLessonApplication" @afterApplication="handleClose"></student-lesson-application>
     <el-table :data="lessonTable"
               style="width: 100%"
               pager="page">
       <el-table-column
         prop="semester"
         label="开课学期"
-        width="80">
+        width="150">
         <template v-slot="scope">
           <span>{{ scope.row.course.semester}}</span>
         </template>
@@ -25,7 +17,7 @@
         label="课程名称"
         width="80">
         <template v-slot="scope">
-          <span>{{ scope.row.course.name }}</span>
+          <span>{{ scope.row.courseTemplate.name }}</span>
         </template>
         </el-table-column>
       <el-table-column
@@ -33,7 +25,7 @@
         label="课程编号"
         width="120">
         <template v-slot="scope">
-          <span>{{ scope.row.course.coursenum }}</span>
+          <span>{{ scope.row.courseTemplate.coursenum }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -41,7 +33,7 @@
         label="课程类型"
         width="80">
         <template v-slot="scope">
-          <span>{{ scope.row.course.type }}</span>
+          <span>{{ isPubilc(scope.row.course.ispublic) }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -96,20 +88,21 @@
         label="课程容量"
         width="80">
         <template v-slot="scope">
-          <span>{{scope.row.course.chosen}}/{{ scope.row.course.capacity }}</span>
+          <span>{{scope.row.course.currentcount}}/{{ scope.row.course.capacity }}</span>
         </template>
       </el-table-column>
       <el-table-column
         prop="operation"
         label="操作"
         width="150">
-        <el-button size="mini">选课</el-button>
+        <template v-slot="scope">
+          <el-button size="mini" v-if="isFull(scope.$index) !== true" @click="submit(scope.$index)">选课</el-button>
+          <el-button size="mini" v-if="isFull(scope.$index) === true" @click="showApplication(scope.$index)">
+            选课申请
+          </el-button>
+        </template>
       </el-table-column>
     </el-table>
-    <el-button size="mini" v-if="isFull() === true" @click="showApplication()">
-      选课申请
-    </el-button>
-<!--    TODO：到时候把按钮放到行内，要给选课按钮加v-if-->
   </el-card>
 </template>
 
@@ -118,24 +111,39 @@ import StudentLessonApplication from './studentLessonApplication'
 export default {
   name: 'studentCheckLesson',
   data () {
+    var temp = this.$store.getters.round
     return {
       lessonTable: [],
       major: '',
-      applicationVisible: false
+      id: 0,
+      round: temp
     }
   },
   mounted () {
+    this.getStudent()
     this.getLessons()
   },
   methods: {
-    isFull () {
-      return true
+    isFull (index) {
+      if (this.round === 'first') return false
+      return this.lessonTable[index].course.capacity === this.lessonTable[index].course.currentcount
     },
-    showApplication () {
-      this.applicationVisible = true
+    showApplication (index) {
+      this.$refs.studentLessonApplication.dialogVisible = true
+      this.$refs.studentLessonApplication.course = this.lessonTable[index]
+      console.log(this.lessonTable[index])
+      this.$refs.studentLessonApplication.course2Form()
+      this.$refs.studentLessonApplication.id = this.id
     },
     handleClose () {
-      this.applicationVisible = false
+      this.getLessons()
+    },
+    isPubilc (YN) {
+      if (YN === 'Y') {
+        return '通识课程'
+      } else {
+        return '专业课程'
+      }
     },
     calendar (calendarList) {
       var schedule = ''
@@ -149,14 +157,36 @@ export default {
       var num = this.$store.getters.username
       this.$axios.get('/api/student/student', {params: {stunum: num}}).then(res => {
         this.major = res.data.data.major
+        this.id = res.data.data.id
       })
     },
     getLessons () {
-      this.getStudent()
       console.log(this.major)
-      this.$axios.get('/api/student/course', {params: {major: this.major}}).then(res => {
+      this.$axios.get('/api/student/course/major', {params: {major: this.major}}).then(res => {
         this.lessonTable = res.data.data
       })
+    },
+    submit (index) {
+      this.$axios.post('/api/student/course/choose', null,
+        {params: {
+          courseid: this.lessonTable[index].course.id,
+          studentid: this.id
+        }}
+      )
+        .then(res => {
+          if (res.data.code === 0) {
+            this.$message({
+              message: res.data.msg,
+              type: 'success'
+            })
+            this.getLessons()
+          } else {
+            this.$message({
+              message: res.data.msg,
+              type: 'error'
+            })
+          }
+        })
     }
   },
   components: {

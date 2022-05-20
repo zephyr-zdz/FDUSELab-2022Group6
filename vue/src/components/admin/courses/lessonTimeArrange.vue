@@ -61,7 +61,6 @@ export default {
   },
   methods: {
     getLessonTime () {
-      // TODO:从数据库读取时间
       this.$axios.get('/api/admin/time/')
         .then(res => {
           this.lessonTimeArrange = res.data.data

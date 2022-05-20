@@ -1,8 +1,6 @@
 <template>
   <body id="post">
     <el-form  label-position="left" ref="regForm" label-width="100px">
-      <h3 class="reg_title">新增专业</h3>
-
       <el-form-item label="学院" prop="school">
         <el-select placeholder="请选择学院" v-model="majorForm.institute">
           <el-option

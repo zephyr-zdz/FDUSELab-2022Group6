@@ -7,7 +7,7 @@
       <el-table-column
         prop="semester"
         label="开课学期"
-        width="80">
+        width="150">
         <template v-slot="scope">
           <span>{{ scope.row.course.semester}}</span>
         </template>
@@ -17,7 +17,7 @@
         label="课程名称"
         width="80">
         <template v-slot="scope">
-          <span>{{ scope.row.course.name }}</span>
+          <span>{{ scope.row.courseTemplate.name }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -25,7 +25,7 @@
         label="课程编号"
         width="120">
         <template v-slot="scope">
-          <span>{{ scope.row.course.coursenum }}</span>
+          <span>{{ scope.row.courseTemplate.coursenum }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -33,7 +33,7 @@
         label="课程类型"
         width="80">
         <template v-slot="scope">
-          <span>{{ scope.row.course.type }}</span>
+          <span>{{ isPublic(scope.row.course.ispublic) }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -88,14 +88,16 @@
         label="课程容量"
         width="80">
         <template v-slot="scope">
-          <span>{{scope.row.course.chosen}}/{{ scope.row.course.capacity }}</span>
+          <span>{{scope.row.course.currentcount}}/{{ scope.row.course.capacity }}</span>
         </template>
       </el-table-column>
       <el-table-column
         prop="operation"
         label="操作"
         width="150">
-        <el-button size="mini">退课</el-button>
+        <template v-slot="scope">
+          <el-button size="mini" @click="submit(scope.$index)">退课</el-button>
+        </template>
       </el-table-column>
     </el-table>
   </el-card>
@@ -108,13 +110,21 @@ export default {
   data () {
     return {
       lessonTable: [],
-      major: ''
+      id: 0
     }
   },
   mounted () {
+    this.getStudent()
     this.getLessons()
   },
   methods: {
+    isPublic (YN) {
+      if (YN === 'Y') {
+        return '通识课程'
+      } else {
+        return '专业课程'
+      }
+    },
     calendar (calendarList) {
       var schedule = ''
       for (var i = 0; i < calendarList.length; i++) {
@@ -127,14 +137,37 @@ export default {
       var num = this.$store.getters.username
       this.$axios.get('/api/student/student', {params: {stunum: num}}).then(res => {
         this.major = res.data.data.major
+        this.id = res.data.data.id
       })
     },
     getLessons () {
       this.getStudent()
       console.log(this.major)
-      this.$axios.get('/api/student/course', {params: {major: this.major}}).then(res => {
+      this.$axios.get('/api/student/course/selected', {params: {stunum: this.$store.getters.username}}).then(res => {
         this.lessonTable = res.data.data
       })
+    },
+    submit (index) {
+      this.$axios.delete('/api/student/course/delete',
+        {params: {
+          courseid: this.lessonTable[index].course.id,
+          studentid: this.id
+        }}
+      )
+        .then(res => {
+          if (res.data.code === 0) {
+            this.$message({
+              message: res.data.msg,
+              type: 'success'
+            })
+            this.getLessons()
+          } else {
+            this.$message({
+              message: res.data.msg,
+              type: 'error'
+            })
+          }
+        })
     }
   }
 
