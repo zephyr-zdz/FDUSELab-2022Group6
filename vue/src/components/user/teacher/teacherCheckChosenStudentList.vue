@@ -48,6 +48,10 @@ export default {
   methods: {
     handleClose () {
       this.dialogVisible = false
+      this.$nextTick(() => {
+        this.$emit('afterDialog')
+        this.dialogVisible = false
+      })
     },
     getChosenStudentList () {
       console.log(this.courseid)

@@ -3,7 +3,7 @@
     <add-lesson ref="addLesson" @afterAddLesson="handleClose"></add-lesson>
     <edit-lesson ref="editLesson" @afterEditLesson="handleClose"></edit-lesson>
     <lesson-info ref="lessonInfo" @afterLessonInfo="handleClose"></lesson-info>
-    <chosen-student-list ref="lessonStudentList"></chosen-student-list>
+    <chosen-student-list ref="lessonStudentList" @afterDialog="handleClose"></chosen-student-list>
 
     <el-button type="success" size="small" @click="showAddLesson()">新建课程</el-button>
 
