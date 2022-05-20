@@ -10,7 +10,7 @@
         label="开课学期"
         width="120">
         <template v-slot="scope">
-          <span>{{ scope.row.courseApplication.semester }}</span>
+          <span>{{ scope.row.courseVO.course.semester }}</span>
         </template>
       </el-table-column>
 
@@ -19,7 +19,7 @@
         label="课程名称"
         width="120">
         <template v-slot="scope">
-          <span>{{ scope.row.courseApplication.coursename }}</span>
+          <span>{{ scope.row.courseVO.courseTemplate.coursename }}</span>
         </template>
       </el-table-column>
 
@@ -28,7 +28,7 @@
         label="课程编号"
         width="120">
         <template v-slot="scope">
-          <span>{{ scope.row.courseApplication.coursenum }}</span>
+          <span>{{ scope.row.courseVO.courseTemplate.coursenum }}</span>
         </template>
       </el-table-column>
 
@@ -37,7 +37,7 @@
         label="学生姓名"
         width="120">
         <template v-slot="scope">
-          <span>{{ scope.row.courseApplication.name }}</span>
+          <span>{{ scope.row.student.name }}</span>
         </template>
       </el-table-column>
 
@@ -46,7 +46,7 @@
         label="学号"
         width="120">
         <template v-slot="scope">
-          <span>{{ scope.row.courseApplication.stunum }}</span>
+          <span>{{ scope.row.student.stunum }}</span>
         </template>
       </el-table-column>
 
@@ -55,7 +55,7 @@
         label="申请理由"
         >
         <template v-slot="scope">
-          <span>{{ scope.row.courseApplication.reason }}</span>
+          <span>{{ scope.row.studentCourseApplication.explanation }}</span>
         </template>
       </el-table-column>
 
@@ -65,7 +65,7 @@
         width="160">
         <template v-slot="scope">
           <el-button size="mini" type="success" @click="handleApproval('true' ,scope.$index)">通过</el-button>
-          <el-button size="mini" type="danger" @click="handleApproval('false' ,scope.$index)">未通过</el-button>
+          <el-button size="mini" type="danger" @click="handleApproval('false' ,scope.$index)">拒绝</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -89,20 +89,9 @@ export default {
         this.rejected(index)
       }
     },
-    // getTeacherJobnumById (index, id) { // TODO: teacherid
-    //   this.$axios.get('/api/admin/teacher-course/getTeacherJobNumById', {params: {Id: id}}).then(response => {
-    //     this.checkStudentApplication[index].jobnum = response.data.data
-    //   })
-    // },
-    // TODO: 教师名字
-    // getTeacherNameById (id) {
-    //   this.$axios.get('/api/admin/institute', {params: {instituteId: id}}).then(response => {
-    //     return response.data.data
-    //   })
-    // },
     approved (index) {
-      this.$axios.post('/api/admin/teacher-course/approve',
-        this.checkStudentApplication[index].courseApplication,
+      this.$axios.post('/api/admin/student-course/approve',
+        this.checkStudentApplication[index].studentCourseApplication,
         {params: { attitude: true }})
         .then(res => {
           if (res.data.code === 0) {
@@ -128,8 +117,8 @@ export default {
         })
     },
     rejected (index) {
-      this.$axios.post('/api/admin/teacher-course/approve',
-        this.checkStudentApplication[index].courseApplication,
+      this.$axios.post('/api/admin/student-course/approve',
+        this.checkStudentApplication[index].studentCourseApplication,
         {params: { attitude: false }})
         .then(res => {
           if (res.data.code === 0) {
@@ -147,9 +136,8 @@ export default {
           }
         })
     },
-    // TODO：改为获取学生申请
     getApplication () {
-      this.$axios.get('/api/admin/teacher-course/pending')
+      this.$axios.get('/api/admin/student-course/student-application-list/pending')
         .then(response => {
           if (response.data.code === 0) {
             this.checkStudentApplication = response.data.data

@@ -168,6 +168,9 @@ export default {
     showSchoolAndMajor () {
       this.$refs.schoolAndMajorTable.getSchoolAndMajor()
     },
+    showStudentApplication () {
+      this.$refs.checkStudentApplication.getApplication()
+    },
     handleChange (value) {
       switch (value) {
         case 'studentTable' :
@@ -208,6 +211,7 @@ export default {
           this.showRecord = value
           break
         case 'checkStudentApplication' :
+          this.showStudentApplication()
           this.showRecord = value
           break
         case 'templateTable' :
