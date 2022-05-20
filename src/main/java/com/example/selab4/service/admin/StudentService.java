@@ -1,7 +1,6 @@
 package com.example.selab4.service.admin;
 
 import com.example.selab4.manager.admin.StudentManager;
-import com.example.selab4.model.checker.CourseChecker;
 import com.example.selab4.model.entity.Course;
 import com.example.selab4.model.entity.Student;
 import com.example.selab4.util.Response;

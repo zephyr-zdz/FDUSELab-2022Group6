@@ -12,4 +12,7 @@ public interface TeacherApplicationMapper extends JpaRepository<TeacherCourseApp
     List<TeacherCourseApplication> findAll();
     List<TeacherCourseApplication> findAllByTeacherid(Integer teacherid);
     List<TeacherCourseApplication> findAllByResult(String result);
+
+
+    List<TeacherCourseApplication> findAllByPrecourseid(Integer precourseid);
 }

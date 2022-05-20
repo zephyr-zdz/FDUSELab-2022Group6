@@ -13,4 +13,6 @@ public interface CourseAndMajorMapper extends JpaRepository<CourseAndMajor, Inte
     List<CourseAndMajor> findCourseAndMajorListByCourseid(Integer courseid);
 
     CourseAndMajor findCourseAndMajorByCourseidAndMajorid(Integer CourseId, Integer studentMajorId);
+
+    void deleteAllByCourseid(Integer pre_courseId);
 }

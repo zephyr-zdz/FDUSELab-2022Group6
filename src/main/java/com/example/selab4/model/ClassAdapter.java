@@ -2,6 +2,8 @@ package com.example.selab4.model;
 
 import com.example.selab4.mapper.*;
 import com.example.selab4.model.entity.*;
+import com.example.selab4.model.vo.StudentCourseApplicationVO;
+import com.example.selab4.model.vo.StudentVO;
 import com.example.selab4.model.vo.TeacherCourseApplicationVO;
 import com.example.selab4.model.vo.CourseVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +47,7 @@ public class ClassAdapter {
         this.courseAndMajorMapper = courseAndMajorMapper;
     }
 
-    public TeacherCourseApplicationVO fromCourseApplication2CourseApplicationVO(TeacherCourseApplication teacherCourseApplication) {
+    public TeacherCourseApplicationVO fromTeacherCourseApplication2TeacherCourseApplicationVO(TeacherCourseApplication teacherCourseApplication) {
         TeacherCourseApplicationVO teacherCourseApplicationVO = new TeacherCourseApplicationVO();
         teacherCourseApplicationVO.setTeacherCourseApplication(teacherCourseApplication);
         teacherCourseApplicationVO.setTeacher(teacherMapper.findTeacherById(teacherCourseApplication.getTeacherid()));
@@ -80,5 +82,23 @@ public class ClassAdapter {
         courseVO.setMajorListOfCourse(majorListOfCourse);
 
         return courseVO;
+    }
+
+    public StudentVO fromStudent2StudentVO(Student student) {
+        StudentVO studentVO = new StudentVO();
+        studentVO.setStudent(student);
+        studentVO.setMajor(majorMapper.findMajorByName(student.getMajor()));
+        studentVO.setInstitute(instituteMapper.findInstituteByName(student.getInstitute()));
+
+        return studentVO;
+    }
+
+    public StudentCourseApplicationVO fromStudentCourseApplication2StudentCourseApplicationVO(StudentCourseApplication studentCourseApplication) {
+        StudentCourseApplicationVO studentCourseApplicationVO = new StudentCourseApplicationVO();
+        studentCourseApplicationVO.setStudentCourseApplication(studentCourseApplication);
+        studentCourseApplicationVO.setStudent(studentMapper.findStudentById(studentCourseApplication.getStudentid()));
+        studentCourseApplicationVO.setCourseVO(fromCourse2CourseVO(courseMapper.findCourseById(studentCourseApplication.getCourseid())));
+
+        return studentCourseApplicationVO;
     }
 }

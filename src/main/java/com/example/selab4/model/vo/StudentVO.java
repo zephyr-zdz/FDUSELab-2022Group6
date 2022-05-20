@@ -7,9 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
-// 需不需要再说
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

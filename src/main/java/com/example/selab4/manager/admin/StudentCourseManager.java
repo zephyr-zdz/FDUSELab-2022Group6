@@ -1,7 +1,71 @@
 package com.example.selab4.manager.admin;
 
+import com.example.selab4.mapper.*;
+import com.example.selab4.model.ClassAdapter;
+import com.example.selab4.model.checker.ScheduleChecker;
+import com.example.selab4.model.entity.*;
+import com.example.selab4.model.vo.StudentCourseApplicationVO;
+import com.example.selab4.model.vo.StudentVO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
+import static java.lang.Integer.parseInt;
 
 @Component("AdminStudentCourseManager")
 public class StudentCourseManager {
+    private final StuCourseMapper stuCourseMapper;
+    private final StudentMapper studentMapper;
+    private final StudentApplicationMapper studentApplicationMapper;
+    private final ClassAdapter classAdapter;
+    private final CourseMapper courseMapper;
+    private final AdminMapper adminMapper;
+    private final ScheduleChecker scheduleChecker;
+    @Autowired
+    public StudentCourseManager(StuCourseMapper stuCourseMapper, StudentMapper studentMapper, StudentApplicationMapper studentApplicationMapper, ClassAdapter classAdapter, CourseMapper courseMapper, AdminMapper adminMapper, ScheduleChecker scheduleChecker) {
+        this.stuCourseMapper = stuCourseMapper;
+        this.studentMapper = studentMapper;
+        this.studentApplicationMapper = studentApplicationMapper;
+
+        this.classAdapter = classAdapter;
+        this.courseMapper = courseMapper;
+        this.adminMapper = adminMapper;
+        this.scheduleChecker = scheduleChecker;
+    }
+
+    public List<StudentVO> getStudentListByCourseid(Integer courseid) {
+        List<StuCourse> stuCourseList = stuCourseMapper.findStuCoursesByCourseidAndStatus(courseid, "S");
+        List<StudentVO> studentVOList = new ArrayList<>();
+        for (StuCourse stuCourse : stuCourseList) {
+            StudentVO studentVO = classAdapter.fromStudent2StudentVO(studentMapper.findStudentById(stuCourse.getStudentid()));
+            studentVOList.add(studentVO);
+        }
+
+        return studentVOList;
+    }
+
+    public List<StudentCourseApplicationVO> getStudentCourseApplicationVOList() {
+        List<StudentCourseApplication> studentCourseApplicationList = studentApplicationMapper.findAll();
+        List<StudentCourseApplicationVO> studentCourseApplicationVOList = new ArrayList<>();
+        for (StudentCourseApplication studentCourseApplication : studentCourseApplicationList) {
+            StudentCourseApplicationVO studentCourseApplicationVO = classAdapter.fromStudentCourseApplication2StudentCourseApplicationVO(studentCourseApplication);
+            studentCourseApplicationVOList.add(studentCourseApplicationVO);
+        }
+
+        return studentCourseApplicationVOList;
+    }
+
+
+    public void save(StudentCourseApplication studentCourseApplication) {
+        studentApplicationMapper.save(studentCourseApplication);
+    }
+
+    public void save(StuCourse stuCourse) {
+        stuCourseMapper.save(stuCourse);
+    }
+
+
 }
