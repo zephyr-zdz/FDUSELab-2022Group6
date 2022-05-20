@@ -104,7 +104,7 @@ export default {
       } else return '面向部分专业课程'
     },
     choseableMajor (majorListOfCourse) {
-      if (this.course.ispublic === 'Y') {
+      if (this.course.course.ispublic === 'Y') {
         return '通识课程'
       } else {
         let majorList = ''

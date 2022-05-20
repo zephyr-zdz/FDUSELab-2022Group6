@@ -247,6 +247,7 @@ export default {
         })
     },
     deleteLesson () {
+      this.getTeacherId()
       var application = {
         semester: this.editLesson.semester,
         coursehour: this.editLesson.coursehour,
