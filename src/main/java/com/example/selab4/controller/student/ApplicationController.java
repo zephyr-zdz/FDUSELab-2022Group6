@@ -20,7 +20,7 @@ public class ApplicationController {
     }
 
     @PostMapping("/submit")
-    public Response<String> submitApplication(StudentCourseApplication studentCourseApplication){
+    public Response<String> submitApplication(@RequestBody StudentCourseApplication studentCourseApplication){
         return service.submit(studentCourseApplication);
     }
 
