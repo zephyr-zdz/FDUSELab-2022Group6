@@ -26,5 +26,6 @@ public class StuCourse {
     public void initialize(Integer courseid, Integer studentid) {
         this.studentid = studentid;
         this.courseid = courseid;
+        this.status = "S";
     }
 }
