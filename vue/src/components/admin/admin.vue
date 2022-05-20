@@ -18,6 +18,7 @@
             <el-submenu index="3">
               <template slot="title"><i class="el-icon-menu"></i>教务维护</template>
               <el-menu-item @click="handleChange('lessonTable')">课程信息维护</el-menu-item>
+              <el-menu-item @click="handleChange('templateTable')">课程模板维护</el-menu-item>
               <el-menu-item @click="handleChange('csvInputLesson')">批量导入课程</el-menu-item>
               <el-menu-item @click="handleChange('lessonApplicationCheck')">课程申请审核</el-menu-item>
               <el-menu-item @click="handleChange('lessonTimeArrange')">上课时间安排</el-menu-item>
@@ -92,6 +93,10 @@
                                        label="checkStudentApplication"
                                        v-show="showRecord === 'checkStudentApplication'"
                                        ref="checkStudentApplication"></check-student-application>
+            <template-table id="templateTable"
+                            label="templateTable"
+                            v-show="showRecord === 'templateTable'"
+                            ref="templateTable"></template-table>
           </el-main>
         </el-container>
       </el-container>
@@ -113,6 +118,8 @@ import OpenOrCloseClassSelect from './openOrCloseClassSelect'
 import LessonApplicationCheck from './courses/lessonApplicationCheck'
 import SchoolAndMajorTable from './majorsAndSchools/schoolAndMajorTable'
 import CheckStudentApplication from './courses/checkStudentApplication'
+import TemplateTable from './courses/templateTable'
+import AddTemplate from './courses/addTemplate'
 
 export default {
   data () {
@@ -142,7 +149,12 @@ export default {
       this.$refs.teacherTable.getTeachers()
     },
     showLessons () {
+      this.$refs.lessonTable.getClassrooms()
       this.$refs.lessonTable.getLessons()
+      this.$refs.lessonTable.getSemesters()
+    },
+    showTemplate () {
+      this.$refs.templateTable.getTemplate()
     },
     showLessonTime () {
       this.$refs.lessonTimeArrange.getLessonTime()
@@ -155,6 +167,9 @@ export default {
     },
     showSchoolAndMajor () {
       this.$refs.schoolAndMajorTable.getSchoolAndMajor()
+    },
+    showStudentApplication () {
+      this.$refs.checkStudentApplication.getApplication()
     },
     handleChange (value) {
       switch (value) {
@@ -196,6 +211,11 @@ export default {
           this.showRecord = value
           break
         case 'checkStudentApplication' :
+          this.showStudentApplication()
+          this.showRecord = value
+          break
+        case 'templateTable' :
+          this.showTemplate()
           this.showRecord = value
           break
         default :
@@ -205,6 +225,7 @@ export default {
     }
   },
   components: {
+    AddTemplate,
     'student-table': StudentTable,
     'teacher-table': TeacherTable,
     'csv-input': CsvInput,
@@ -216,7 +237,8 @@ export default {
     'open-or-close-class-select': OpenOrCloseClassSelect,
     'lesson-application-check': LessonApplicationCheck,
     'school-and-major-table': SchoolAndMajorTable,
-    'check-student-application': CheckStudentApplication
+    'check-student-application': CheckStudentApplication,
+    'template-table': TemplateTable
   }
 }
 

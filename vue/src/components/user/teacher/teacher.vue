@@ -56,7 +56,7 @@
 <script>
 import NavMenu from '../../common/NavMenu'
 import TeacherInfoMaintain from './teacherInfoMaintain'
-import MyLessonApplication from '../student/myLessonApplication'
+import MyLessonApplication from './myLessonApplication'
 import LessonTable from './lessonTable'
 
 export default {
@@ -64,12 +64,12 @@ export default {
     var temp = this.$store.getters.username
     return {
       username: temp,
-      name: 'wzy',
-      identity: '330902200011209219',
-      mobile: '11111111111',
-      email: '123@qq.com',
+      teacherid: 0,
       showRecord: ''
     }
+  },
+  mounted () {
+    this.getTeacher()
   },
   methods: {
     handleCommand (command) {
@@ -86,15 +86,26 @@ export default {
         })
       }
     },
+    getTeacher () {
+      this.$axios.get('/api/teacher/teacher', {
+        params: {
+          jobnum: this.$store.getters.username
+        }
+      }).then(res => {
+        this.teacherid = res.data.data.id
+      })
+    },
     showInfo () {
       this.$refs.teacherInfoMaintain.getInfo()
     },
     showApplication () {
+      this.$refs.myLessonApplication.teacherid = this.teacherid
       this.$refs.myLessonApplication.getApplication()
     },
     showLesson () {
-      this.$refs.lessonTable.getTeacher()
+      this.$refs.lessonTable.getClassrooms()
       this.$refs.lessonTable.getLessons()
+      this.$refs.lessonTable.getSemesters()
     },
     handleChange (value) {
       switch (value) {

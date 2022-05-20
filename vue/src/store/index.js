@@ -1,3 +1,4 @@
+import { off } from 'node-notifier'
 import Vue from 'vue'
 import Vuex from 'vuex'
 
@@ -9,13 +10,18 @@ export default new Vuex.Store({
       role: 'none',
       username: 'none'
     },
+    round: off,
     isLogin: false
   },
   getters: {
+    round: state => state.round,
     role: state => state.user.role,
     username: state => state.user.username
   },
   mutations: {
+    setRound (state, round) {
+      state.round = round
+    },
     login (state, user) {
       state.user.role = (user.type === undefined) ? user.role : user.type
       state.user.username = (user.username === undefined) ? user.number : user.username

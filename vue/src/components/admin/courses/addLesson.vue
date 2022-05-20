@@ -1,18 +1,27 @@
 <template>
-  <body id="post">
-    <el-form class="reg-container" label-position="left" :model="addLesson" :rules="rules" ref="addLesson" label-width="100px">
-      <h3 class="reg_title">新增课程</h3>
+  <el-dialog
+    title="新增课程"
+    top="5vh"
+    width="50%"
+    :append-to-body="true"
+    :visible.sync="dialogVisible"
+    :before-close="handleClose"
+    @open="show()">
 
+    <el-form class="reg-container" label-position="left" :model="addLesson" :rules="rules" ref="addLessonForm" label-width="100px">
       <el-form-item label="开课学期" prop="semester">
-        <el-input v-model="addLesson.semester" placeholder="请输入开课学期"></el-input>
+        <el-input v-model="addLesson.semester" placeholder="请输入开课学期" disabled></el-input>
       </el-form-item>
 
-      <el-form-item label="课程名称" prop="name">
-        <el-input v-model="addLesson.name" placeholder="请输入课程名称"></el-input>
-      </el-form-item>
-
-      <el-form-item label="课程编号" prop="number">
-        <el-input v-model="addLesson.number" placeholder="请输入课程编号"></el-input>
+      <el-form-item label="课程名称" prop="coursetemplateid">
+        <el-select placeholder="请选择课程名称" v-model="addLesson.coursetemplateid">
+          <el-option
+            v-for="item in templateOptions"
+            :key="item.name"
+            :label="item.name"
+            :value="item.id">
+          </el-option>
+        </el-select>
       </el-form-item>
 
       <el-form-item label="课程类型" prop="type">
@@ -26,7 +35,7 @@
         </el-select>
       </el-form-item>
 
-      <el-form-item label="可选专业" prop="major" v-if="addLesson.type === '2' ">
+      <el-form-item label="可选专业" prop="major" v-if="addLesson.type === 2 ">
         <el-select placeholder="请选择专业" multiple v-model="addLesson.majorMulti">
           <el-option
             v-for="item in majorOptions"
@@ -37,7 +46,7 @@
         </el-select>
       </el-form-item>
 
-      <el-form-item label="可选专业" prop="major" v-if="addLesson.type === '3' ">
+      <el-form-item label="可选专业" prop="major" v-if="addLesson.type === 3 ">
         <el-select placeholder="请选择专业" v-model="addLesson.majorSingle">
           <el-option
             v-for="item in majorOptions"
@@ -68,12 +77,12 @@
         </el-input>
       </el-form-item>
 
-      <el-form-item label="上课时间" prop="time">
-        <el-input v-model="addLesson.time" placeholder="请输入上课时间"></el-input>
+      <el-form-item label="上课时间" prop="schedule">
+        <el-input v-model="addLesson.schedule" placeholder="请输入上课时间"></el-input>
       </el-form-item>
 
-      <el-form-item label="上课地点" prop="place">
-        <el-select placeholder="请选择上课地点" v-model="addLesson.place">
+      <el-form-item label="上课地点" prop="classroomid">
+        <el-select placeholder="请选择上课地点" v-model="addLesson.classroomid">
           <el-option
             v-for="item in classroomOptions"
             :key="item.name"
@@ -88,10 +97,11 @@
       </el-form-item>
 
       <el-form-item style="width: 100%">
-        <el-button type="primary" style="width: 100%;background: #505458;border: none" @click="submit">增加</el-button>
+        <el-button type="success" style="width: 30%;border: none" @click="submit">增加</el-button>
+        <el-button type="danger" style="width: 30%;border: none" @click="cleanForm">清空表单</el-button>
       </el-form-item>
     </el-form>
-  </body>
+  </el-dialog>
 </template>
 
 <script>
@@ -99,9 +109,11 @@ export default {
   name: 'addLesson',
   data () {
     return {
+      dialogVisible: false,
       res: {id: -1},
+      majoridlist: '',
       addLesson: {
-        semester: '',
+        semester: '2021-2022春',
         jobnum: '',
         classroomid: '',
         name: '',
@@ -113,18 +125,19 @@ export default {
         credit: '',
         intro: '',
         schedule: '',
-        capacity: ''
+        capacity: '',
+        coursetemplateid: ''
       },
-      majorOptions: [],
+      templateOptions: [],
       classroomOptions: [],
       typeOptions: [{
-        id: '1',
+        id: 1,
         name: '通识课程'
       }, {
-        id: '2',
+        id: 2,
         name: '面向部分专业课程'
       }, {
-        id: '3',
+        id: 3,
         name: '专业课程'
       }],
       rules: {
@@ -132,7 +145,7 @@ export default {
           {required: true, message: '请输入开课学期', trigger: 'blur'},
           {pattern: /[0-9]{4}[-][0-9]{4}[\u4e00-\u9fa5]$/, message: '请输入正确的开课学期，如：2021-2022春', trigger: 'blur'}
         ],
-        name: [
+        coursetemplateid: [
           { required: true, message: '请输入课程名称', trigger: 'blur' }
         ],
         number: [
@@ -141,9 +154,9 @@ export default {
         type: [
           { required: true, message: '请输入课程类型', trigger: 'blur' }
         ],
-        major: [
-          { required: true, message: '请选择学院', trigger: 'blur' }
-        ],
+        // major: [
+        //   { required: true, message: '请选择学院', trigger: 'blur' }
+        // ],
         coursehour: [
           { required: true, message: '请选择学时', trigger: 'blur' }
         ],
@@ -156,10 +169,10 @@ export default {
         ],
         intro: [
         ],
-        time: [
+        schedule: [
           { required: true, message: '请输入上课时间', trigger: 'blur' }
         ],
-        place: [
+        classroomid: [
           { required: true, message: '请选择上课地点', trigger: 'blur' }
         ],
         capacity: [
@@ -169,23 +182,25 @@ export default {
     }
   },
   mounted () {
-    console.log('mounted')
-    this.getMajor()
+    this.getTemplates()
     this.getClassrooms()
+    this.getMajors()
   },
   methods: {
-    getMajor () {
-      this.$axios.get('/api/admin/major/all')
-        .then(response => {
-          console.log(response.data)
-          this.majorOptions = response.data.data
-        })
-        .catch(error => {
-          console.log(error)
-        })
+    handleClose () {
+      this.$nextTick(() => {
+        this.$emit('afterAddLesson')
+        this.dialogVisible = false
+      })
+    },
+    cleanForm () {
+      this.$refs.addLessonForm.resetFields()
+    },
+    show () {
+      this.$refs.addLessonForm.resetFields()
     },
     getTeacherId () {
-      this.$axios.get('/api/admin/course/id-by-jobnum/', {params: {JobNum: this.addLesson.jobnum}})
+      this.$axios.get('/api/admin/teacher-course/id-by-jobnum/', {params: {JobNum: this.addLesson.jobnum}})
         .then(response => {
           console.log(response.data.data)
           if (response.data.code === 0) {
@@ -198,6 +213,16 @@ export default {
             })
             this.res.id = -1
           }
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    },
+    getMajors () {
+      this.$axios.get('/api/admin/major/all')
+        .then(response => {
+          console.log(response.data)
+          this.majorOptions = response.data.data
         })
         .catch(error => {
           console.log(error)
@@ -220,35 +245,72 @@ export default {
           console.log(error)
         })
     },
+    getTemplates () {
+      this.$axios.get('/api/admin/course-template/all')
+        .then(response => {
+          if (response.data.code === 0) {
+            console.log(response.data)
+            this.templateOptions = response.data.data
+          } else {
+            this.$message({
+              message: response.data.msg,
+              type: 'error'
+            })
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    },
     submit () {
       this.getTeacherId()
       console.log('submit' + this.res.id)
-      this.$refs.addLesson.validate((valid) => {
+      this.$refs.addLessonForm.validate((valid) => {
         if ((valid) && (this.res.id !== -1)) {
+          switch (this.addLesson.type) {
+            case 1:
+              this.majoridlist = this.addLesson.majorSingle
+              break
+            case 2:
+              this.majoridlist = ''
+              for (let i = 0; i < this.addLesson.majorMulti.length; i++) {
+                this.majoridlist += this.addLesson.majorMulti[i] + ','
+              }
+              break
+            case 3:
+              console.log(this.addLesson.majorSingle)
+              this.majoridlist = this.addLesson.majorSingle
+              break
+            default:
+              break
+          }
           var application = {
-            coursename: this.addLesson.name,
-            coursenum: this.addLesson.number,
+            semester: this.addLesson.semester,
             coursehour: this.addLesson.coursehour,
             credit: this.addLesson.credit,
             teacherid: this.res.id,
             instituteid: this.addLesson.institute,
             intro: this.addLesson.intro,
-            schedule: this.addLesson.time,
-            classroomid: this.addLesson.place,
+            schedule: this.addLesson.schedule,
+            classroomid: this.addLesson.classroomid,
             capacity: this.addLesson.capacity,
+            coursetemplateid: this.addLesson.coursetemplateid,
             applytype: 'insert',
             result: 'success',
-            pre_courseId: -1,
+            precourseid: -1,
+            majoridlist: this.majoridlist,
+            ispublic: this.addLesson.type === 1 ? 'Y' : 'N',
             applytime: new Date().getTime()
           }
           console.log('post')
-          this.$axios.post('/api/admin/course/modify', application).then(res => {
+          this.$axios.post('/api/admin/teacher-course/modify', application).then(res => {
             console.log(res.data)
             if (res.data.code === 0) {
               this.$message({
                 message: '添加成功',
                 type: 'success'
               })
+              this.cleanForm()
             } else {
               this.$message({
                 message: '添加失败，请检查输入课程是否有冲突',

@@ -1,6 +1,6 @@
 <template>
   <el-card class="box-card">
-  <el-table :data="lessonApplicationCheck"
+  <el-table :data="myLessonApplicationList"
             style="width: 100%"
             pager="page"
             stripe>
@@ -99,12 +99,11 @@
       </template>
     </el-table-column>
     <el-table-column
-      prop="operation"
-      label="操作"
-      width="160">
+      prop="capacity"
+      label="申请结果"
+      width="80">
       <template v-slot="scope">
-        <el-button size="mini" type="success" @click="handleApproval('true' ,scope.$index)">通过</el-button>
-        <el-button size="mini" type="danger" @click="handleApproval('false' ,scope.$index)">拒绝</el-button>
+        <span>{{ scope.row.teacherCourseApplication.result }}</span>
       </template>
     </el-table-column>
   </el-table>
@@ -113,12 +112,14 @@
 
 <script>
 export default {
-  name: 'lessonApplicationCheck',
+  name: 'myLessonApplication',
   data () {
+    var temp = this.$store.getters.username
     return {
-      lessonApplicationCheck: [],
-      templateList: [],
-      info: []
+      teacherid: 0,
+      jobnum: temp,
+      myLessonApplicationList: [],
+      templateList: []
     }
   },
   methods: {
@@ -136,65 +137,15 @@ export default {
         return '专业课程'
       }
     },
-    approved (index) {
-      this.$axios.post('/api/admin/teacher-course/approve',
-        this.lessonApplicationCheck[index].teacherCourseApplication,
-        {params: { attitude: true }})
-        .then(res => {
-          if (res.data.code === 0) {
-            this.$message({
-              message: '审批成功',
-              type: 'success'
-            })
-            this.getApplication()
-          } else {
-            this.$message({
-              message: res.data.msg,
-              type: 'error'
-            })
-            this.getApplication()
-          }
-        })
-        .catch(err => {
-          this.$message({
-            message: err,
-            type: 'error'
-          })
-          this.getApplication()
-        })
-    },
-    rejected (index) {
-      this.$axios.post('/api/admin/teacher-course/approve',
-        this.lessonApplicationCheck[index].teacherCourseApplication,
-        {params: { attitude: false }})
-        .then(res => {
-          if (res.data.code === 0) {
-            this.$message({
-              message: '审批成功',
-              type: 'success'
-            })
-            this.getApplication()
-          } else {
-            this.$message({
-              message: res.data.msg,
-              type: 'error'
-            })
-            this.getApplication()
-          }
-        })
-    },
     getApplication () {
-      this.$axios.get('/api/admin/teacher-course/pending')
+      this.$axios.get('/api/teacher/application/all', {params: {teacherid: this.teacherid}})
         .then(response => {
           if (response.data.code === 0) {
-            this.lessonApplicationCheck = response.data.data
+            this.myLessonApplicationList = response.data.data
             // this.$message.success(response.data.msg)
           } else {
             this.$message.error(response.data.msg)
           }
-        })
-        .catch(error => {
-          this.$message.error(error)
         })
       this.$axios.get('/api/admin/course-template/all')
         .then(response => {
