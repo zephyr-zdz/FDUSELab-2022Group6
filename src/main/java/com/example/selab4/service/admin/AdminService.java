@@ -6,6 +6,9 @@ import com.example.selab4.util.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
+@Transactional
 @Service("AdminAdminService")
 public class AdminService {
     private final AdminManager adminManager;
@@ -63,6 +66,7 @@ public class AdminService {
 
         // 前置条件：学期已经开始，1、2轮选课开关均为off
         administrator.setChoosecourse1("on");
+        administrator.setSelectcoursefunction("on");
         adminManager.saveAdmin(administrator);
 
         return new Response<>(Response.SUCCESS,"第一轮选课开关成功开启",null);
@@ -76,6 +80,7 @@ public class AdminService {
 
         // 前置条件：1轮开
         administrator.setChoosecourse1("off");
+        administrator.setSelectcoursefunction("off");
         adminManager.saveAdmin(administrator);
 
         // 调用第一轮结束时应执行的功能
@@ -96,6 +101,7 @@ public class AdminService {
 
         // 前置条件：学期已经开始，1、2轮选课开关均为off
         administrator.setChoosecourse2("on");
+        administrator.setSelectcoursefunction("on");
         adminManager.saveAdmin(administrator);
 
         return new Response<>(Response.SUCCESS,"第二轮选课开关成功开启",null);
@@ -109,6 +115,7 @@ public class AdminService {
 
         // 前置条件：2轮开
         administrator.setChoosecourse2("off");
+        administrator.setSelectcoursefunction("off");
         adminManager.saveAdmin(administrator);
 
         return new Response<>(Response.SUCCESS, "第一轮选课开关成功关闭", null);
