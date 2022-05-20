@@ -93,15 +93,30 @@ public class TeacherCourseService {
         // 1、检查申请的类型与pre_courseid的情形是否符合预期
         Course course = manager.findCourseByCourseId(teacherCourseApplication.getPrecourseid());
         switch (teacherCourseApplication.getApplytype()) {
-            case "delete" : case "update" :
+            case "delete" :
+                // 被删课程应存在
                 if (course == null) {
                     return false;
                 }
                 break;
+            case "update":
+                // 被删课程应存在
+                if (course == null) {
+                    return false;
+                }
+
+                // 修改后的课程容量应不小于已选学生人数
+                if (parseInt(teacherCourseApplication.getCapacity()) < parseInt(manager.findCourseByCourseId(teacherCourseApplication.getPrecourseid()).getCurrentcount())) {
+                    return false;
+                }
+                break;
             case "insert" :
+                // 新增课程原先应不存在
                 if (course != null) {
                     return false;
                 }
+
+                // 非公选课程，必须指定可选专业
                 if (teacherCourseApplication.getIspublic().equals("N") && teacherCourseApplication.getMajoridlist().length() == 0) {
                     return false;
                 }
