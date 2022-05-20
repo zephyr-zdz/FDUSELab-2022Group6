@@ -8,8 +8,10 @@ import com.example.selab4.util.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
+@Transactional
 @Service("StudentCourseService")
 public class CourseService {
     private final CourseManager manager;
@@ -34,9 +36,24 @@ public class CourseService {
         return new Response<>(Response.SUCCESS, "根据专业查找课程成功", manager.findCoursesByMajor(major));
     }
 
-    public Response<String> isValid() {
+    public Response<String> currentState() {
         Administrator administrator = manager.findAdmin();
-        return new Response<>(Response.SUCCESS,"success", administrator.getSelectcoursefunction());
+        String msg;
+        String state;
+        if (administrator.getSemesterbegin().equals("off")) {
+            msg = "学期未开始";
+            state = "off";
+        } else if (administrator.getChoosecourse1().equals("on")) {
+            msg = "第一轮选课已开始";
+            state = "first";
+        } else if (administrator.getChoosecourse2().equals("on")) {
+            msg = "第二轮选课已开始";
+            state = "second";
+        } else {
+            msg = "学期已开始，选课未开始";
+            state = "off";
+        }
+        return new Response<>(Response.SUCCESS,msg, state);
     }
 
     public Response<List<CourseVO>> getAllByStunum(String stunum) {
