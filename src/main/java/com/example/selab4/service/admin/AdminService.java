@@ -3,7 +3,6 @@ package com.example.selab4.service.admin;
 import com.example.selab4.manager.admin.AdminManager;
 import com.example.selab4.model.entity.Administrator;
 import com.example.selab4.util.Response;
-import com.sun.net.httpserver.Authenticator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,9 +30,24 @@ public class AdminService {
     }
 
 
-    public Response<String> isValid() {
-        Administrator administrator=adminManager.findAdmin();
-        return new Response<>(Response.SUCCESS,"success",administrator.getSelectcoursefunction());
+    public Response<String> currentState() {
+        Administrator administrator = adminManager.findAdmin();
+        String msg;
+        String state;
+        if (administrator.getSemesterbegin().equals("off")) {
+            msg = "学期未开始";
+            state = "off";
+        } else if (administrator.getChoosecourse1().equals("on")) {
+            msg = "第一轮选课已开始";
+            state = "first";
+        } else if (administrator.getChoosecourse2().equals("on")) {
+            msg = "第二轮选课已开始";
+            state = "second";
+        } else {
+            msg = "学期已开始，选课未开始";
+            state = "off";
+        }
+        return new Response<>(Response.SUCCESS,msg, state);
     }
 
     public Response<String> openFirstCourseSelect() {

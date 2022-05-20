@@ -36,11 +36,6 @@ public class ApplicationService {
     }
 
     boolean check(TeacherCourseApplication teacherCourseApplication){
-//        // 1、字段非空检查
-//        if (!checker.infoComplete(teacherCourseApplication)) {
-//            return false;
-//        }
-
         Course course= applicationManager.findCourseById(teacherCourseApplication.getPrecourseid());
         switch (teacherCourseApplication.getApplytype()) {
             case "delete" : case "update" :
@@ -57,7 +52,7 @@ public class ApplicationService {
                 return false;
         }
 
-        // 2、时空检查，人时检查
+        // 1、时空检查，人时检查
         List<Schedule> schedules=applicationManager.deleteSchedulesByCourseId(teacherCourseApplication.getPrecourseid());
         String[] schedule=split(teacherCourseApplication.getSchedule());
         List<Integer> CalendarIdList = new ArrayList<>();
@@ -78,19 +73,19 @@ public class ApplicationService {
             return false;
         }
 
-        // 3、教师on检查
+        // 2、教师on检查
         Integer classroomId= teacherCourseApplication.getClassroomid();
         String classroomCapacity=applicationManager.findClassroomCapacityById(classroomId);
         if(applicationManager.findClassroomById(teacherCourseApplication.getClassroomid()).getState().equals("off")) {
             return false;
         }
 
-        // 4、capacity检查
+        // 3、capacity检查
         if(parseInt(teacherCourseApplication.getCapacity()) > parseInt(classroomCapacity)) {
             return false;
         }
 
-        // 5、update类型的申请，ispublic不能修改
+        // 4、update类型的申请，ispublic不能修改
         if (teacherCourseApplication.getApplytype().equals("update")) {
             if (applicationManager.changeIspublic(teacherCourseApplication)) {
                 return false;

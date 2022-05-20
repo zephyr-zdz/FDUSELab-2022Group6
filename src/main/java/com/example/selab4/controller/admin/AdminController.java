@@ -19,20 +19,9 @@ public class AdminController {
     }
 
     @GetMapping("/valid")
-    public Response<String> isValid() {
-        return adminService.isValid();
+    public Response<String> currentState() {
+        return adminService.currentState();
     }
-
-//    @PostMapping("/open")
-//    Response<String> open_select_course(){
-//        return adminService.openCourseSelect();
-//    }
-
-//    @PostMapping("/close")
-//    Response<String> close_select_course(){
-//        return adminService.closeCourseSelect();
-//    }
-
 
     @PostMapping("/open/first")
     Response<String> open_first(){
