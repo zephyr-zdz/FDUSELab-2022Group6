@@ -103,10 +103,18 @@ export default {
       this.$refs.studentInfoMaintain.getInfo()
     },
     showLesson () {
+      this.$refs.studentCheckLesson.getStudent()
       this.$refs.studentCheckLesson.getLessons()
     },
+    showStudentLessonChosen () {
+      this.$refs.studentLessonChosen.getStudent()
+      this.$refs.studentLessonChosen.getLessons()
+    },
+    showStudentLessonLearned () {
+      this.$refs.studentLessonLearned.getStudent()
+      this.$refs.studentLessonLearned.getLessons()
+    },
     isChoose () {
-      // TODO:读取选课是否开放 get.path还没写
       var isChoose = false
       this.$axios.get('/api/student/course/valid').then(res => {
         if (res.data.code === 0) {
@@ -140,9 +148,11 @@ export default {
           }
           break
         case 'studentLessonChosen' :
+          this.showStudentLessonChosen()
           this.showRecord = value
           break
         case 'studentLessonLearned' :
+          this.showStudentLessonLearned()
           this.showRecord = value
           break
         default :
