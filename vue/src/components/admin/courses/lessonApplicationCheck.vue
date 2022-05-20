@@ -9,14 +9,14 @@
       label="课程名称"
       width="100">
       <template v-slot="scope">
-        <span>{{ scope.row.courseApplication.coursename }}</span>
+        <span>{{ templateList[scope.row.teacherCourseApplication.coursetemplateid].name }}</span>
       </template></el-table-column>
     <el-table-column
       prop="lessonNumber"
       label="课程编号"
       width="80">
       <template v-slot="scope">
-        <span>{{ scope.row.courseApplication.coursenum }}</span>
+        <span>{{ templateList[scope.row.teacherCourseApplication.coursetemplateid].coursenum }}</span>
       </template>
     </el-table-column>
     <el-table-column
@@ -26,6 +26,14 @@
       <template v-slot="scope">
         <span>{{ scope.row.institute.name }}</span>
       </template>
+    </el-table-column>
+    <el-table-column
+        prop="school"
+        label="课程类型"
+        width="100">
+        <template v-slot="scope">
+          <span>{{ isPubilc(scope.row.teacherCourseApplication.ispublic) }}</span>
+        </template>
     </el-table-column>
     <el-table-column
       prop="jobnum"
@@ -40,7 +48,7 @@
       label="学时"
       width="50">
       <template v-slot="scope">
-        <span>{{ scope.row.courseApplication.coursehour }}</span>
+        <span>{{ scope.row.teacherCourseApplication.coursehour }}</span>
       </template>
     </el-table-column>
     <el-table-column
@@ -48,14 +56,14 @@
       label="学分"
       width="50">
       <template v-slot="scope">
-        <span>{{ scope.row.courseApplication.credit }}</span>
+        <span>{{ scope.row.teacherCourseApplication.credit }}</span>
       </template>
     </el-table-column>
     <el-table-column
       prop="intro"
       label="课程介绍">
       <template v-slot="scope">
-        <span>{{ scope.row.courseApplication.intro }}</span>
+        <span>{{ scope.row.teacherCourseApplication.intro }}</span>
       </template>
     </el-table-column>
     <el-table-column
@@ -63,7 +71,7 @@
       label="上课时间"
       width="120">
       <template v-slot="scope">
-        <span>{{ scope.row.courseApplication.schedule }}</span>
+        <span>{{ scope.row.teacherCourseApplication.schedule }}</span>
       </template>
     </el-table-column>
     <el-table-column
@@ -79,7 +87,7 @@
       label="课程容量"
       width="80">
       <template v-slot="scope">
-        <span>{{ scope.row.courseApplication.capacity }}</span>
+        <span>{{ scope.row.teacherCourseApplication.capacity }}</span>
       </template>
     </el-table-column>
     <el-table-column
@@ -87,7 +95,7 @@
       label="申请操作"
       width="80">
       <template v-slot="scope">
-        <span>{{ scope.row.courseApplication.applytype }}</span>
+        <span>{{ scope.row.teacherCourseApplication.applytype }}</span>
       </template>
     </el-table-column>
     <el-table-column
@@ -96,7 +104,7 @@
       width="160">
       <template v-slot="scope">
         <el-button size="mini" type="success" @click="handleApproval('true' ,scope.$index)">通过</el-button>
-        <el-button size="mini" type="danger" @click="handleApproval('false' ,scope.$index)">未通过</el-button>
+        <el-button size="mini" type="danger" @click="handleApproval('false' ,scope.$index)">拒绝</el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -109,6 +117,7 @@ export default {
   data () {
     return {
       lessonApplicationCheck: [],
+      templateList: [],
       info: []
     }
   },
@@ -120,20 +129,16 @@ export default {
         this.rejected(index)
       }
     },
-    // getTeacherJobnumById (index, id) { // TODO: teacherid
-    //   this.$axios.get('/api/admin/teacher-course/getTeacherJobNumById', {params: {Id: id}}).then(response => {
-    //     this.lessonApplicationCheck[index].jobnum = response.data.data
-    //   })
-    // },
-    // TODO: 教师名字
-    // getTeacherNameById (id) {
-    //   this.$axios.get('/api/admin/institute', {params: {instituteId: id}}).then(response => {
-    //     return response.data.data
-    //   })
-    // },
+    isPubilc (YN) {
+      if (YN === 'Y') {
+        return '通识课程'
+      } else {
+        return '专业课程'
+      }
+    },
     approved (index) {
       this.$axios.post('/api/admin/teacher-course/approve',
-        this.lessonApplicationCheck[index].courseApplication,
+        this.lessonApplicationCheck[index].teacherCourseApplication,
         {params: { attitude: true }})
         .then(res => {
           if (res.data.code === 0) {
@@ -160,7 +165,7 @@ export default {
     },
     rejected (index) {
       this.$axios.post('/api/admin/teacher-course/approve',
-        this.lessonApplicationCheck[index].courseApplication,
+        this.lessonApplicationCheck[index].teacherCourseApplication,
         {params: { attitude: false }})
         .then(res => {
           if (res.data.code === 0) {
@@ -191,24 +196,19 @@ export default {
         .catch(error => {
           this.$message.error(error)
         })
-      // this.getName()
+      this.$axios.get('/api/admin/course-template/all')
+        .then(response => {
+          if (response.data.code === 0) {
+            this.templateList = response.data.data
+            // this.$message.success(response.data.msg)
+          } else {
+            this.$message.error(response.data.msg)
+          }
+        })
+        .catch(error => {
+          this.$message.error(error)
+        })
     }
-    // getName () {
-    //   console.log('name')
-    //   var length = this.lessonApplicationCheck.length
-    //   for (var index = 0; index < length; index++) {
-    //     (function (index) {
-    //       this.$axios.get('/api/admin/institute/getNameById', {params: {id: this.lessonApplicationCheck[index].instituteid}}).then(response => {
-    //         console.log(response.data.data + ':' + index)
-    //         this.$set(this.lessonApplicationCheck[index], 'institute', response.data.data)
-    //       // this.lessonApplicationCheck[index].institute = response.data.data
-    //       })
-    //       this.$axios.get('/api/admin/teacher-course/getTeacherJobNumById', {params: {Id: this.lessonApplicationCheck[index].teacherid}}).then(response => {
-    //         this.$set(this.lessonApplicationCheck[index], 'jobnum', response.data.data)
-    //       })
-    //     })(index)
-    //   }
-    // }
   }
 }
 </script>

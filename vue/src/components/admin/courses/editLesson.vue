@@ -306,12 +306,10 @@ export default {
         if ((valid) && (this.res.id !== -1)) {
           switch (this.editLesson.type) {
             case 1:
-              this.majoridlist = this.editLesson.majorSingle
+              this.majoridlist = ''
               break
             case 2:
-              for (let i = 0; i < this.editLesson.majorMulti.length; i++) {
-                this.majoridlist += this.editLesson.majorMulti[i] + ','
-              }
+              this.majoridlist = this.editLesson.majorMulti.join(',')
               break
             case 3:
               console.log(this.editLesson.majorSingle)

@@ -272,6 +272,7 @@ export default {
               this.majoridlist = this.addLesson.majorSingle
               break
             case 2:
+              this.majoridlist = ''
               for (let i = 0; i < this.addLesson.majorMulti.length; i++) {
                 this.majoridlist += this.addLesson.majorMulti[i] + ','
               }
