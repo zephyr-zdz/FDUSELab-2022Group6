@@ -75,7 +75,8 @@ export default {
         {
           studentid: this.id,
           courseid: this.course.course.id,
-          reason: this.applicationForm.reason
+          explanation: this.applicationForm.reason,
+          result: 'pending'
         }
       )
         .then(res => {

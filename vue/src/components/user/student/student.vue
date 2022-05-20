@@ -118,7 +118,8 @@ export default {
       var isChoose = false
       this.$axios.get('/api/student/course/valid').then(res => {
         if (res.data.code === 0) {
-          if (res.data.data === 'on') {
+          this.$store.commit('setRound', res.data.data)
+          if ((res.data.data === 'first') || (res.data.data === 'second')) {
             this.isValid = true
             return true
           } else {

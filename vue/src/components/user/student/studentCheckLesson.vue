@@ -111,10 +111,12 @@ import StudentLessonApplication from './studentLessonApplication'
 export default {
   name: 'studentCheckLesson',
   data () {
+    var temp = this.$store.getters.round
     return {
       lessonTable: [],
       major: '',
-      id: 0
+      id: 0,
+      round: temp
     }
   },
   mounted () {
@@ -123,6 +125,7 @@ export default {
   },
   methods: {
     isFull (index) {
+      if (this.round === 'first') return false
       return this.lessonTable[index].course.capacity === this.lessonTable[index].course.currentcount
     },
     showApplication (index) {
