@@ -58,6 +58,7 @@ public class AdminManager {
 
         String capacity = courseMapper.findCourseById(courseid).getCapacity();
         int capacity_Integer = parseInt(capacity);
+        if (capacity_Integer >= gradeList.size()) {return;}
         List<String> to_be_deleted = gradeList.subList(capacity_Integer,gradeList.size());
         for(String stunum : to_be_deleted){
             Integer studentid = studentMapper.findStudentByStunum(stunum).getId();
