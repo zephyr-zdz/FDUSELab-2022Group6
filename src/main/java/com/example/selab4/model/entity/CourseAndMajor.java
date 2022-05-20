@@ -20,4 +20,6 @@ public class CourseAndMajor {
     private Integer courseid;
     @Column(name = "majorid", nullable = false)
     private Integer majorid;
+
+
 }

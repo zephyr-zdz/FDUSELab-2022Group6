@@ -1,6 +1,5 @@
 package com.example.selab4.controller.student;
 
-import com.example.selab4.model.entity.Course;
 import com.example.selab4.model.vo.CourseVO;
 import com.example.selab4.service.student.CourseService;
 import com.example.selab4.util.Response;
@@ -21,8 +20,8 @@ public class CourseController {
 
     // 学生查看选课功能状态
     @GetMapping("/valid")
-    public Response<String> isValid() {
-        return service.isValid();
+    public Response<String> currentState() {
+        return service.currentState();
     }
 
     // 学生查看本专业所有可选课程

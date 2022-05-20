@@ -45,6 +45,7 @@ public class Course {
         this.coursehour = newCourse.getCoursehour();
         this.ispublic = newCourse.getIspublic();
         this.semester = newCourse.getSemester();
+        this.currentcount = newCourse.getCurrentcount();
     }
 
     public void addStudent() {

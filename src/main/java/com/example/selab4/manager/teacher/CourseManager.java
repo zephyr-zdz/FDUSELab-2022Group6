@@ -1,14 +1,13 @@
 package com.example.selab4.manager.teacher;
 
-import com.example.selab4.mapper.CourseMapper;
-import com.example.selab4.mapper.MajorMapper;
-import com.example.selab4.mapper.ScheduleMapper;
-import com.example.selab4.mapper.TeacherMapper;
+import com.example.selab4.mapper.*;
 import com.example.selab4.model.ClassAdapter;
 import com.example.selab4.model.entity.Major;
 import com.example.selab4.model.entity.Schedule;
+import com.example.selab4.model.entity.StuCourse;
 import com.example.selab4.model.entity.Teacher;
 import com.example.selab4.model.vo.CourseVO;
+import com.example.selab4.model.vo.StudentVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -21,15 +20,21 @@ public class CourseManager {
     private final CourseMapper courseMapper;
     private final MajorMapper majorMapper;
     private final ScheduleMapper scheduleMapper;
+    private final StudentMapper studentMapper;
     private final TeacherMapper teacherMapper;
+    private final StuCourseMapper stuCourseMapper;
     private final ClassAdapter classAdapter;
 
+
+
     @Autowired
-    public CourseManager(CourseMapper courseMapper, MajorMapper majorMapper, ScheduleMapper scheduleMapper, TeacherMapper teacherMapper, ClassAdapter classAdapter) {
+    public CourseManager(CourseMapper courseMapper, MajorMapper majorMapper, ScheduleMapper scheduleMapper, StudentMapper studentMapper, TeacherMapper teacherMapper, StuCourseMapper stuCourseMapper, ClassAdapter classAdapter) {
         this.courseMapper = courseMapper;
         this.majorMapper = majorMapper;
         this.scheduleMapper = scheduleMapper;
+        this.studentMapper = studentMapper;
         this.teacherMapper = teacherMapper;
+        this.stuCourseMapper = stuCourseMapper;
         this.classAdapter = classAdapter;
     }
 
@@ -81,5 +86,16 @@ public class CourseManager {
         }
 
         return result;
+    }
+
+    public List<StudentVO> getStudentListByCourseid(Integer courseid) {
+        List<StuCourse> stuCourseList = stuCourseMapper.findStuCoursesByCourseidAndStatus(courseid, "S");
+        List<StudentVO> studentVOList = new ArrayList<>();
+        for (StuCourse stuCourse : stuCourseList) {
+            StudentVO studentVO = classAdapter.fromStudent2StudentVO(studentMapper.findStudentById(stuCourse.getStudentid()));
+            studentVOList.add(studentVO);
+        }
+
+        return studentVOList;
     }
 }

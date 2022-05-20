@@ -19,17 +19,40 @@ public class AdminController {
     }
 
     @GetMapping("/valid")
-    public Response<String> isValid() {
-        return adminService.isValid();
+    public Response<String> currentState() {
+        return adminService.currentState();
     }
 
-    @PostMapping("/open")
-    Response<String> open_select_course(){
-        return adminService.openCourseSelect();
+    @PostMapping("/open/first")
+    Response<String> open_first(){
+        return adminService.openFirstCourseSelect();
     }
 
-    @PostMapping("/close")
-    Response<String> close_select_course(){
-        return adminService.closeCourseSelect();
+    // 第一轮结束：按优先级踢人
+    @PostMapping("/close/first")
+    Response<String> close_first(){
+        return adminService.closeFirstCourseSelect();
+    }
+
+    @PostMapping("/open/second")
+    Response<String> open_second(){
+        return adminService.openSecondCourseSelect();
+    }
+
+    // TODO 第二轮结束：学生选课申请清空
+    @PostMapping("/close/second")
+    Response<String> close_second(){
+        return adminService.closeSecondCourseSelect();
+    }
+
+    @PostMapping("/begin/semester")
+    Response<String> begin_semester(){
+        return adminService.beginSemester();
+    }
+
+    // TODO 学期结束：已选=>已修；Schedule清空。
+    @PostMapping("/end/semester")
+    Response<String> end_semester(){
+        return adminService.endSemester();
     }
 }

@@ -4,6 +4,7 @@ import com.example.selab4.model.checker.TeacherCourseApplicationChecker;
 import com.example.selab4.model.entity.Course;
 import com.example.selab4.model.entity.TeacherCourseApplication;
 import com.example.selab4.model.entity.Schedule;
+import com.example.selab4.model.vo.TeacherCourseApplicationVO;
 import com.example.selab4.util.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,12 +36,7 @@ public class ApplicationService {
     }
 
     boolean check(TeacherCourseApplication teacherCourseApplication){
-        // 字段非空检查
-        if (!checker.infoComplete(teacherCourseApplication)) {
-            return false;
-        }
-
-        Course course= applicationManager.findCourseById(teacherCourseApplication.getPre_courseId());
+        Course course= applicationManager.findCourseById(teacherCourseApplication.getPrecourseid());
         switch (teacherCourseApplication.getApplytype()) {
             case "delete" : case "update" :
                 if (course == null) {
@@ -56,7 +52,8 @@ public class ApplicationService {
                 return false;
         }
 
-        List<Schedule> schedules=applicationManager.deleteSchedulesByCourseId(teacherCourseApplication.getPre_courseId());
+        // 1、时空检查，人时检查
+        List<Schedule> schedules=applicationManager.deleteSchedulesByCourseId(teacherCourseApplication.getPrecourseid());
         String[] schedule=split(teacherCourseApplication.getSchedule());
         List<Integer> CalendarIdList = new ArrayList<>();
         for (String s : schedule){
@@ -71,15 +68,31 @@ public class ApplicationService {
                 flag=false;
         }
         addSchedules(schedules);
+
+        if (!flag) {
+            return false;
+        }
+
+        // 2、教师on检查
         Integer classroomId= teacherCourseApplication.getClassroomid();
         String classroomCapacity=applicationManager.findClassroomCapacityById(classroomId);
         if(applicationManager.findClassroomById(teacherCourseApplication.getClassroomid()).getState().equals("off")) {
-            throw new RuntimeException("classroom is off");
+            return false;
         }
+
+        // 3、capacity检查
         if(parseInt(teacherCourseApplication.getCapacity()) > parseInt(classroomCapacity)) {
-            throw new RuntimeException("capacity overflow");
+            return false;
         }
-        return flag;
+
+        // 4、update类型的申请，ispublic不能修改
+        if (teacherCourseApplication.getApplytype().equals("update")) {
+            if (applicationManager.changeIspublic(teacherCourseApplication)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
 
@@ -93,8 +106,7 @@ public class ApplicationService {
         }
     }
 
-    public Response<List<TeacherCourseApplication>> showMyApplication(String JobNum){
-        List<TeacherCourseApplication> teacherCourseApplications =applicationManager.getCourseApplicationByJobNum(JobNum);
-        return new Response<>(Response.SUCCESS,"success", teacherCourseApplications);
+    public Response<List<TeacherCourseApplicationVO>> getApplicationsByTeacherid(Integer teacherid){
+        return new Response<>(Response.SUCCESS,"success", applicationManager.getApplicationsByTeacherid(teacherid));
     }
 }

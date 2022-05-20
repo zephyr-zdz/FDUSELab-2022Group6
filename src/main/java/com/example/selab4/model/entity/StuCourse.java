@@ -22,4 +22,10 @@ public class StuCourse {
     private Integer courseid;
     @Column(name = "status", nullable = false, length = 1)
     private String status;  // 已选S；已修F
+
+    public void initialize(Integer courseid, Integer studentid) {
+        this.studentid = studentid;
+        this.courseid = courseid;
+        this.status = "S";
+    }
 }
