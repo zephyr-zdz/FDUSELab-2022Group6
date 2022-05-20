@@ -167,7 +167,7 @@ export default {
     },
     showInfo (index) {
       this.$refs.lessonInfo.dialogVisible = true
-      this.$refs.lessonInfo.course = this.lessonTable[index].course
+      this.$refs.lessonInfo.course = this.lessonTable[index]
     },
     showChosenStudent (index) {
       this.$refs.lessonStudentList.dialogVisible = true
@@ -179,9 +179,9 @@ export default {
     },
     isPubilc (YN) {
       if (YN === 'Y') {
-        return '通用修读'
+        return '通识课程'
       } else {
-        return '专业修读'
+        return '专业课程'
       }
     },
     calendar (calendarList) {

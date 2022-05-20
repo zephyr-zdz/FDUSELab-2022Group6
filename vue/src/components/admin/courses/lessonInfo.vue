@@ -1,4 +1,11 @@
 <template>
+  <el-dialog
+    title="编辑课程"
+    top="5vh"
+    width="80%"
+    :append-to-body="true"
+    :visible.sync="dialogVisible"
+    :before-close="handleClose">
     <el-form>
       <div>
         <h2>开课学期</h2>
@@ -26,7 +33,7 @@
 
       <div>
         <h2>可选专业</h2>
-        <span class="elements">{{ choseableMajor() }}</span>
+        <span class="elements">{{ choseableMajor(this.course.majorListOfCourse) }}</span>
       </div>
       <el-divider></el-divider>
 
@@ -54,7 +61,7 @@
 
       <div>
         <h2>上课时间</h2>
-        <span class="calendar">{{calendar()}}</span>
+        <span class="calendar">{{calendar(this.course.calendarList)}}</span>
       </div>
       <el-divider></el-divider>
 
@@ -70,6 +77,7 @@
       </div>
       <el-divider></el-divider>
     </el-form>
+  </el-dialog>
 </template>
 
 <script>
@@ -77,37 +85,43 @@ export default {
   name: 'lessonInfo',
   data () {
     return {
+      dialogVisible: false,
       course: {}
     }
   },
-  mounted () {
-    this.getMajor()
-    this.getClassrooms()
-  },
   methods: {
+    handleClose () {
+      this.$nextTick(() => {
+        this.$emit('afterLessonInfo')
+        this.dialogVisible = false
+      })
+    },
     type () {
       if (this.course.course.ispublic === 'Y') {
         return '通识课程'
       } else if (this.course.majorListOfCourse.length === 1) {
         return '专业课程'
-      } else return '向部分专业课程'
+      } else return '面向部分专业课程'
     },
-    choseableMajor () {
+    choseableMajor (majorListOfCourse) {
       if (this.course.ispublic === 'Y') {
         return '通识课程'
       } else {
-        return this.course.majorListOfCourse
+        let majorList = ''
+        majorListOfCourse.forEach(item => {
+          majorList += item.name + ' '
+        })
+        return majorList
       }
     },
-    calendar () {
-      var time
-      for (var i = 0; i < this.course.calendarList.length; i++) {
-        time += this.course.calendarList.day
-        time += ','
-        time += this.course.calendarList.number
-        time += ' '
+    calendar (calendarList) {
+      var schedule = ''
+      for (var i = 0; i < calendarList.length; i++) {
+        schedule += (calendarList[i].day + ',' + calendarList[i].number)
+        schedule += ' '
       }
-      return time
+      this.rowSchedule = schedule
+      return schedule
     }
   }
 }

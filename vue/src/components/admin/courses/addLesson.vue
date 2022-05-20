@@ -309,6 +309,7 @@ export default {
                 message: '添加成功',
                 type: 'success'
               })
+              this.cleanForm()
             } else {
               this.$message({
                 message: '添加失败，请检查输入课程是否有冲突',

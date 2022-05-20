@@ -1,55 +1,20 @@
 <template>
   <el-dialog
-    title="新增课程"
+    title="编辑课程"
     top="5vh"
-    width="50%"
+    width="80%"
     :append-to-body="true"
     :visible.sync="dialogVisible"
     :before-close="handleClose"
     @open="course2Form()">
-
     <el-form class="reg-container" label-position="left" :model="editLesson" :rules="rules" ref="editLessonForm" label-width="100px">
       <el-form-item label="开课学期" prop="semester">
         <el-input v-model="editLesson.semester" placeholder="请输入开课学期" disabled></el-input>
       </el-form-item>
-
       <el-form-item label="课程名称" prop="coursetemplateid">
         <el-select placeholder="请选择课程名称" v-model="editLesson.coursetemplateid">
           <el-option
             v-for="item in templateOptions"
-            :key="item.name"
-            :label="item.name"
-            :value="item.id">
-          </el-option>
-        </el-select>
-      </el-form-item>
-
-      <el-form-item label="课程类型" prop="type">
-        <el-select placeholder="请选择类型" v-model="editLesson.type">
-          <el-option
-            v-for="item in typeOptions"
-            :key="item.name"
-            :label="item.name"
-            :value="item.id">
-          </el-option>
-        </el-select>
-      </el-form-item>
-
-      <el-form-item label="可选专业" prop="major" v-if="editLesson.type === 2 ">
-        <el-select placeholder="请选择专业" multiple v-model="editLesson.majorMulti">
-          <el-option
-            v-for="item in majorOptions"
-            :key="item.name"
-            :label="item.name"
-            :value="item.id">
-          </el-option>
-        </el-select>
-      </el-form-item>
-
-      <el-form-item label="可选专业" prop="major" v-if="editLesson.type === 3 ">
-        <el-select placeholder="请选择专业" v-model="editLesson.majorSingle">
-          <el-option
-            v-for="item in majorOptions"
             :key="item.name"
             :label="item.name"
             :value="item.id">
@@ -95,14 +60,14 @@
       <el-form-item label="课程人数" prop="capacity">
         <el-input-number v-model="editLesson.capacity" :min="0"></el-input-number>
       </el-form-item>
-
-      <el-form-item style="width: 100%">
-        <el-button type="success" style="width: 30%;border: none" @click="submit">提交修改</el-button>
-        <el-popconfirm title="确定永久删除该课程吗？" @confirm="deleteLesson">
-          <el-button type="danger" style="width: 30%;border: none" slot="reference">删除课程</el-button>
-        </el-popconfirm>
-      </el-form-item>
     </el-form>
+    <div style="text-align:center">
+      <el-button type="success" @click="submit">提交</el-button>
+      <el-button type="warning" @click="course2Form">恢复</el-button>
+      <el-popconfirm title="确定永久删除该课程吗？" @confirm="deleteLesson" style="margin-left:10px">
+        <el-button type="danger" slot="reference">删除课程</el-button>
+      </el-popconfirm>
+    </div>
   </el-dialog>
 </template>
 
@@ -366,9 +331,9 @@ export default {
             classroomid: this.editLesson.classroomid,
             capacity: this.editLesson.capacity,
             coursetemplateid: this.editLesson.coursetemplateid,
-            applytype: 'insert',
+            applytype: 'update',
             result: 'success',
-            precourseid: -1,
+            precourseid: this.course.course.id,
             majoridlist: this.majoridlist,
             ispublic: this.editLesson.type === 1 ? 'Y' : 'N',
             applytime: new Date().getTime()
@@ -378,12 +343,12 @@ export default {
             console.log(res.data)
             if (res.data.code === 0) {
               this.$message({
-                message: '添加成功',
+                message: '修改成功',
                 type: 'success'
               })
             } else {
               this.$message({
-                message: '添加失败，请检查输入课程是否有冲突',
+                message: '修改失败，请检查输入课程是否有冲突',
                 type: 'error'
               })
             }
@@ -398,21 +363,6 @@ export default {
 </script>
 
 <style>
-  /* .reg-container {
-    border-radius: 15px;
-    background-clip: padding-box;
-    margin: 5px auto;
-    width: 350px auto;
-    padding: 35px 35px 15px 35px;
-    background: #fff;
-    border: 1px solid #eaeaea;
-    box-shadow: 0 0 25px #cac6c6;
-  }
-  .reg_title {
-    margin: 10px auto;
-    text-align: center;
-    color: #505458;
-  } */
   #post {
     height: auto;
     width: auto;
