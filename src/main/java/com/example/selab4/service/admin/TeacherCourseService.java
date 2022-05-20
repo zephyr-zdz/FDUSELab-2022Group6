@@ -133,12 +133,12 @@ public class TeacherCourseService {
 
         // 4、教室的状态为on
         if(manager.findClassroomById(teacherCourseApplication.getClassroomid()).getState().equals("off")) {
-            throw new RuntimeException("classroom is off");
+            return false;
         }
 
         // 5、教室的capacity >= 课程的capacity（老师不占容量）
         if(parseInt(teacherCourseApplication.getCapacity()) > parseInt(classroomCapacity)) {
-            throw new RuntimeException("capacity overflow");
+            return false;
         }
         return flag;
     }
