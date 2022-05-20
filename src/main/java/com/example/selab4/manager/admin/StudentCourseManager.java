@@ -47,6 +47,9 @@ public class StudentCourseManager {
         return studentVOList;
     }
 
+    public Course getCourseByCourseid(Integer courseid) {
+        return courseMapper.findCourseById(courseid);
+    }
     public List<StudentCourseApplicationVO> getStudentCourseApplicationVOList() {
         List<StudentCourseApplication> studentCourseApplicationList = studentApplicationMapper.findAll();
         List<StudentCourseApplicationVO> studentCourseApplicationVOList = new ArrayList<>();
@@ -65,6 +68,10 @@ public class StudentCourseManager {
 
     public void save(StuCourse stuCourse) {
         stuCourseMapper.save(stuCourse);
+    }
+
+    public void save(Course course) {
+        courseMapper.save(course);
     }
 
 
