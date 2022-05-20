@@ -11,5 +11,7 @@ public interface StudentApplicationMapper extends JpaRepository<StudentCourseApp
 
     List<StudentCourseApplication> findAllByStudentid(Integer studentid);
 
-    List<StudentCourseApplication> findAllByCourseid(Integer pre_courseId);
+    List<StudentCourseApplication> findAllByCourseid(Integer courseid);
+
+    List<StudentCourseApplication> findAllByResult(String result);
 }

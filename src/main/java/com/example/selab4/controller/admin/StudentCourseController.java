@@ -34,6 +34,12 @@ public class StudentCourseController {
         return service.getStudentCourseApplicationVOList();
     }
 
+    // 管理员查看所有的待处理的学生选课申请
+    @GetMapping("/student-application-list/pending")
+    public Response<List<StudentCourseApplicationVO>> getStudentCoursePendingApplicationVOList() {
+        return service.getStudentCoursePendingApplicationVOList();
+    }
+
     // TODO 管理员审核学生的选课申请
     @PostMapping("/approve")
     public Response<String> approve(@RequestBody StudentCourseApplication studentCourseApplication, @RequestParam(name = "attitude") boolean attitude){

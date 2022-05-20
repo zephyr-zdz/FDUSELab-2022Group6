@@ -70,4 +70,8 @@ public class StudentCourseService {
         manager.save(studentCourseApplication);
         return new Response<>(Response.SUCCESS,"审批成功","结果：通过");
     }
+
+    public Response<List<StudentCourseApplicationVO>> getStudentCoursePendingApplicationVOList() {
+        return new Response<>(Response.SUCCESS, "查找待处理学生选课申请成功", manager.getStudentPendingCourseApplicationVOList());
+    }
 }

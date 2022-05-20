@@ -22,8 +22,7 @@ public class StudentCourseManager {
     private final StudentApplicationMapper studentApplicationMapper;
     private final ClassAdapter classAdapter;
     private final CourseMapper courseMapper;
-    private final AdminMapper adminMapper;
-    private final ScheduleChecker scheduleChecker;
+
     @Autowired
     public StudentCourseManager(StuCourseMapper stuCourseMapper, StudentMapper studentMapper, StudentApplicationMapper studentApplicationMapper, ClassAdapter classAdapter, CourseMapper courseMapper, AdminMapper adminMapper, ScheduleChecker scheduleChecker) {
         this.stuCourseMapper = stuCourseMapper;
@@ -32,8 +31,6 @@ public class StudentCourseManager {
 
         this.classAdapter = classAdapter;
         this.courseMapper = courseMapper;
-        this.adminMapper = adminMapper;
-        this.scheduleChecker = scheduleChecker;
     }
 
     public List<StudentVO> getStudentListByCourseid(Integer courseid) {
@@ -75,4 +72,13 @@ public class StudentCourseManager {
     }
 
 
+    public List<StudentCourseApplicationVO> getStudentPendingCourseApplicationVOList() {
+        List<StudentCourseApplication> studentPendingCourseApplicationList = studentApplicationMapper.findAllByResult("pending");
+        List<StudentCourseApplicationVO> studentPendingCourseApplicationVOList = new ArrayList<>();
+        for (StudentCourseApplication studentCourseApplication : studentPendingCourseApplicationList) {
+            StudentCourseApplicationVO studentCourseApplicationVO = classAdapter.fromStudentCourseApplication2StudentCourseApplicationVO(studentCourseApplication);
+            studentPendingCourseApplicationVOList.add(studentCourseApplicationVO);
+        }
+        return studentPendingCourseApplicationVOList;
+    }
 }
