@@ -36,10 +36,10 @@ public class ApplicationService {
     }
 
     boolean check(TeacherCourseApplication teacherCourseApplication){
-        // 1、字段非空检查
-        if (!checker.infoComplete(teacherCourseApplication)) {
-            return false;
-        }
+//        // 1、字段非空检查
+//        if (!checker.infoComplete(teacherCourseApplication)) {
+//            return false;
+//        }
 
         Course course= applicationManager.findCourseById(teacherCourseApplication.getPrecourseid());
         switch (teacherCourseApplication.getApplytype()) {
