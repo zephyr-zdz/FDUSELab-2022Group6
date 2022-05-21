@@ -155,4 +155,14 @@ public class AdminService {
 
         return new Response<>(Response.SUCCESS, "结束学期成功", null);
     }
+
+    public Response<String> getSemesterState() {
+        String state = adminManager.findAdmin().getSelectcoursefunction();
+        return new Response<>(Response.SUCCESS,"查询成功",state);
+    }
+
+    public Response<String> getSemester() {
+        String semester = adminManager.findAdmin().getSemester();
+        return new Response<>(Response.SUCCESS,"查询成功",semester);
+    }
 }

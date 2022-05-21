@@ -18,6 +18,11 @@ public class AdminController {
         this.adminService=adminService;
     }
 
+    @GetMapping("/semester/state")
+    public Response<String> semesterState(){return adminService.getSemesterState();}
+    @GetMapping("/semester")
+    public Response<String> semester(){return adminService.getSemester();}
+
     @GetMapping("/valid")
     public Response<String> currentState() {
         return adminService.currentState();
