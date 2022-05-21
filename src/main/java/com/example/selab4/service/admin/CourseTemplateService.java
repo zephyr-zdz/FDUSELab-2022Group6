@@ -37,6 +37,10 @@ public class CourseTemplateService {
             return new Response<>(Response.FAIL, "课程模板不存在", null);
         }
 
+        if (checker.stillHaveCourse(courseTemplate)) {
+            return new Response<>(Response.FAIL, "该课程模板还有课程开设", null);
+        }
+
         manager.deleteCourseTemplate(courseTemplate);
         return new Response<>(Response.SUCCESS, "课程模板删除成功", courseTemplate);
     }

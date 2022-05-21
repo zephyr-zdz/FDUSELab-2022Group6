@@ -153,9 +153,6 @@ public class AdminService {
         // 已选=>已修
         adminManager.changeS2F();
 
-        // Schedule清空
-        adminManager.clearSchedule();
-
         return new Response<>(Response.SUCCESS, "结束学期成功", null);
     }
 }

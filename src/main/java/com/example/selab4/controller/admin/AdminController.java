@@ -49,7 +49,7 @@ public class AdminController {
         return adminService.beginSemester();
     }
 
-    // TODO 学期结束：已选=>已修；Schedule清空。
+    // TODO 学期结束：已选=>已修。
     @PostMapping("/end/semester")
     Response<String> end_semester(){
         return adminService.endSemester();
