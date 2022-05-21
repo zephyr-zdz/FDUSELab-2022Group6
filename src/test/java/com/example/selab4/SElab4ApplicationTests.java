@@ -1,6 +1,8 @@
 package com.example.selab4;
 
+import com.example.selab4.mapper.CourseTemplateMapper;
 import com.example.selab4.mapper.StudentMapper;
+import com.example.selab4.model.entity.CourseTemplate;
 import com.example.selab4.model.entity.Student;
 import com.example.selab4.service.admin.StudentService;
 import org.junit.jupiter.api.Test;
@@ -19,10 +21,12 @@ import java.io.IOException;
 class SElab4ApplicationTests {
 
     StudentMapper studentMapper;
+    CourseTemplateMapper courseTemplateMapper;
 
     @Autowired
-    SElab4ApplicationTests(StudentMapper studentMapper){
+    SElab4ApplicationTests(StudentMapper studentMapper,CourseTemplateMapper courseTemplateMapper){
         this.studentMapper=studentMapper;
+        this.courseTemplateMapper=courseTemplateMapper;
     }
 
     @Test
@@ -49,5 +53,13 @@ class SElab4ApplicationTests {
 
         // 观察数据表，此时数据表新增了一条数据，但它的id不是10000，而是数据库自动生成的一个自增id
         studentMapper.save(student);
+    }
+
+    @Test
+    void testUpdateCourseTemplate(){
+        CourseTemplate courseTemplate = new CourseTemplate();
+        courseTemplate.setCoursenum("000011");
+        courseTemplate.setName("离散数学");
+        courseTemplateMapper.save(courseTemplate);
     }
 }
