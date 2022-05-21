@@ -40,7 +40,7 @@ public class StudentController {
 
     // 如果学生有选课，不允许删除学生
     @DeleteMapping
-    public Response<Student> delete(@RequestParam("studentId") Integer studentId) {
+    public Response<Student> delete(@RequestParam("studentid") Integer studentId) {
         return service.delete(studentId);
     }
 
