@@ -48,8 +48,12 @@ public class StudentCourseService {
             manager.save(studentCourseApplication);
             return new Response<>(Response.SUCCESS,"审批成功","结果：拒绝");
         }
-        if(!studentCourseChecker.check_approve(studentCourseApplication))
+        if(!studentCourseChecker.check_approve(studentCourseApplication)) {
+            studentCourseApplication.setResult("reject");
+            manager.save(studentCourseApplication);
             return new Response<>(Response.FAIL,"发生逻辑错误，审批不能通过","结果：拒绝");
+        }
+
 
         StuCourse stuCourse = new StuCourse();
         stuCourse.initialize(studentCourseApplication.getCourseid(),studentCourseApplication.getStudentid());

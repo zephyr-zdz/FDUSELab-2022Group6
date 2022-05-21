@@ -90,7 +90,7 @@ public class TeacherCourseService {
     }
 
     boolean check(TeacherCourseApplication teacherCourseApplication){
-        // 1、检查申请的类型与pre_courseid的情形是否符合预期
+        // 1、检查申请的类型与precourseid的情形是否符合预期
         Course course = manager.findCourseByCourseId(teacherCourseApplication.getPrecourseid());
         switch (teacherCourseApplication.getApplytype()) {
             case "delete" :
@@ -142,6 +142,10 @@ public class TeacherCourseService {
         }
         addSchedules(schedules);
 
+        if (!flag) {
+            return false;
+        }
+
 
         Integer classroomId= teacherCourseApplication.getClassroomid();
         String classroomCapacity= manager.findClassroomCapacityById(classroomId);
@@ -155,7 +159,8 @@ public class TeacherCourseService {
         if(parseInt(teacherCourseApplication.getCapacity()) > parseInt(classroomCapacity)) {
             return false;
         }
-        return flag;
+
+        return true;
     }
 
     public Response<String> approve(TeacherCourseApplication teacherCourseApplication, boolean attitude){
@@ -166,9 +171,12 @@ public class TeacherCourseService {
         }
         Course course = fromApplicationToCourse(teacherCourseApplication);
 
-        // 一些逻辑检查
-        if(!check(teacherCourseApplication))
+        // 进一步逻辑检查
+        if(!check(teacherCourseApplication)) {
+            teacherCourseApplication.setResult("reject");
+            manager.save(teacherCourseApplication);
             return new Response<>(Response.FAIL,"产生逻辑错误，管理员不得通过申请","Another application had been approved,leading to conflict");
+        }
 
         switch (teacherCourseApplication.getApplytype()){
             case "delete":{

@@ -27,6 +27,7 @@ public class ApplicationService {
             return new Response<>(Response.FAIL,"err","conflict");
         }
         else {
+            studentCourseApplication.setResult("pending");
             manager.save(studentCourseApplication);
             return new Response<>(Response.SUCCESS,"success","application uploaded");
         }
