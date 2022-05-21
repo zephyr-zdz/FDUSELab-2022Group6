@@ -15,30 +15,8 @@ import java.util.List;
 
 @Component
 public class TeacherCourseApplicationChecker {
-    private final TeacherApplicationMapper teacherApplicationMapper;
-    private final ClassAdapter classAdapter;
 
     @Autowired
     public TeacherCourseApplicationChecker(TeacherApplicationMapper teacherApplicationMapper, ClassAdapter classAdapter) {
-        this.teacherApplicationMapper = teacherApplicationMapper;
-        this.classAdapter = classAdapter;
-    }
-
-
-    public boolean infoComplete(TeacherCourseApplication teacherCourseApplication) {
-        Field[] fields = teacherCourseApplication.getClass().getDeclaredFields();
-        try {
-            for (Field field : fields) {
-                field.setAccessible(true);
-                Object value = field.get(teacherCourseApplication);
-                if (value != null) {
-                    return false;
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-        return true;
     }
 }
