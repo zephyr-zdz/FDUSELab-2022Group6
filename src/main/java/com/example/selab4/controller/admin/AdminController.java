@@ -49,13 +49,13 @@ public class AdminController {
         return adminService.closeSecondCourseSelect();
     }
 
-    @PostMapping("/begin/semester")
+    @PostMapping("/semester/begin")
     Response<String> begin_semester(){
         return adminService.beginSemester();
     }
 
     // TODO 学期结束：已选=>已修。
-    @PostMapping("/end/semester")
+    @PostMapping("/semester/end")
     Response<String> end_semester(){
         return adminService.endSemester();
     }
