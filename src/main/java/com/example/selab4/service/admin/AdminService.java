@@ -148,7 +148,6 @@ public class AdminService {
             new_semester = prefix+"秋";
         }
         administrator.setSemester(new_semester);
-        administrator.setSemester("on");
 
         return new Response<>(Response.SUCCESS, "开始学期成功", null);
     }
