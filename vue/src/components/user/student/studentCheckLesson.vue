@@ -7,6 +7,7 @@
     <el-input v-model="searchTime" size="mini" style="width: 15%" placeholder="输入上课时间模糊搜索"></el-input>
     <el-table :data="lessonTable.filter(data => !searchLessonName || data.courseTemplate.name.toLowerCase().includes(searchLessonName.toLowerCase()))
                      .filter(data => !searchCourseNum || data.courseTemplate.coursenum.toLowerCase().includes(searchCourseNum.toLowerCase()))
+                     .filter(data => !searchTeacherName || data.teacher.name.toLowerCase().includes(searchTeacherName.toLowerCase()))
                      .filter(data => !searchTime || calendar(data.calendarList).toLowerCase().includes(searchTime.toLowerCase()))"
               style="width: 100%"
               pager="page">
