@@ -105,6 +105,8 @@ export default {
     showLesson () {
       this.$refs.studentCheckLesson.getStudent()
       this.$refs.studentCheckLesson.getLessons()
+      this.$refs.studentCheckLesson.getClassrooms()
+      this.$refs.studentCheckLesson.getSemesters()
     },
     showStudentLessonChosen () {
       this.$refs.studentLessonChosen.getStudent()
