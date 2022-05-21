@@ -1,9 +1,6 @@
 package com.example.selab4.manager.admin;
 
-import com.example.selab4.mapper.AdminMapper;
-import com.example.selab4.mapper.CourseMapper;
-import com.example.selab4.mapper.StuCourseMapper;
-import com.example.selab4.mapper.StudentMapper;
+import com.example.selab4.mapper.*;
 import com.example.selab4.model.entity.Administrator;
 import com.example.selab4.model.entity.Course;
 import com.example.selab4.model.entity.StuCourse;
@@ -12,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -24,12 +20,15 @@ public class AdminManager {
     private final StuCourseMapper stuCourseMapper;
     private final CourseMapper  courseMapper;
     private final StudentMapper studentMapper;
+    private final ScheduleMapper scheduleMapper;
+
     @Autowired
-    AdminManager(AdminMapper adminMapper, StuCourseMapper stuCourseMapper, CourseMapper courseMapper, StudentMapper studentMapper){
+    AdminManager(AdminMapper adminMapper, StuCourseMapper stuCourseMapper, CourseMapper courseMapper, StudentMapper studentMapper, ScheduleMapper scheduleMapper){
         this.adminMapper=adminMapper;
         this.stuCourseMapper = stuCourseMapper;
         this.courseMapper = courseMapper;
         this.studentMapper = studentMapper;
+        this.scheduleMapper = scheduleMapper;
     }
 
     public void saveAdmin(Administrator administrator){
@@ -73,5 +72,17 @@ public class AdminManager {
         for (Course course : courseList){
             solveOverflow_single(course.getId());
         }
+    }
+
+    public void changeS2F() {
+        List<StuCourse> stuCourseList = stuCourseMapper.findAllByStatus("S");
+        for (StuCourse stuCourse : stuCourseList) {
+            stuCourse.setStatus("F");
+            stuCourseMapper.save(stuCourse);
+        }
+    }
+
+    public void clearSchedule() {
+        scheduleMapper.deleteAll();
     }
 }

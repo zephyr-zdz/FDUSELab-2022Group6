@@ -53,7 +53,7 @@ public class CourseTemplateChecker {
         }
 
         if (courseTemplate.getCoursenum().equals(oldCourseTemplate.getCoursenum())) {
-            return true;
+            return false;
         }
 
         return existCoursenum(courseTemplate);
@@ -73,7 +73,7 @@ public class CourseTemplateChecker {
         }
 
         if (courseTemplate.getName().equals(oldCourseTemplate.getName())) {
-            return true;
+            return false;
         }
 
         return existName(courseTemplate);

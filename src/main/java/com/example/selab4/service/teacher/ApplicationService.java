@@ -97,10 +97,12 @@ public class ApplicationService {
 
 
     public Response<String> upload(TeacherCourseApplication teacherCourseApplication){
+        // 预检查
         if(!check(teacherCourseApplication)){
             return new Response<>(Response.FAIL,"err","conflict");
         }
         else {
+            teacherCourseApplication.setResult("pending");
             applicationManager.save(teacherCourseApplication);
             return new Response<>(Response.SUCCESS,"success","application uploaded");
         }
