@@ -52,19 +52,22 @@ public class ApplicationService {
                 return false;
         }
 
-        // 1、时空检查，人时检查
-        List<Schedule> schedules=applicationManager.deleteSchedulesByCourseId(teacherCourseApplication.getPrecourseid());
+        // 1、同一学期的时空检查，同一学期的人时检查
         String[] schedule=split(teacherCourseApplication.getSchedule());
         List<Integer> CalendarIdList = new ArrayList<>();
         for (String s : schedule){
             String[] info=s.split(",");
             CalendarIdList.add(applicationManager.getCalendarIdByDayAndNumber(info[0],info[1]));
         }
+
         Integer ClassroomId= teacherCourseApplication.getClassroomid();
         Integer TeacherId= teacherCourseApplication.getTeacherid();
+        String semester = teacherCourseApplication.getSemester();
+
+        List<Schedule> schedules=applicationManager.deleteSchedulesByCourseId(teacherCourseApplication.getPrecourseid());
         boolean flag=true;
         for (Integer i : CalendarIdList){
-            if(applicationManager.scheduleExistByCalendarIdAndClassroomId(i,ClassroomId)||applicationManager.scheduleExistByCalendarIdAndTeacherId(i,TeacherId))
+            if(applicationManager.scheduleExistByCalendarIdAndClassroomIdAndSemester(i,ClassroomId, semester)||applicationManager.scheduleExistByCalendarIdAndTeacherIdAndSemester(i,TeacherId,semester))
                 flag=false;
         }
         addSchedules(schedules);
