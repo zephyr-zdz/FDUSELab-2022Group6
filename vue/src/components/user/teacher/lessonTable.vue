@@ -5,7 +5,7 @@
     <lesson-info ref="lessonInfo" @afterLessonInfo="handleClose"></lesson-info>
     <chosen-student-list ref="lessonStudentList" @afterDialog="handleClose"></chosen-student-list>
 
-    <el-button type="success" size="small" @click="showAddLesson()">新建课程</el-button>
+    <el-button type="success" size="small" @click="showAddLesson()" v-if="round==='off'">新建课程</el-button>
 
     <el-input v-model="searchLessonName" size="mini" style="width: 15%" placeholder="输入课程名称模糊搜索"></el-input>
     <el-input v-model="searchCourseNum" size="mini" style="width: 15%" placeholder="输入课程编号模糊搜索"></el-input>
@@ -123,7 +123,7 @@
         width="180"
        >
         <template v-slot="scope">
-          <el-button size="mini" type="text" @click="showEditLesson(scope.$index)">修改</el-button>
+          <el-button size="mini" type="text" @click="showEditLesson(scope.$index)" v-if="round==='off'">修改</el-button>
           <el-button size="mini" type="text" @click="showInfo(scope.$index)">详细</el-button>
           <el-button size="mini" type="text" @click="showChosenStudent(scope.$index)">已选学生名单</el-button>
         </template>

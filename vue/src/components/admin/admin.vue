@@ -149,6 +149,7 @@ export default {
       this.$refs.teacherTable.getTeachers()
     },
     showLessons () {
+      this.$refs.lessonTable.round = this.$store.getters.round
       this.$refs.lessonTable.getClassrooms()
       this.$refs.lessonTable.getLessons()
       this.$refs.lessonTable.getSemesters()
