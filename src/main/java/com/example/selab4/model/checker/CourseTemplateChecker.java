@@ -1,5 +1,6 @@
 package com.example.selab4.model.checker;
 
+import com.example.selab4.mapper.CourseMapper;
 import com.example.selab4.mapper.CourseTemplateMapper;
 import com.example.selab4.model.entity.CourseTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,10 +9,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class CourseTemplateChecker {
     private final CourseTemplateMapper courseTemplateMapper;
+    private final CourseMapper courseMapper;
 
     @Autowired
-    public CourseTemplateChecker(CourseTemplateMapper courseTemplateMapper) {
+    public CourseTemplateChecker(CourseTemplateMapper courseTemplateMapper, CourseMapper courseMapper) {
         this.courseTemplateMapper = courseTemplateMapper;
+        this.courseMapper = courseMapper;
     }
 
     public boolean haveId(CourseTemplate courseTemplate) {
@@ -53,7 +56,7 @@ public class CourseTemplateChecker {
         }
 
         if (courseTemplate.getCoursenum().equals(oldCourseTemplate.getCoursenum())) {
-            return true;
+            return false;
         }
 
         return existCoursenum(courseTemplate);
@@ -73,7 +76,7 @@ public class CourseTemplateChecker {
         }
 
         if (courseTemplate.getName().equals(oldCourseTemplate.getName())) {
-            return true;
+            return false;
         }
 
         return existName(courseTemplate);
@@ -85,5 +88,9 @@ public class CourseTemplateChecker {
         }
         CourseTemplate existedCourseTemplate = courseTemplateMapper.findCourseTemplateById(courseTemplate.getId());
         return existedCourseTemplate != null;
+    }
+
+    public boolean stillHaveCourse(CourseTemplate courseTemplate) {
+        return courseMapper.findAllByCoursetemplateid(courseTemplate.getId()).size() > 0;
     }
 }

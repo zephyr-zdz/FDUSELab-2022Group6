@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Component
 public class ScheduleChecker {
@@ -23,6 +24,17 @@ public class ScheduleChecker {
         this.stuCourseMapper = stuCourseMapper;
     }
 
+
+    private boolean feasible(List<Schedule> studentSchedules,List<Schedule> newSchedules){
+        for(Schedule newSchedule : newSchedules){
+            for(Schedule studentSchedule : studentSchedules){
+                if(Objects.equals(studentSchedule.getCalendarid(), newSchedule.getCalendarid()))
+                    return false;
+            }
+        }
+        return true;
+    }
+
     public boolean checkSchedule(Student student, Course course) {
         List<StuCourse> stuCourseList = stuCourseMapper.findStuCoursesByStudentidAndStatus(student.getId(), "S");
         List<Schedule> studentScheduleList = new ArrayList<>();
@@ -32,13 +44,7 @@ public class ScheduleChecker {
         }
 
         List<Schedule> courseScheduleList = scheduleMapper.findSchedulesByCourseid(course.getId());
-        for (Schedule schedule : courseScheduleList) {
-            if (studentScheduleList.contains(schedule)) {   // 挑选的课程的某个上课时间，学生本来就要上课
-                return false;
-            }
-        }
-
-        return true;
+        return feasible(studentScheduleList,courseScheduleList);
     }
 
 }

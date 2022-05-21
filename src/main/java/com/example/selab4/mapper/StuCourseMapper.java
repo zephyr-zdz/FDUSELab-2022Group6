@@ -31,4 +31,6 @@ public interface StuCourseMapper extends JpaRepository<StuCourse, Integer> {
     List<StuCourse> findStuCoursesByCourseid(Integer courseid);
 
     void deleteStuCoursesByCourseid(Integer courseid);
+
+    List<StuCourse> findAllByStatus(String status);
 }

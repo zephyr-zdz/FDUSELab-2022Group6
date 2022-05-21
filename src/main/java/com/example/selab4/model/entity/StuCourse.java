@@ -23,9 +23,9 @@ public class StuCourse {
     @Column(name = "status", nullable = false, length = 1)
     private String status;  // 已选S；已修F
 
-    public void initialize(Integer courseid, Integer studentid) {
+    public void initialize(Integer courseid, Integer studentid, String status) {
         this.studentid = studentid;
         this.courseid = courseid;
-        this.status = "S";
+        this.status = status;
     }
 }
