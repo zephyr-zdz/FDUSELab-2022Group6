@@ -37,22 +37,36 @@ public class ApplicationManager {
         return calendar.getId();
     }
 
-    public Schedule findScheduleByCalendarIdAndClassroomId(Integer i, Integer classroomId) {
-        return scheduleMapper.findScheduleByCalendaridAndClassroomid(i,classroomId);
+    public List<Schedule> findScheduleListByCalendarIdAndClassroomId(Integer i, Integer classroomId) {
+        return scheduleMapper.findScheduleListByCalendaridAndClassroomid(i,classroomId);
     }
 
-    public Schedule findScheduleByCalendarIdAndTeacherId(Integer i, Integer teacherId) {
-        return scheduleMapper.findScheduleByCalendaridAndTeacherid(i,teacherId);
+    public List<Schedule> findScheduleListByCalendarIdAndTeacherId(Integer i, Integer teacherId) {
+        return scheduleMapper.findScheduleListByCalendaridAndTeacherid(i,teacherId);
     }
 
-    public boolean scheduleExistByCalendarIdAndClassroomId(Integer cal_id,Integer class_id){
-        Schedule schedule=findScheduleByCalendarIdAndClassroomId(cal_id,class_id);
-        return schedule != null;
+    public boolean scheduleExistByCalendarIdAndClassroomIdAndSemester(Integer cal_id, Integer class_id, String semester){
+        List<Schedule> scheduleList = findScheduleListByCalendarIdAndClassroomId(cal_id,class_id);
+        for (Schedule schedule : scheduleList) {
+            Course course = courseMapper.findCourseById(schedule.getCourseid());
+            if (course.getSemester().equals(semester)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
-    public boolean scheduleExistByCalendarIdAndTeacherId(Integer cal_id,Integer teacher_Id){
-        Schedule schedule=findScheduleByCalendarIdAndTeacherId(cal_id,teacher_Id);
-        return schedule !=null;
+    public boolean scheduleExistByCalendarIdAndTeacherIdAndSemester(Integer cal_id, Integer tec_id, String semester){
+        List<Schedule> scheduleList = findScheduleListByCalendarIdAndTeacherId(cal_id,tec_id);
+        for (Schedule schedule : scheduleList) {
+            Course course = courseMapper.findCourseById(schedule.getCourseid());
+            if (course.getSemester().equals(semester)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public void save(TeacherCourseApplication teacherCourseApplication) {

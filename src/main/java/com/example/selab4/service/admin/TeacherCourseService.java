@@ -90,7 +90,7 @@ public class TeacherCourseService {
     }
 
     boolean check(TeacherCourseApplication teacherCourseApplication){
-        // 1、检查申请的类型与pre_courseid的情形是否符合预期
+        // 1、检查申请的类型与precourseid的情形是否符合预期
         Course course = manager.findCourseByCourseId(teacherCourseApplication.getPrecourseid());
         switch (teacherCourseApplication.getApplytype()) {
             case "delete" :
@@ -125,22 +125,26 @@ public class TeacherCourseService {
                 return false;
         }
 
-        // 2、检查申请的上课时间内，其上课地点是否在上其他的课
-        // 3、检查申请的上课时间内，其上课教师是否也在上其他的课
+        // 2、检查当前学期，申请的上课时间内，其上课地点是否在上其他的课
+        // 3、检查当前学期，申请的上课时间内，其上课教师是否也在上其他的课
         List<Integer> CalendarIdListId=getCalendarIDsFromApplication(teacherCourseApplication);
         Integer ClassroomId= teacherCourseApplication.getClassroomid();
         Integer TeacherId= teacherCourseApplication.getTeacherid();
+        String semester = teacherCourseApplication.getSemester();
 
         // 得到被修改课程的上课时间、教室
         List<Schedule> schedules= manager.deleteSchedulesByCourseId(teacherCourseApplication.getPrecourseid());
         boolean flag=true;
         for (Integer i : CalendarIdListId){
-            if(manager.scheduleExistByCalendarIdAndClassroomId(i,ClassroomId)|| manager.scheduleExistByCalendarIdAndTeacherId(i,TeacherId)) {
+            if(manager.scheduleExistByCalendarIdAndClassroomIdAndSemester(i, ClassroomId, semester) || manager.scheduleExistByCalendarIdAndTeacherIdAndSemester(i, TeacherId, semester)) {
                 flag=false;
-                System.out.println(i);
             }
         }
         addSchedules(schedules);
+
+        if (!flag) {
+            return false;
+        }
 
 
         Integer classroomId= teacherCourseApplication.getClassroomid();
@@ -155,7 +159,8 @@ public class TeacherCourseService {
         if(parseInt(teacherCourseApplication.getCapacity()) > parseInt(classroomCapacity)) {
             return false;
         }
-        return flag;
+
+        return true;
     }
 
     public Response<String> approve(TeacherCourseApplication teacherCourseApplication, boolean attitude){
@@ -166,9 +171,12 @@ public class TeacherCourseService {
         }
         Course course = fromApplicationToCourse(teacherCourseApplication);
 
-        // 一些逻辑检查
-        if(!check(teacherCourseApplication))
+        // 进一步逻辑检查
+        if(!check(teacherCourseApplication)) {
+            teacherCourseApplication.setResult("reject");
+            manager.save(teacherCourseApplication);
             return new Response<>(Response.FAIL,"产生逻辑错误，管理员不得通过申请","Another application had been approved,leading to conflict");
+        }
 
         switch (teacherCourseApplication.getApplytype()){
             case "delete":{
@@ -199,7 +207,9 @@ public class TeacherCourseService {
                 teacherCourseApplication.setResult("approve");
                 manager.save(teacherCourseApplication);
                 // 课程可选专业不允许修改（忽视majoridlist，逻辑检查保证ispublic不会变），CourseAndMajor不变
-                // StuCourse不变
+                // 为防止因为上课时间修改，而引起学生选课时间的冲突，应该把学生全部踢掉，让学生重新选
+                // TODO StuCourse根据courseid删除
+                manager.clearStuCourseByCourseid(teacherCourseApplication.getPrecourseid());
                 // TODO StudentCourseApplication相关的被reject
                 manager.rejectStudentApplicationByCourseid(teacherCourseApplication.getPrecourseid());
                 // TeacherCourseApplication不变

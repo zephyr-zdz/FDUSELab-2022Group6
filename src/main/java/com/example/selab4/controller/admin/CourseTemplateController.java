@@ -25,6 +25,7 @@ public class CourseTemplateController {
         return service.getAll();
     }
 
+    // 有课程就不能删课程模板
     @DeleteMapping
     public Response<CourseTemplate> delete(@RequestBody CourseTemplate courseTemplate) {
         return service.delete(courseTemplate);

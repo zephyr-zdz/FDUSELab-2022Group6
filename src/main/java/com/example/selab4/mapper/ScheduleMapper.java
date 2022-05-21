@@ -15,4 +15,8 @@ public interface ScheduleMapper extends JpaRepository<Schedule,Integer> {
     List<Schedule> findAllByTeacherid(Integer teacherid);
 
     List<Schedule> findSchedulesByClassroomid(Integer id);
+
+    List<Schedule> findScheduleListByCalendaridAndClassroomid(Integer cal_id, Integer class_id);
+
+    List<Schedule> findScheduleListByCalendaridAndTeacherid(Integer cal_id, Integer tec_id);
 }

@@ -43,13 +43,15 @@ public class StudentCourseChecker {
         Course course =  courseMapper.findCourseById(studentCourseApplication.getCourseid());
         if(course == null) return false;
         Administrator administrator = adminMapper.findAdministratorById(1);
+        String current_semester = administrator.getSemester();
+        String application_semester = courseMapper.findCourseById(studentCourseApplication.getCourseid()).getSemester();
         int space_capacity = parseInt(classAdapter.fromCourse2CourseVO(course).getClassroom().getCapacity());
         Student student = studentMapper.findStudentById(studentCourseApplication.getStudentid());
         boolean schedule_space = scheduleChecker.checkSchedule(student,course);
         boolean timing = administrator.getChoosecourse2().equals("on");
         boolean enough_space = parseInt(course.getCurrentcount()) < space_capacity;
-        return schedule_space && timing && enough_space;
+        boolean current_course = application_semester.equals(current_semester);
+        return schedule_space && timing && enough_space && current_course;
     }
-
 
 }
