@@ -56,22 +56,17 @@ public class StudentCourseService {
 
 
         StuCourse stuCourse = new StuCourse();
-        stuCourse.initialize(studentCourseApplication.getCourseid(),studentCourseApplication.getStudentid());
+        stuCourse.initialize(studentCourseApplication.getCourseid(),studentCourseApplication.getStudentid(), "S");
         manager.save(stuCourse);
+
         Course course = fromApplicationToCourse(studentCourseApplication);
-
-        String capacity = course.getCapacity();
-        String currentcount = course.getCurrentcount();
-
-        capacity = Integer.toString(Integer.parseInt(capacity)+1);
-        currentcount = Integer.toString(Integer.parseInt(currentcount)+1);
-
-        course.setCapacity(capacity);
-        course.setCurrentcount(currentcount);
-
+        course.addCapacity();
+        course.addStudent();
         manager.save(course);
+
         studentCourseApplication.setResult("approve");
         manager.save(studentCourseApplication);
+
         return new Response<>(Response.SUCCESS,"审批成功","结果：通过");
     }
 

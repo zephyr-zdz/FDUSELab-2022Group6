@@ -55,4 +55,12 @@ public class Course {
     public void reduceStudent() {
         setCurrentcount(Integer.toString(parseInt(getCurrentcount()) - 1));
     }
+
+    public void addCapacity() {
+        setCapacity(Integer.toString(parseInt(getCapacity()) + 1));
+    }
+
+    public void reduceCapacity() {
+        setCapacity(Integer.toString(parseInt(getCapacity()) - 1));
+    }
 }
