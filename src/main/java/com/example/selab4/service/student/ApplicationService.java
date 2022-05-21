@@ -24,16 +24,16 @@ public class ApplicationService {
 
     public Response<String> submit(StudentCourseApplication studentCourseApplication) {
         if(!studentCourseChecker.check_apply(studentCourseApplication)){
-            return new Response<>(Response.FAIL,"err","conflict");
+            return new Response<>(Response.FAIL,"提交失败","发生逻辑错误");
         }
         else {
             studentCourseApplication.setResult("pending");
             manager.save(studentCourseApplication);
-            return new Response<>(Response.SUCCESS,"success","application uploaded");
+            return new Response<>(Response.SUCCESS,"成功","申请已上传");
         }
     }
 
     public Response<List<StudentCourseApplicationVO>> getApplicationsByStudentid(Integer studentid) {
-        return new Response<>(Response.SUCCESS, "success", manager.getCourseApplicationsByStudentid(studentid));
+        return new Response<>(Response.SUCCESS, "成功", manager.getCourseApplicationsByStudentid(studentid));
     }
 }
