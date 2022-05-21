@@ -102,16 +102,16 @@ public class ApplicationService {
     public Response<String> upload(TeacherCourseApplication teacherCourseApplication){
         // 预检查
         if(!check(teacherCourseApplication)){
-            return new Response<>(Response.FAIL,"err","conflict");
+            return new Response<>(Response.FAIL,"错误","发生逻辑错误");
         }
         else {
             teacherCourseApplication.setResult("pending");
             applicationManager.save(teacherCourseApplication);
-            return new Response<>(Response.SUCCESS,"success","application uploaded");
+            return new Response<>(Response.SUCCESS,"成功","申请已上传");
         }
     }
 
     public Response<List<TeacherCourseApplicationVO>> getApplicationsByTeacherid(Integer teacherid){
-        return new Response<>(Response.SUCCESS,"success", applicationManager.getApplicationsByTeacherid(teacherid));
+        return new Response<>(Response.SUCCESS,"成功", applicationManager.getApplicationsByTeacherid(teacherid));
     }
 }
