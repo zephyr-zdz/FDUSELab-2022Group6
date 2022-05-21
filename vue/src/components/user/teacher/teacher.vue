@@ -94,6 +94,16 @@ export default {
       }).then(res => {
         this.teacherid = res.data.data.id
       })
+      this.$axios.get('/api/admin/admin/semester').then(res => {
+        if (res.data.code === 0) {
+          this.$store.commit('setSemester', res.data.data)
+        }
+      })
+      this.$axios.get('/api/student/course/valid').then(res => {
+        if (res.data.code === 0) {
+          this.$store.commit('setRound', res.data.data)
+        }
+      })
     },
     showInfo () {
       this.$refs.teacherInfoMaintain.getInfo()
@@ -103,6 +113,7 @@ export default {
       this.$refs.myLessonApplication.getApplication()
     },
     showLesson () {
+      this.$refs.lessonTable.round = this.$store.getters.round
       this.$refs.lessonTable.getClassrooms()
       this.$refs.lessonTable.getLessons()
       this.$refs.lessonTable.getSemesters()

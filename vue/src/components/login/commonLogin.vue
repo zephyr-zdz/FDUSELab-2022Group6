@@ -59,12 +59,9 @@ export default {
       param.append('type', this.loginForm.type)
       param.append('username', this.loginForm.number)
       param.append('password', this.loginForm.password)
-      console.log(param.get('username'))
-      console.log(param.get('password'))
       this.$axios
         .post('/api/user/login', param)
         .then(successResponse => {
-          console.log(successResponse.data)
           if (successResponse.data.data === 'true') {
             this.$store.commit('login', this.loginForm)
             this.$router.replace('/user')
@@ -78,7 +75,6 @@ export default {
             })
             // var toPath = this.$route.query.redirect
             // this.$router.push({path: '/user/changePassword'})
-            console.log('first')
           } else {
             this.$alert(successResponse.data.msg, '系统提示', {
               confirmButtonText: '确定',

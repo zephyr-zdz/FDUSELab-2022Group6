@@ -75,13 +75,14 @@
 export default {
   name: 'editLesson',
   data () {
+    var semester = this.$store.getters.semester
     return {
       course: [],
       dialogVisible: false,
       res: {id: -1},
       majoridlist: '',
       editLesson: {
-        semester: '2021-2022春',
+        semester: semester,
         jobnum: '',
         classroomid: '',
         name: '',

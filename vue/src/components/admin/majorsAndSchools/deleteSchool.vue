@@ -4,12 +4,12 @@
     <h3 class="reg_title">删除学院</h3>
 
     <el-form-item label="学院" prop="school">
-      <el-select placeholder="请选择学院" v-model="deleteSchool.school">
+      <el-select placeholder="请选择学院" v-model="deleteSchool.id">
         <el-option
           v-for="item in schoolOptions"
           :key="item.name"
           :label="item.name"
-          :value="item.name">
+          :value="item.id">
         </el-option>
       </el-select>
     </el-form-item>
@@ -28,7 +28,7 @@ export default {
     return {
       schoolOptions: [],
       deleteSchool: {
-        school: ''
+        id: ''
       }
     }
   },
@@ -44,7 +44,7 @@ export default {
       })
     },
     confirmDelete () {
-      this.$axios.delete('/api/admin/institute', {params: {institute: this.deleteSchool.school}})
+      this.$axios.delete('/api/admin/institute', {params: {instituteid: this.deleteSchool.id}})
         .then(res => {
           if (res.data.code === 0) {
             this.$message({
