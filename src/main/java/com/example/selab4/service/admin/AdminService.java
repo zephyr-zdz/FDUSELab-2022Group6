@@ -83,7 +83,7 @@ public class AdminService {
         administrator.setSelectcoursefunction("off");
         adminManager.saveAdmin(administrator);
 
-        // 调用第一轮结束时应执行的功能
+        // 第一轮结束时，踢出超额的低优先级学生
         adminManager.solveOverflow();
         return new Response<>(Response.SUCCESS, "第一轮选课开关成功关闭", null);
     }
@@ -149,6 +149,12 @@ public class AdminService {
         // 前置条件：学期已经开始，且1、2轮开关均为off
         administrator.setSemesterbegin("off");
         adminManager.saveAdmin(administrator);
+
+        // 已选=>已修
+        adminManager.changeS2F();
+
+        // Schedule清空
+        adminManager.clearSchedule();
 
         return new Response<>(Response.SUCCESS, "结束学期成功", null);
     }

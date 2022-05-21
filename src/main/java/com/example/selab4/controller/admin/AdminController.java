@@ -39,7 +39,6 @@ public class AdminController {
         return adminService.openSecondCourseSelect();
     }
 
-    // TODO 第二轮结束：学生选课申请清空
     @PostMapping("/close/second")
     Response<String> close_second(){
         return adminService.closeSecondCourseSelect();
