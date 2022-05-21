@@ -219,7 +219,7 @@ export default {
         })
     },
     isValid (row, index) {
-      var usernamePattern = /^[2][2][0-9]{4}$/
+      var usernamePattern = /^[0-9]{6}$/
       var namePattern = /^[\u4E00-\u9FA5A-Za-z]+$/
       var identityPattern = /^[0-9]{18}|[0-9]{17}[xX]$/
       var telPattern = /^(1[0-9][0-9])\d{8}$/
