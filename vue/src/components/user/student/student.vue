@@ -115,6 +115,7 @@ export default {
     showStudentLessonLearned () {
       this.$refs.studentLessonLearned.getStudent()
       this.$refs.studentLessonLearned.getLessons()
+      this.$refs.studentLessonLearned.getSemesters()
     },
     isChoose () {
       var isChoose = false

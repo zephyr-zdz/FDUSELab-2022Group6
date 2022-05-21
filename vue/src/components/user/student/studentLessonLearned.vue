@@ -7,7 +7,9 @@
       <el-table-column
         prop="semester"
         label="开课学期"
-        width="150">
+        width="120"
+        :filters="semesterList"
+        :filter-method="semesterFilterHandler">
         <template v-slot="scope">
           <span>{{ scope.row.course.semester}}</span>
         </template>
@@ -93,6 +95,7 @@ export default {
   name: 'studentLessonLearned',
   data () {
     return {
+      semesterList: [],
       lessonTable: [],
       major: ''
     }
@@ -130,6 +133,26 @@ export default {
       this.$axios.get('/api/student/course/finished', {params: {stunum: this.$store.getters.username}}).then(res => {
         this.lessonTable = res.data.data
       })
+    },
+    getSemesters () {
+      this.$axios.get('/api/admin/course/semester')
+        .then(response => {
+          if (response.data.code === 0) {
+            console.log(response.data)
+            this.semesterList = response.data.data
+          } else {
+            this.$message({
+              message: response.data.msg,
+              type: 'error'
+            })
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    },
+    semesterFilterHandler (value, row) {
+      return row.course.semester === value
     }
   }
 }
