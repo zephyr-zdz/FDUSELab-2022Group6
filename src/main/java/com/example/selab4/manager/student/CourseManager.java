@@ -141,7 +141,7 @@ public class CourseManager {
     public boolean courseTemplateConflict(Student student, Course course) {
         List<Course> list = findCoursesByStudent(student);
         for (Course v : list){
-            if(v.getCoursetemplateid() == course.getCoursetemplateid())
+            if(v.getCoursetemplateid().equals(course.getCoursetemplateid()))
                 return true;
         }
         return false;
@@ -171,4 +171,30 @@ public class CourseManager {
     public boolean chooseCourseFunctionIsOn(Administrator administrator) {
         return administrator.getSelectcoursefunction().equals("on");
     }
+
+    public List<CourseVO> findCoursesByMajorAndSemester(Major studentMajor, String semester) {
+        List<Schedule> scheduleList = scheduleMapper.findAll();
+        List<CourseVO> courseVOList = new ArrayList<>();
+        List<CourseVO> result = new ArrayList<>();
+        for (Schedule schedule : scheduleList) {
+            CourseVO courseVO = classAdapter.fromCourse2CourseVO(courseMapper.findCourseById(schedule.getCourseid()));
+            courseVOList.add(courseVO);
+        }
+
+        // 去重
+        LinkedHashSet<CourseVO> hashSet = new LinkedHashSet<>(courseVOList);
+        courseVOList = new ArrayList<>(hashSet);
+
+        for (CourseVO courseVO : courseVOList) {
+            if (majorQualified(courseVO,studentMajor) && semesterQualified(courseVO,semester)) {
+                result.add(courseVO);
+            }
+        }
+        return result;
+    }
+
+    private boolean semesterQualified(CourseVO courseVO, String semester) {
+        return courseVO.getCourse().getSemester().equals(semester);
+    }
+
 }
