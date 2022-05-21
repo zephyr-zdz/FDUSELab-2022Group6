@@ -99,6 +99,11 @@ export default {
           this.$store.commit('setSemester', res.data.data)
         }
       })
+      this.$axios.get('/api/student/course/valid').then(res => {
+        if (res.data.code === 0) {
+          this.$store.commit('setRound', res.data.data)
+        }
+      })
     },
     showInfo () {
       this.$refs.teacherInfoMaintain.getInfo()
