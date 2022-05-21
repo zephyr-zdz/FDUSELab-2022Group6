@@ -23,17 +23,18 @@ public class CourseService {
         this.scheduleChecker = scheduleChecker;
     }
 
-    public Response<List<CourseVO>> getAllByMajor(String studentMajor) {
+    public Response<List<CourseVO>> getAllByMajorAndThisSemester(String studentMajor) {
         // 判定是否在选课期内
         String select_course_function = manager.findAdmin().getSelectcoursefunction();
         if(select_course_function.equals("off"))
             return new Response<>(Response.FAIL, "当前不是选课期", null);
 
+        String semester = manager.findAdmin().getSemester();
         Major major = manager.findMajorByName(studentMajor);
         if (major == null) {
             return new Response<>(Response.FAIL, "专业: " + studentMajor + "不存在", null);
         }
-        return new Response<>(Response.SUCCESS, "根据专业查找课程成功", manager.findCoursesByMajor(major));
+        return new Response<>(Response.SUCCESS, "根据专业查找课程成功", manager.findCoursesByMajorAndSemester(major,semester));
     }
 
     public Response<String> currentState() {
