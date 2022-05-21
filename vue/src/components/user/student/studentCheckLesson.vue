@@ -1,13 +1,19 @@
 <template>
   <el-card class="box-card">
     <student-lesson-application ref="studentLessonApplication" @afterApplication="handleClose"></student-lesson-application>
-    <el-table :data="lessonTable"
+    <el-input v-model="searchLessonName" size="mini" style="width: 15%" placeholder="输入课程名称模糊搜索"></el-input>
+    <el-input v-model="searchCourseNum" size="mini" style="width: 15%" placeholder="输入课程编号模糊搜索"></el-input>
+    <el-input v-model="searchTeacherName" size="mini" style="width: 15%" placeholder="输入教师姓名模糊搜索"></el-input>
+    <el-input v-model="searchTime" size="mini" style="width: 15%" placeholder="输入上课时间模糊搜索"></el-input>
+    <el-table :data="lessonTable.filter(data => !searchLessonName || data.courseTemplate.name.toLowerCase().includes(searchLessonName.toLowerCase()))
+                     .filter(data => !searchCourseNum || data.courseTemplate.coursenum.toLowerCase().includes(searchCourseNum.toLowerCase()))
+                     .filter(data => !searchTime || calendar(data.calendarList).toLowerCase().includes(searchTime.toLowerCase()))"
               style="width: 100%"
               pager="page">
       <el-table-column
         prop="semester"
         label="开课学期"
-        width="150">
+        width="120">
         <template v-slot="scope">
           <span>{{ scope.row.course.semester}}</span>
         </template>
@@ -78,7 +84,9 @@
       <el-table-column
         prop="place"
         label="上课地点"
-        width="80">
+        width="90"
+        :filters="classroomList"
+        :filter-method="classroomFilterHandler">
         <template v-slot="scope">
           <span>{{ scope.row.classroom.name }}</span>
         </template>
@@ -113,10 +121,16 @@ export default {
   data () {
     var temp = this.$store.getters.round
     return {
+      semesterList: [],
+      classroomList: [],
       lessonTable: [],
       major: '',
       id: 0,
-      round: temp
+      round: temp,
+      searchLessonName: '',
+      searchCourseNum: '',
+      searchTeacherName: '',
+      searchTime: ''
     }
   },
   mounted () {
@@ -125,7 +139,7 @@ export default {
   },
   methods: {
     isFull (index) {
-      if (this.round === 'first') return false
+      if (this.$store.getters.round === 'first') return false
       return this.lessonTable[index].course.capacity === this.lessonTable[index].course.currentcount
     },
     showApplication (index) {
@@ -166,6 +180,47 @@ export default {
         this.lessonTable = res.data.data
       })
     },
+    getSemesters () {
+      this.$axios.get('/api/admin/course/semester')
+        .then(response => {
+          if (response.data.code === 0) {
+            console.log(response.data)
+            this.semesterList = response.data.data
+          } else {
+            this.$message({
+              message: response.data.msg,
+              type: 'error'
+            })
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    },
+    getClassrooms () {
+      this.$axios.get('/api/admin/classroom/open')
+        .then(response => {
+          if (response.data.code === 0) {
+            console.log(response.data.data)
+            this.classroomOptions = response.data.data
+            this.classroomList = this.classroomOptions.map(item => {
+              return {
+                text: item.name,
+                value: item.name
+              }
+            })
+            console.log(this.classroomList)
+          } else {
+            this.$message({
+              message: response.data.msg,
+              type: 'error'
+            })
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    },
     submit (index) {
       this.$axios.post('/api/student/course/choose', null,
         {params: {
@@ -187,6 +242,12 @@ export default {
             })
           }
         })
+    },
+    semesterFilterHandler (value, row) {
+      return row.course.semester === value
+    },
+    classroomFilterHandler (value, row) {
+      return row.classroom.name === value
     }
   },
   components: {

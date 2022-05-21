@@ -9,14 +9,14 @@
       label="课程名称"
       width="100">
       <template v-slot="scope">
-        <span>{{ templateList[scope.row.teacherCourseApplication.coursetemplateid].name }}</span>
+        <span>{{templateList.find(item=>item.id === scope.row.teacherCourseApplication.coursetemplateid).name }}</span>
       </template></el-table-column>
     <el-table-column
       prop="lessonNumber"
       label="课程编号"
       width="80">
       <template v-slot="scope">
-        <span>{{ templateList[scope.row.teacherCourseApplication.coursetemplateid].coursenum }}</span>
+        <span>{{ templateList.find(item=>item.id === scope.row.teacherCourseApplication.coursetemplateid).coursenum }}</span>
       </template>
     </el-table-column>
     <el-table-column
@@ -95,7 +95,7 @@
       label="申请操作"
       width="80">
       <template v-slot="scope">
-        <span>{{ scope.row.teacherCourseApplication.applytype }}</span>
+        <span>{{ applytype2Chinese(scope.row.teacherCourseApplication.applytype) }}</span>
       </template>
     </el-table-column>
     <el-table-column
@@ -103,7 +103,7 @@
       label="申请结果"
       width="80">
       <template v-slot="scope">
-        <span>{{ scope.row.teacherCourseApplication.result }}</span>
+        <span>{{ result2Chinese(scope.row.teacherCourseApplication.result) }}</span>
       </template>
     </el-table-column>
   </el-table>
@@ -135,6 +135,26 @@ export default {
         return '通识课程'
       } else {
         return '专业课程'
+      }
+    },
+    result2Chinese (result) {
+      switch (result) {
+        case 'approve':
+          return '通过'
+        case 'reject':
+          return '拒绝'
+        default:
+          return '审核中'
+      }
+    },
+    applytype2Chinese (result) {
+      switch (result) {
+        case 'insert':
+          return '新增课程'
+        case 'update':
+          return '更新课程'
+        default:
+          return '删除课程'
       }
     },
     getApplication () {

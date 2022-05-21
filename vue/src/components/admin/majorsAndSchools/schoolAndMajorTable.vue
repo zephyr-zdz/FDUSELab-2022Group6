@@ -148,7 +148,7 @@ export default {
     },
     deleteRow (row, index) {
       // axios
-      this.$axios.delete('/api/admin/major', {params: {major: row.name}})
+      this.$axios.delete('/api/admin/major', {params: {majorId: row.id}})
         .then(res => {
           console.log(res.data)
           if (res.data.code === 0) {

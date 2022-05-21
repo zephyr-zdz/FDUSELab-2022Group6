@@ -75,13 +75,14 @@
 export default {
   name: 'editLesson',
   data () {
+    var semester = this.$store.getters.semester
     return {
       course: [],
       dialogVisible: false,
       res: {id: -1},
       majoridlist: '',
       editLesson: {
-        semester: '2021-2022春',
+        semester: semester,
         jobnum: this.$store.getters.username,
         classroomid: '',
         name: '',
@@ -153,6 +154,7 @@ export default {
     console.log('mounted')
     this.getTemplates()
     this.getClassrooms()
+    this.getTeacherId()
     this.getMajors()
   },
   methods: {
@@ -302,59 +304,60 @@ export default {
     },
     submit () {
       this.getTeacherId()
-      console.log('submit' + this.res.id)
-      this.$refs.editLessonForm.validate((valid) => {
-        if ((valid) && (this.res.id !== -1)) {
-          switch (this.editLesson.type) {
-            case 1:
-              this.majoridlist = ''
-              break
-            case 2:
-              this.majoridlist = this.editLesson.majorMulti.join(',')
-              break
-            case 3:
-              console.log(this.editLesson.majorSingle)
-              this.majoridlist = this.editLesson.majorSingle
-              break
-            default:
-              break
-          }
-          var application = {
-            semester: this.editLesson.semester,
-            coursehour: this.editLesson.coursehour,
-            credit: this.editLesson.credit,
-            teacherid: this.res.id,
-            instituteid: this.editLesson.institute,
-            intro: this.editLesson.intro,
-            schedule: this.editLesson.schedule,
-            classroomid: this.editLesson.classroomid,
-            capacity: this.editLesson.capacity,
-            coursetemplateid: this.editLesson.coursetemplateid,
-            applytype: 'update',
-            result: 'pending',
-            precourseid: this.course.course.id,
-            majoridlist: this.majoridlist,
-            ispublic: this.editLesson.type === 1 ? 'Y' : 'N',
-            applytime: new Date().getTime()
-          }
-          console.log('post')
-          this.$axios.post('/api/teacher/application/apply', application).then(res => {
-            console.log(res.data)
-            if (res.data.code === 0) {
-              this.$message({
-                message: '申请修改成功',
-                type: 'success'
-              })
-            } else {
-              this.$message({
-                message: '申请修改失败，请检查输入课程是否有冲突',
-                type: 'error'
-              })
+      this.$nextTick(() => {
+        this.$refs.editLessonForm.validate((valid) => {
+          if ((valid) && (this.res.id !== -1)) {
+            switch (this.editLesson.type) {
+              case 1:
+                this.majoridlist = ''
+                break
+              case 2:
+                this.majoridlist = this.editLesson.majorMulti.join(',')
+                break
+              case 3:
+                console.log(this.editLesson.majorSingle)
+                this.majoridlist = this.editLesson.majorSingle
+                break
+              default:
+                break
             }
-          })
-        } else {
-          this.$alert('请检查输入是否正确', '添加失败', {confirmButtonText: '确定'})
-        }
+            var application = {
+              semester: this.editLesson.semester,
+              coursehour: this.editLesson.coursehour,
+              credit: this.editLesson.credit,
+              teacherid: this.res.id,
+              instituteid: this.editLesson.institute,
+              intro: this.editLesson.intro,
+              schedule: this.editLesson.schedule,
+              classroomid: this.editLesson.classroomid,
+              capacity: this.editLesson.capacity,
+              coursetemplateid: this.editLesson.coursetemplateid,
+              applytype: 'update',
+              result: 'pending',
+              precourseid: this.course.course.id,
+              majoridlist: this.majoridlist,
+              ispublic: this.editLesson.type === 1 ? 'Y' : 'N',
+              applytime: new Date().getTime()
+            }
+            console.log('post')
+            this.$axios.post('/api/teacher/application/apply', application).then(res => {
+              console.log(res.data)
+              if (res.data.code === 0) {
+                this.$message({
+                  message: '申请修改成功',
+                  type: 'success'
+                })
+              } else {
+                this.$message({
+                  message: '申请修改失败，请检查输入课程是否有冲突',
+                  type: 'error'
+                })
+              }
+            })
+          } else {
+            this.$alert('请检查输入是否正确', '添加失败', {confirmButtonText: '确定'})
+          }
+        })
       })
     }
   }

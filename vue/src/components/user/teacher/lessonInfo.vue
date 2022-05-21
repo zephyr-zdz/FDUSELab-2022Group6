@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    title="编辑课程"
+    title="课程详细信息"
     top="5vh"
     width="80%"
     :append-to-body="true"

@@ -105,6 +105,8 @@ export default {
     showLesson () {
       this.$refs.studentCheckLesson.getStudent()
       this.$refs.studentCheckLesson.getLessons()
+      this.$refs.studentCheckLesson.getClassrooms()
+      this.$refs.studentCheckLesson.getSemesters()
     },
     showStudentLessonChosen () {
       this.$refs.studentLessonChosen.getStudent()
@@ -113,6 +115,7 @@ export default {
     showStudentLessonLearned () {
       this.$refs.studentLessonLearned.getStudent()
       this.$refs.studentLessonLearned.getLessons()
+      this.$refs.studentLessonLearned.getSemesters()
     },
     isChoose () {
       var isChoose = false

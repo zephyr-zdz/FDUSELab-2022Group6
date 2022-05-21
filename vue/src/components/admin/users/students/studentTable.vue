@@ -219,7 +219,6 @@ export default {
         })
     },
     isValid (row, index) {
-      var usernamePattern = /^[2][2][0-9]{4}$/
       var namePattern = /^[\u4E00-\u9FA5A-Za-z]+$/
       var identityPattern = /^[0-9]{18}|[0-9]{17}[xX]$/
       var telPattern = /^(1[0-9][0-9])\d{8}$/
@@ -233,9 +232,6 @@ export default {
         return false
       } else if (this.studentTable[index].major === '') {
         this.$alert('专业不应为空')
-        return false
-      } else if (!usernamePattern.test(this.studentTable[index].stunum)) {
-        this.$alert('学号不应为空')
         return false
       } else if (!namePattern.test(this.studentTable[index].name)) {
         this.$alert('姓名应为汉字或字母')
@@ -265,7 +261,7 @@ export default {
       console.log(this.editingRow)
     },
     deleteRow (row, index) {
-      this.$axios.delete('/api/admin/student', {params: {studentId: row.id}})
+      this.$axios.delete('/api/admin/student', {params: {studentid: row.id}})
         .then(res => {
           console.log(res.data)
           if (res.data.code === 0) {

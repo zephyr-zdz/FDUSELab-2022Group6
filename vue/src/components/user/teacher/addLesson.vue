@@ -67,7 +67,7 @@
 
       <el-form-item label="教师工号" prop="jobnum">
         <el-input v-model="addLesson.jobnum" oninput="value=value.replace(/[^\d]/g,'')"
-                  placeholder="8位，22开头" maxlength="8" disable></el-input>
+                  placeholder="8位，22开头" maxlength="8" disabled></el-input>
       </el-form-item>
 
       <el-form-item label="课程介绍" prop="intro">
@@ -108,12 +108,13 @@
 export default {
   name: 'addLesson',
   data () {
+    var semester = this.$store.getters.semester
     return {
       dialogVisible: false,
       res: {id: -1},
       majoridlist: '',
       addLesson: {
-        semester: '2021-2022春',
+        semester: semester,
         jobnum: this.$store.getters.username,
         classroomid: '',
         name: '',
@@ -193,9 +194,6 @@ export default {
     cleanForm () {
       this.$refs.addLessonForm.resetFields()
     },
-    show () {
-      this.$refs.addLessonForm.resetFields()
-    },
     getTeacherId () {
       this.$axios.get('/api/admin/teacher-course/id-by-jobnum/', {params: {JobNum: this.addLesson.jobnum}})
         .then(response => {
@@ -260,6 +258,7 @@ export default {
         })
     },
     submit () {
+      this.getTeacherId()
       this.$refs.addLessonForm.validate((valid) => {
         if ((valid) && (this.res.id !== -1)) {
           switch (this.addLesson.type) {
