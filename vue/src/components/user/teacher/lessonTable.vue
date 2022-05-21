@@ -141,7 +141,9 @@ import TeacherCheckChosenStudentList from './teacherCheckChosenStudentList'
 export default {
   name: 'lessonTable',
   data () {
+    var round = this.$store.getters.round
     return {
+      round: round,
       lessonTable: [],
       semesterList: [],
       classroomOptions: [],
