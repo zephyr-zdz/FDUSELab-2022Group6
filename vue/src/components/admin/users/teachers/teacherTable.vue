@@ -262,7 +262,7 @@ export default {
       console.log(this.editingRow)
     },
     deleteRow (row, index) {
-      this.$axios.delete('/api/admin/teacher', {params: {teacherId: row.id}})
+      this.$axios.delete('/api/admin/teacher', {params: {teacherid: row.id}})
         .then(res => {
           console.log(res.data)
           if (res.data.code === 0) {

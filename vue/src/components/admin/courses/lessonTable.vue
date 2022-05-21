@@ -5,7 +5,7 @@
     <lesson-info ref="lessonInfo" @afterLessonInfo="handleClose"></lesson-info>
     <chosen-student-list ref="lessonStudentList"></chosen-student-list>
 
-    <el-button type="success" size="small" @click="showAddLesson()">新建课程</el-button>
+    <el-button type="success" size="small" @click="showAddLesson()" v-if="round==='off'">新建课程</el-button>
 
     <el-input v-model="searchLessonName" size="mini" style="width: 15%" placeholder="输入课程名称模糊搜索"></el-input>
     <el-input v-model="searchCourseNum" size="mini" style="width: 15%" placeholder="输入课程编号模糊搜索"></el-input>
@@ -124,7 +124,7 @@
         width="180"
        >
         <template v-slot="scope">
-          <el-button size="mini" type="text" @click="showEditLesson(scope.$index)">修改</el-button>
+          <el-button size="mini" type="text" @click="showEditLesson(scope.$index)" v-if="round==='off'">修改</el-button>
           <el-button size="mini" type="text" @click="showInfo(scope.$index)">详细</el-button>
           <el-button size="mini" type="text" @click="showChosenStudent(scope.$index)">已选学生名单</el-button>
         </template>
@@ -142,7 +142,9 @@ import AdminCheckChosenStudentList from './adminCheckChosenStudentList'
 export default {
   name: 'lessonTable',
   data () {
+    var round = this.$store.getters.round
     return {
+      round: round,
       lessonTable: [],
       semesterList: [],
       classroomOptions: [],
@@ -159,10 +161,16 @@ export default {
     },
     showAddLesson () {
       this.$refs.addLesson.dialogVisible = true
+      this.$refs.addLesson.getTemplates()
+      this.$refs.addLesson.getClassrooms()
+      this.$refs.addLesson.getMajors()
     },
     showEditLesson (index) {
       this.$refs.editLesson.dialogVisible = true
       this.$refs.editLesson.course = this.lessonTable[index]
+      this.$refs.editLesson.getTemplates()
+      this.$refs.editLesson.getClassrooms()
+      this.$refs.editLesson.getMajors()
       this.$refs.editLesson.course2Form()
     },
     showInfo (index) {

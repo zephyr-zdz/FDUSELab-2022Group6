@@ -149,6 +149,7 @@ export default {
       this.$refs.teacherTable.getTeachers()
     },
     showLessons () {
+      this.$refs.lessonTable.round = this.$store.getters.round
       this.$refs.lessonTable.getClassrooms()
       this.$refs.lessonTable.getLessons()
       this.$refs.lessonTable.getSemesters()
@@ -170,6 +171,9 @@ export default {
     },
     showStudentApplication () {
       this.$refs.checkStudentApplication.getApplication()
+    },
+    showClassSelect () {
+      this.$refs.openOrCloseClassSelect.getStats()
     },
     handleChange (value) {
       switch (value) {
@@ -200,6 +204,7 @@ export default {
           this.showRecord = value
           break
         case 'openOrCloseClassSelect' :
+          this.showClassSelect()
           this.showRecord = value
           break
         case 'lessonApplicationCheck' :
