@@ -171,6 +171,9 @@ export default {
     showStudentApplication () {
       this.$refs.checkStudentApplication.getApplication()
     },
+    showClassSelect () {
+      this.$refs.openOrCloseClassSelect.getStats()
+    },
     handleChange (value) {
       switch (value) {
         case 'studentTable' :
@@ -200,6 +203,7 @@ export default {
           this.showRecord = value
           break
         case 'openOrCloseClassSelect' :
+          this.showClassSelect()
           this.showRecord = value
           break
         case 'lessonApplicationCheck' :

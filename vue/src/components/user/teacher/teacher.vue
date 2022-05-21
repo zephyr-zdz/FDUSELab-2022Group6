@@ -94,6 +94,11 @@ export default {
       }).then(res => {
         this.teacherid = res.data.data.id
       })
+      this.$axios.get('/api/admin/admin/semester').then(res => {
+        if (res.data.code === 0) {
+          this.$store.commit('setSemester', res.data.data)
+        }
+      })
     },
     showInfo () {
       this.$refs.teacherInfoMaintain.getInfo()

@@ -108,12 +108,13 @@
 export default {
   name: 'addLesson',
   data () {
+    var semester = this.$store.getters.semester
     return {
       dialogVisible: false,
       res: {id: -1},
       majoridlist: '',
       addLesson: {
-        semester: '2021-2022春',
+        semester: semester,
         jobnum: '',
         classroomid: '',
         name: '',

@@ -158,6 +158,7 @@ export default {
     },
     showAddLesson () {
       this.$refs.addLesson.dialogVisible = true
+      this.$refs.addLesson.getTeacherId()
     },
     showEditLesson (index) {
       this.$refs.editLesson.dialogVisible = true
@@ -193,7 +194,7 @@ export default {
       return schedule
     },
     getLessons () {
-      this.$axios.get('/api/admin/teacher-course/all').then(res => {
+      this.$axios.get('/api/teacher/course/jobnum', {params: {jobnum: this.$store.getters.username}}).then(res => {
         this.lessonTable = res.data.data
       })
     },

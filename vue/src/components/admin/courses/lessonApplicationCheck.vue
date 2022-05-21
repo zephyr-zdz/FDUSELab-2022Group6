@@ -1,6 +1,6 @@
 <template>
   <el-card class="box-card">
-  <el-table :data="lessonApplicationCheck"
+  <el-table :data="lessonApplicationCheckList"
             style="width: 100%"
             pager="page"
             stripe>
@@ -9,14 +9,14 @@
       label="课程名称"
       width="100">
       <template v-slot="scope">
-        <span>{{ templateList[scope.row.teacherCourseApplication.coursetemplateid].name }}</span>
+        <span>{{ templateList.find(item=>item.id === scope.row.teacherCourseApplication.coursetemplateid).name }}</span>
       </template></el-table-column>
     <el-table-column
       prop="lessonNumber"
       label="课程编号"
       width="80">
       <template v-slot="scope">
-        <span>{{ templateList[scope.row.teacherCourseApplication.coursetemplateid].coursenum }}</span>
+        <span>{{ templateList.find(item=>item.id === scope.row.teacherCourseApplication.coursetemplateid).coursenum }}</span>
       </template>
     </el-table-column>
     <el-table-column
@@ -116,7 +116,7 @@ export default {
   name: 'lessonApplicationCheck',
   data () {
     return {
-      lessonApplicationCheck: [],
+      lessonApplicationCheckList: [],
       templateList: [],
       info: []
     }
@@ -138,7 +138,7 @@ export default {
     },
     approved (index) {
       this.$axios.post('/api/admin/teacher-course/approve',
-        this.lessonApplicationCheck[index].teacherCourseApplication,
+        this.lessonApplicationCheckList[index].teacherCourseApplication,
         {params: { attitude: true }})
         .then(res => {
           if (res.data.code === 0) {
@@ -165,7 +165,7 @@ export default {
     },
     rejected (index) {
       this.$axios.post('/api/admin/teacher-course/approve',
-        this.lessonApplicationCheck[index].teacherCourseApplication,
+        this.lessonApplicationCheckList[index].teacherCourseApplication,
         {params: { attitude: false }})
         .then(res => {
           if (res.data.code === 0) {
@@ -187,7 +187,8 @@ export default {
       this.$axios.get('/api/admin/teacher-course/pending')
         .then(response => {
           if (response.data.code === 0) {
-            this.lessonApplicationCheck = response.data.data
+            this.lessonApplicationCheckList = response.data.data
+            console.log(this.lessonApplicationCheckList)
             // this.$message.success(response.data.msg)
           } else {
             this.$message.error(response.data.msg)

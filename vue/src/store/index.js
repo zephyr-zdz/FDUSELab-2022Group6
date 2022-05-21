@@ -11,9 +11,11 @@ export default new Vuex.Store({
       username: 'none'
     },
     round: off,
-    isLogin: false
+    isLogin: false,
+    semester: ''
   },
   getters: {
+    semester: state => state.semester,
     round: state => state.round,
     role: state => state.user.role,
     username: state => state.user.username
@@ -21,6 +23,9 @@ export default new Vuex.Store({
   mutations: {
     setRound (state, round) {
       state.round = round
+    },
+    setSemester (state, semester) {
+      state.semester = semester
     },
     login (state, user) {
       state.user.role = (user.type === undefined) ? user.role : user.type
