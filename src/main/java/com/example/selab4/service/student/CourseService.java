@@ -95,7 +95,7 @@ public class CourseService {
 
         // 4、学生已选/已修相同课程模板
         if(manager.courseTemplateConflict(student,course)){
-            return new Response<>(Response.FAIL, "学生id: " + studentid + "的学生已经修过该课程", null);
+            return new Response<>(Response.FAIL, "学生id: " + studentid + "的学生已经选过/修过该课程", null);
         }
 
         manager.choose(student, course);
