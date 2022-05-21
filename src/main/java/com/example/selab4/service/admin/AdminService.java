@@ -149,7 +149,6 @@ public class AdminService {
             new_semester = new_start+"-"+new_end+"秋";
         }
         administrator.setSemester(new_semester);
-        administrator.setSemester("on");
 
         return new Response<>(Response.SUCCESS, "开始学期成功", null);
     }
