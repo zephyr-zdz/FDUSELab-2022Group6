@@ -157,7 +157,7 @@ public class AdminService {
     }
 
     public Response<String> getSemesterState() {
-        String state = adminManager.findAdmin().getSelectcoursefunction();
+        String state = adminManager.findAdmin().getSemesterbegin();
         return new Response<>(Response.SUCCESS,"查询成功",state);
     }
 
