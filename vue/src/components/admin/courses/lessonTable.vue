@@ -168,6 +168,9 @@ export default {
     showEditLesson (index) {
       this.$refs.editLesson.dialogVisible = true
       this.$refs.editLesson.course = this.lessonTable[index]
+      this.$refs.editLesson.getTemplates()
+      this.$refs.editLesson.getClassrooms()
+      this.$refs.editLesson.getMajors()
       this.$refs.editLesson.course2Form()
     },
     showInfo (index) {
