@@ -10,4 +10,5 @@ public interface CourseMapper extends JpaRepository<Course,Integer> {
     Course findCourseById(Integer id);
 
     List<Course> findCourseBySemester(String semester);
+    List<Course> findAllByCoursetemplateid(Integer id);
 }

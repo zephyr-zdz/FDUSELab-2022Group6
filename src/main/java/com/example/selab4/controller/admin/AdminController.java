@@ -18,6 +18,11 @@ public class AdminController {
         this.adminService=adminService;
     }
 
+    @GetMapping("/semester/state")
+    public Response<String> semesterState(){return adminService.getSemesterState();}
+    @GetMapping("/semester")
+    public Response<String> semester(){return adminService.getSemester();}
+
     @GetMapping("/valid")
     public Response<String> currentState() {
         return adminService.currentState();
@@ -44,13 +49,13 @@ public class AdminController {
         return adminService.closeSecondCourseSelect();
     }
 
-    @PostMapping("/begin/semester")
+    @PostMapping("/semester/begin")
     Response<String> begin_semester(){
         return adminService.beginSemester();
     }
 
-    // TODO 学期结束：已选=>已修；Schedule清空。
-    @PostMapping("/end/semester")
+    // TODO 学期结束：已选=>已修。
+    @PostMapping("/semester/end")
     Response<String> end_semester(){
         return adminService.endSemester();
     }

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -48,6 +49,8 @@ public class AdminManager {
             student=studentMapper.findStudentById(stuCourse.getStudentid());
             gradeList.add(student.getStunum());
         }
+
+        Collections.shuffle(gradeList);
         gradeList.sort(new Comparator<String>() {
             @Override
             public int compare(String o1, String o2) {

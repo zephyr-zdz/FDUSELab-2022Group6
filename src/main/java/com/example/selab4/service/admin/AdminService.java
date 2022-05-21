@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
+import static java.lang.Integer.parseInt;
+
 @Transactional
 @Service("AdminAdminService")
 public class AdminService {
@@ -130,6 +132,23 @@ public class AdminService {
         // 前置条件：学期未开始
         administrator.setSemesterbegin("on");
         adminManager.saveAdmin(administrator);
+        // semester 更新
+        String current_semester = administrator.getSemester();
+        int start_year = parseInt(current_semester.substring(0,4));
+        String season = current_semester.substring(9,10);
+        String new_semester;
+        if(season.equals("秋")){
+            String new_start = Integer.toString(start_year);
+            String new_end = Integer.toString(start_year +1);
+            new_semester = new_start+"-"+new_end+"春";
+        }
+        else {
+            int new_start_year = start_year +1;
+            String new_start = Integer.toString(new_start_year);
+            String new_end = Integer.toString(new_start_year+1);
+            new_semester = new_start+"-"+new_end+"秋";
+        }
+        administrator.setSemester(new_semester);
 
         return new Response<>(Response.SUCCESS, "开始学期成功", null);
     }
@@ -153,9 +172,16 @@ public class AdminService {
         // 已选=>已修
         adminManager.changeS2F();
 
-        // Schedule清空
-        adminManager.clearSchedule();
-
         return new Response<>(Response.SUCCESS, "结束学期成功", null);
+    }
+
+    public Response<String> getSemesterState() {
+        String state = adminManager.findAdmin().getSemesterbegin();
+        return new Response<>(Response.SUCCESS,"查询成功",state);
+    }
+
+    public Response<String> getSemester() {
+        String semester = adminManager.findAdmin().getSemester();
+        return new Response<>(Response.SUCCESS,"查询成功",semester);
     }
 }

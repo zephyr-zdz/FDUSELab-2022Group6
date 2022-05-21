@@ -24,10 +24,10 @@ public class CourseController {
         return service.currentState();
     }
 
-    // 学生查看本专业所有可选课程
+    // 学生查看本专业所有可选课程（）
     @GetMapping("/major")
-    public Response<List<CourseVO>> getAllByMajor(@RequestParam("major") String majorName) {
-        return service.getAllByMajor(majorName);
+    public Response<List<CourseVO>> getAllByMajorAndThisSemester(@RequestParam("major") String majorName) {
+        return service.getAllByMajorAndThisSemester(majorName);
     }
 
     // 学生查看所有已选/已修的课程
