@@ -198,7 +198,8 @@ public class TeacherCourseService {
                 return new Response<>(Response.SUCCESS,"管理员通过申请，删除申请处理成功","delete succeed");
             }
             case "update":{
-                // 更新Course
+                // 更新Course（学生全部被踢）
+                course.setCurrentcount("0");
                 manager.save(course);
                 // 更新Schedule
                 manager.deleteSchedulesByCourseId(teacherCourseApplication.getPrecourseid());
